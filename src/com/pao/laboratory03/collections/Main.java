@@ -1,61 +1,67 @@
-package com.pao.laboratory02.collections;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+package com.pao.laboratory03.collections;
 
 /**
- * Demo: ArrayList (ordonat, duplicate), HashSet (fără duplicate), TreeSet (sortat).
+ * Exercise 1 — Collections: HashMap and TreeMap
+ *
+ * Create in this main:
+ *
+ * PART A — HashMap (word frequency)
+ * 1. Declare an array of Strings:
+ *    String[] words = {"java", "python", "java", "c++", "python", "java", "rust", "c++", "go"};
+ * 2. Create a HashMap<String, Integer> that counts how many times each word appears.
+ *    - Iterate through the array and use put() + getOrDefault() to increment the counter.
+ * 3. Display the map.
+ * 4. Check if the key "rust" exists using containsKey().
+ * 5. Display ONLY the keys (keySet()), then ONLY the values (values()).
+ * 6. Iterate through the map with entrySet() and display "key -> value" for each entry.
+ *
+ * PART B — TreeMap (automatic sorting)
+ * 7. Create a TreeMap<String, Integer> from the same HashMap (constructor with argument).
+ * 8. Display the TreeMap — observe the alphabetical order of the keys.
+ * 9. Use firstKey() and lastKey() to display the first and last key.
+ *
+ * PART C — Map with objects
+ * 10. Create a HashMap<String, List<String>> that associates subjects with lists of students.
+ *     Example: "PAOJ" -> ["Ana", "Mihai", "Ion"], "DB" -> ["Ana", "Elena"]
+ * 11. Display all students for the subject "PAOJ".
+ * 12. Add a new student to "DB" and display the updated list.
+ *
+ * Expected output (approximate — HashMap order may vary):
+ *
+ * === PART A: HashMap — word frequency ===
+ * Frequency: {python=2, c++=2, java=3, rust=1, go=1}
+ * Contains 'rust'? true
+ * Keys: [python, c++, java, rust, go]
+ * Values: [2, 2, 3, 1, 1]
+ * python -> 2
+ * c++ -> 2
+ * java -> 3
+ * rust -> 1
+ * go -> 1
+ *
+ * === PART B: TreeMap — automatic sorting ===
+ * Sorted: {c++=2, go=1, java=3, python=2, rust=1}
+ * First key: c++
+ * Last key: rust
+ *
+ * === PART C: Map with objects ===
+ * Students at PAOJ: [Ana, Mihai, Ion]
+ * Students at DB (updated): [Ana, Elena, George]
  */
 public class Main {
     public static void main(String[] args) {
+        // TODO: implement the 3 parts above
+        String[] words = {"java", "python", "java", "c++", "python", "java", "rust", "c++", "go"};
 
-        // ArrayList — ordonat, permite duplicate, acces prin index
-        System.out.println("=== 1. ArrayList ===");
-        List<String> list = new ArrayList<>();
-        list.add("Ana");
-        list.add("Maria");
-        list.add("Ion");
-        list.add("Ana");
-        System.out.println("Lista: " + list);
-        System.out.println("Dimensiune: " + list.size());
-        System.out.println("Index 1: " + list.get(1));
-        list.remove(0);
-        System.out.println("După remove(0): " + list);
+        HashMap<String, Integer> cntWords = new HashMap<>();
 
-        System.out.println("\nParcurgere cu for clasic:");
-        for (int i = 0; i < list.size(); i++)
-            System.out.println("  [" + i + "] " + list.get(i));
+        for (HashMap.Entry<String, Integer> set : words.entrySet()) {
+            System.out.println(set.getKey() + " = " + set.getValue());
 
-        System.out.println("\nParcurgere cu enhanced for:");
-        for (String name : list)
-            System.out.println("  " + name);
+            put() + getOrDefault()
+            containsKey().rust
 
-        System.out.println("\nParcurgere cu forEach + lambda:");
-        list.forEach(name -> System.out.println("  " + name));
+        }
 
-        // HashSet — fără duplicate, ordine imprevizibilă
-        System.out.println("\n=== 2. HashSet ===");
-        Set<String> set = new HashSet<>();
-        set.add("Ana");
-        set.add("Maria");
-        set.add("Ion");
-        set.add("Ana"); // ignorat — duplicat
-        System.out.println("Set: " + set);
-        System.out.println("Dimensiune: " + set.size());
-        System.out.println("Conține \"Ion\"? " + set.contains("Ion"));
-
-        // TreeSet — fără duplicate, sortat natural
-        System.out.println("\n=== 3. TreeSet ===");
-        TreeSet<String> sortedSet = new TreeSet<>();
-        sortedSet.add("Maria");
-        sortedSet.add("Ana");
-        sortedSet.add("Zoe");
-        sortedSet.add("Ion");
-        System.out.println("TreeSet: " + sortedSet);
-        System.out.println("Primul: " + sortedSet.first());
-        System.out.println("Ultimul: " + sortedSet.last());
     }
 }

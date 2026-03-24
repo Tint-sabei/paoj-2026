@@ -48,7 +48,7 @@ public class ExampleMap {
         String[] culori = {"roșu", "verde", "roșu", "albastru", "verde", "roșu"};
         Map<String, Integer> freq = new HashMap<>();
         for (String c : culori) {
-            freq.put(c, freq.getOrDefault(c, 0) + 1);
+            freq.put(c, freq.getOrDefault(c,0) + 1);
         }
         System.out.println("Frecvență culori: " + freq);
 

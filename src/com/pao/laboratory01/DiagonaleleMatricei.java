@@ -1,13 +1,13 @@
 package com.pao.laboratory00;
 
 /**
- * Exercitiul 2
+ * Exercise 2
  *
- * Cititi de la tastatura o matrice de n ori n elemente REALE.
+ * Read from the keyboard an n by n matrix of REAL numbers.
  *
- * 1. Afisati matricea in consola.
- * 2. Afisati suma elementelor de pe diagonala principala
- *    si produsul elementelor de pe diagonala secundara.
+ * 1. Display the matrix in the console.
+ * 2. Display the sum of the elements on the main diagonal
+ *    and the product of the elements on the secondary diagonal.
  *
  */
 
