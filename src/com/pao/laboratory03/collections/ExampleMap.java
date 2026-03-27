@@ -3,10 +3,11 @@ package com.pao.laboratory03.collections;
 import java.util.*;
 
 /**
- * Exemplu demonstrativ — Map-uri în Java.
- * Rulează acest main pentru a vedea cum funcționează HashMap, TreeMap și Map cu liste.
- * Apoi rezolvă exercițiul din Main.java (date diferite, aceleași concepte).
+ * Demonstrative example — Maps in Java.
+ * Run this main to see how HashMap, TreeMap, and Map with lists work.
+ * Then solve the exercise in Main.java (different data, same concepts).
  */
+
 public class ExampleMap {
     public static void main(String[] args) {
 
@@ -48,7 +49,7 @@ public class ExampleMap {
         String[] culori = {"roșu", "verde", "roșu", "albastru", "verde", "roșu"};
         Map<String, Integer> freq = new HashMap<>();
         for (String c : culori) {
-            freq.put(c, freq.getOrDefault(c, 0) + 1);
+            freq.put(c, freq.getOrDefault(c,0) + 1);
         }
         System.out.println("Frecvență culori: " + freq);
 

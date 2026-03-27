@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Exemplu demonstrativ — Excepții în Java.
- * Rulează acest main pentru a vedea try-catch-finally, custom exceptions, multi-catch.
- * Apoi rezolvă exercițiul din Main.java (creezi InvalidAgeException + DuplicateEntryException).
+ * Demonstrative example — Exceptions in Java.
+ * Run this main to see try-catch-finally, custom exceptions, multi-catch.
+ * Then solve the exercise in Main.java (create InvalidAgeException + DuplicateEntryException).
  */
+
 public class ExampleExceptions {
 
     // --- Excepție custom (în exercițiu creezi fișiere separate) ---
