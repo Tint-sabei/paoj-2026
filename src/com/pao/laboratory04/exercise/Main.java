@@ -1,144 +1,189 @@
-package com.pao.laboratory03.exercise;
-
-import java.util.Scanner;
-
-/**
- * Exercițiul 4 (Integrator) — Sistem de gestiune studenți + note
- *
- * Combină Map, Enum și Excepții custom într-un mini-sistem interactiv.
- * Studenții creează TOATE clasele de la zero.
- *
- * ═══════════════════════════════════════════════════════════════
- *  CLASE DE CREAT (fișiere separate în subpachetele corespunzătoare):
- * ═══════════════════════════════════════════════════════════════
- *
- * 1. model/Subject.java — ENUM
- *    - Constante: PAOJ, BD, SO, RC (sau alte materii)
- *    - Câmpuri: String fullName, int credits
- *    - Constructor privat, getteri
- *    - toString() → "PAOJ (Programare Avansată pe Obiecte, 6 credite)"
- *
- * 2. model/Student.java — CLASĂ
- *    - Câmpuri private: String name, int age, Map<Subject, Double> grades
- *    - Constructor: Student(String name, int age)
- *      → inițializează grades ca HashMap gol
- *      → validare: dacă age < 18 sau age > 60, aruncă InvalidStudentException
- *    - Metode: getName(), getAge(), getGrades()
- *    - addGrade(Subject subject, double grade)
- *      → dacă grade < 1 sau grade > 10, aruncă InvalidGradeException
- *      → pune nota în map (suprascrie dacă materia există deja)
- *    - double getAverage()
- *      → calculează media aritmetică a notelor (returnează 0 dacă nu are note)
- *    - toString() → "Student{name='Ana', age=20, avg=8.50}"
- *
- * 3. exception/InvalidStudentException.java — EXCEPȚIE CUSTOM
- *    - extends RuntimeException
- *    - Constructor cu String message → super(message)
- *
- * 4. exception/InvalidGradeException.java — EXCEPȚIE CUSTOM
- *    - extends RuntimeException
- *    - Constructor cu String message → super(message)
- *
- * 5. exception/StudentNotFoundException.java — EXCEPȚIE CUSTOM
- *    - extends RuntimeException
- *    - Constructor cu String message → super(message)
- *
- * 6. service/StudentService.java — SERVICIU (Singleton)
- *    - Câmp: List<Student> students (ArrayList)
- *    - Singleton pattern (constructor privat, getInstance())
- *    - Metode:
- *      a) void addStudent(String name, int age)
- *         → creează Student și adaugă în listă
- *         → dacă există deja un student cu același nume, aruncă RuntimeException
- *      b) Student findByName(String name)
- *         → caută în listă, aruncă StudentNotFoundException dacă nu găsește
- *      c) void addGrade(String studentName, Subject subject, double grade)
- *         → găsește studentul (findByName) și adaugă nota
- *      d) void printAllStudents()
- *         → afișează toți studenții cu notele lor
- *      e) void printTopStudents()
- *         → sortează studenții descrescător după medie și afișează
- *      f) Map<Subject, Double> getAveragePerSubject()
- *         → calculează media pe fiecare materie (din toți studenții care au notă)
- *
- * ═══════════════════════════════════════════════════════════════
- *  MENIU (implementat mai jos — NU modifica structura switch-ului)
- * ═══════════════════════════════════════════════════════════════
- */
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        // TODO: obține instanța StudentService (Singleton)
-
-        System.out.println("=== Sistem Gestiune Studenți ===");
-
-        boolean running = true;
-        while (running) {
-            System.out.println("\n--- Meniu ---");
-            System.out.println("1. Adaugă student");
-            System.out.println("2. Adaugă notă");
-            System.out.println("3. Afișează toți studenții");
-            System.out.println("4. Top studenți (după medie)");
-            System.out.println("5. Media pe materie");
-            System.out.println("0. Ieșire");
-            System.out.print("Opțiune: ");
-
-            String option = scanner.nextLine().trim();
-
-            try {
-                switch (option) {
-                    case "1":
-                        System.out.print("Nume: ");
-                        String name = scanner.nextLine().trim();
-                        System.out.print("Vârsta: ");
-                        int age = Integer.parseInt(scanner.nextLine().trim());
-                        // TODO: apelează service.addStudent(name, age)
-                        System.out.println("Student adăugat cu succes!");
-                        break;
-
-                    case "2":
-                        System.out.print("Nume student: ");
-                        String studentName = scanner.nextLine().trim();
-                        System.out.print("Materie (" + /* TODO: afișează Subject.values() */ "PAOJ, BD, SO, RC" + "): ");
-                        String subjectStr = scanner.nextLine().trim().toUpperCase();
-                        System.out.print("Nota (1-10): ");
-                        double grade = Double.parseDouble(scanner.nextLine().trim());
-                        // TODO: convertește subjectStr în Subject cu valueOf()
-                        // TODO: apelează service.addGrade(studentName, subject, grade)
-                        System.out.println("Notă adăugată!");
-                        break;
-
-                    case "3":
-                        // TODO: apelează service.printAllStudents()
-                        break;
-
-                    case "4":
-                        // TODO: apelează service.printTopStudents()
-                        break;
-
-                    case "5":
-                        // TODO: apelează service.getAveragePerSubject() și afișează
-                        break;
-
-                    case "0":
-                        running = false;
-                        System.out.println("La revedere!");
-                        break;
-
-                    default:
-                        System.out.println("Opțiune invalidă.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Eroare: Introdu un număr valid.");
-            } catch (IllegalArgumentException e) {
-                System.out.println("Eroare: " + e.getMessage());
-            } catch (RuntimeException e) {
-                System.out.println("Eroare: " + e.getMessage());
-            }
-        }
-
-        scanner.close();
-    }
-}
-
+//package com.pao.laboratory03.exercise;
+//
+//import java.util.Scanner;
+//
+///**
+// * Exercise 4 (Integrator) — Student + Grade Management System
+// *
+// * Combines Map, Enum and Custom Exceptions into a mini-interactive system.
+// * Students create ALL classes from scratch.
+// *
+// * ═══════════════════════════════════════════════════════════════
+// *  CLASSES TO CREATE (separate files in corresponding subpackages):
+// * ═══════════════════════════════════════════════════════════════
+// *
+// * 1. model/Subject.java — ENUM
+// *    - Constants: PAOJ, BD, SO, RC (or other subjects)
+// *    - Fields: String fullName, int credits
+// *    - Private constructor, getters
+// *    - toString() → "PAOJ (Advanced Object-Oriented Programming, 6 credits)"
+// *
+// * 2. model/Student.java — CLASS
+// *    - Private fields: String name, int age, Map<Subject, Double> grades
+// *    - Constructor: Student(String name, int age)
+// *      → initializes grades as empty HashMap
+// *      → validation: if age < 18 or age > 60, throw InvalidStudentException
+// *    - Methods: getName(), getAge(), getGrades()
+// *    - addGrade(Subject subject, double grade)
+// *      → if grade < 1 or grade > 10, throw InvalidGradeException
+// *      → puts the grade in the map (overwrites if subject already exists)
+// *    - double getAverage()
+// *      → calculates the arithmetic mean of grades (returns 0 if no grades)
+// *    - toString() → "Student{name='Ana', age=20, avg=8.50}"
+// *
+// * 3. exception/InvalidStudentException.java — CUSTOM EXCEPTION
+// *    - extends RuntimeException
+// *    - Constructor with String message → super(message)
+// *
+// * 4. exception/InvalidGradeException.java — CUSTOM EXCEPTION
+// *    - extends RuntimeException
+// *    - Constructor with String message → super(message)
+// *
+// * 5. exception/StudentNotFoundException.java — CUSTOM EXCEPTION
+// *    - extends RuntimeException
+// *    - Constructor with String message → super(message)
+// *
+// * 6. service/StudentService.java — SERVICE (Singleton)
+// *    - Field: List<Student> students (ArrayList)
+// *    - Singleton pattern (private constructor, getInstance())
+// *    - Methods:
+// *      a) void addStudent(String name, int age)
+// *         → creates Student and adds to list
+// *         → if a student with the same name already exists, throw RuntimeException
+// *      b) Student findByName(String name)
+// *         → searches the list, throws StudentNotFoundException if not found
+// *      c) void addGrade(String studentName, Subject subject, double grade)
+// *         → finds the student (findByName) and adds the grade
+// *      d) void printAllStudents()
+// *         → displays all students with their grades
+// *      e) void printTopStudents()
+// *         → sorts students in descending order by average and displays them
+// *      f) Map<Subject, Double> getAveragePerSubject()
+// *         → calculates the average per subject (from all students who have a grade)
+// *
+// * ═══════════════════════════════════════════════════════════════
+// *  MENU (implemented below — DO NOT modify the switch structure)
+// * ═══════════════════════════════════════════════════════════════
+// */
+//
+//public class Main {
+//    public static void main(String[] args) {
+//        Scanner scanner = new Scanner(System.in);
+//
+//        // TODO: obține instanța StudentService (Singleton)
+//
+//        System.out.println("=== Sistem Gestiune Studenți ===");
+//
+//        boolean running = true;
+//        while (running) {
+//            System.out.println("\n--- Menu ---");
+//            System.out.println("1. Add student");
+//            System.out.println("2. Add notes");
+//            System.out.println("3. Show all students");
+//            System.out.println("4. Top students (by average)");
+//            System.out.println("5. Average per subject");
+//            System.out.println("0. Exit");
+//            System.out.print("Options: ");
+//
+//            String option = scanner.nextLine().trim();
+//
+//            try {
+//                switch (option) {
+//                    case "1":
+//                        System.out.print("Nume: ");
+//                        String name = scanner.nextLine().trim();
+//                        System.out.print("Vârsta: ");
+//                        int age = Integer.parseInt(scanner.nextLine().trim());
+//                        // TODO: call service.addStudent(name, age)
+//                        System.out.println("Student added successfully!");
+//                        break;
+//
+//                    case "2":
+//                        System.out.print("Student name:  ");
+//                        String studentName = scanner.nextLine().trim();
+//                        System.out.print("Subjects (" + /* TODO: display Subject.values() */ "PAOJ, BD, SO, RC" + "): ");
+//                        String subjectStr = scanner.nextLine().trim().toUpperCase();
+//                        System.out.print("Note (1-10): ");
+//                        double grade = Double.parseDouble(scanner.nextLine().trim());
+//                        // TODO: convert subjectStr to Subject with valueOf()
+//// TODO: call           service.addGrade(studentName, subject, grade)
+//                        System.out.println("Note added!");
+//                        break;
+//
+//                    case "3":
+//                        // TODO: call service.printAllStudents()
+//                        break;
+//
+//                    case "4":
+//                        // TODO: call service.printTopStudents()
+//                        break;
+//
+//                    case "5":
+//                        // TODO: call service.getAveragePerSubject() and show
+//                        break;
+//
+//                    case "0":
+//                        running = false;
+//                        System.out.println("Goodbye!");
+//                        break;
+//
+//                    default:
+//                        System.out.println("Invalid Option.");
+//                }
+//            } catch (NumberFormatException e) {
+//                System.out.println("Eroare: Introdu un număr valid.");
+//            } catch (IllegalArgumentException e) {
+//                System.out.println("Eroare: " + e.getMessage());
+//            } catch (RuntimeException e) {
+//                System.out.println("Eroare: " + e.getMessage());
+//            }
+//        }
+//
+//        scanner.close();
+//    }
+//}
+//
+//
+////
+////=== Student Management System ===
+////
+////        --- Menu ---
+////        1. Add student
+////2. Add grade
+////3. Display all students
+////4. Top students (by average)
+////5. Average per subject
+////0. Exit
+////Option: 1
+////Name: Ana
+////Age: 20
+////Student added successfully!
+////
+////Option: 2
+////Student name: Ana
+////Subject (PAOJ, BD, SO, RC): PAOJ
+////Grade (1-10): 9.5
+////Grade added!
+////
+////Option: 3
+////        1. Student{name='Ana', age=20, avg=8.75}
+////PAOJ = 9.5
+////BD = 8.0
+////
+////Option: 4
+////        === Top students ===
+////        1. Ana — average: 8.75
+////        2. Mihai — average: 7.00
+////
+////Option: 5
+////        === Average per subject ===
+////PAOJ: 8.25
+////BD: 8.00
+////
+////Option: 1
+////Name: Invalid
+////Age: -5
+////Error: Age -5 is invalid (18-60)
+////
+////Option: 0
+////Goodbye!

@@ -1,109 +1,109 @@
-﻿# Laboratory 04 — Colecții (`Map`), Enum-uri, Excepții
+﻿# Laboratory 04 — Collections (`Map`), Enums, Exceptions
 
-> **Pachet:** `com.pao.laboratory04` · **Curs:** 07–08 · **Pre-rechizite:** [Laboratory 03](src/com/pao/laboratory04/Readme.md)
+> **Package:** `com.pao.laboratory04` · **Course:** 07–08 · **Prerequisites:** [Laboratory 03](src/com/pao/laboratory04/Readme.md)
 
 ---
 
 <details open>
-<summary><h2>Obiective</h2></summary>
+<summary><h2>Objectives</h2></summary>
 
-1. **`Map`** — `HashMap`, `TreeMap`: perechi cheie-valoare
-2. **Enum-uri** — constante cu câmpuri, constructori, metode abstracte per constantă
-3. **Excepții** — ierarhia `Throwable`, checked vs unchecked, `try-catch-finally`, excepții custom
-4. **Exercițiu integrator** — `Map` + `enum` + excepții custom + Singleton
+1. **`Map`** — `HashMap`, `TreeMap`: key-value pairs
+2. **Enums** — constants with fields, constructors, abstract methods per constant
+3. **Exceptions** — `Throwable` hierarchy, checked vs unchecked, `try-catch-finally`, custom exceptions
+4. **Integrator Exercise** — `Map` + `enum` + custom exceptions + Singleton
 
-> ⚠️ De data aceasta **NU primiți clase model gata făcute**. Creați totul de la zero — simulează munca pe proiectul individual.
+> ⚠️ This time you **are NOT given pre-made model classes**. Create everything from scratch — this simulates working on the individual project.
 
 </details>
 
 ---
 
-## Exerciții
+## Exercises
 
-| # | Exercițiu | Timp | Ce creezi |
-|---|-----------|------|-----------|
-| 1 | HashMap + TreeMap | ~20 min | Totul în [collections/Main.java](src/com/pao/laboratory04/collections/Main.java) |
-| 2 | Enum-uri | ~20 min | `Priority.java` + [enums/Main.java](src/com/pao/laboratory04/enums/Main.java) |
-| 3 | Excepții custom | ~25 min | `InvalidAgeException.java`, `DuplicateEntryException.java` + [exceptions/Main.java](src/com/pao/laboratory04/exceptions/Main.java) |
-| 4 | Integrator: Studenți + Note | ~35 min | 6 clase de la zero + [exercise/Main.java](src/com/pao/laboratory04/exercise/Main.java) |
-| 5 | **Bonus:** Task Manager + Audit | ~45 min | ~8 clase de la zero + [bonus/Main.java](src/com/pao/laboratory04/bonus/Main.java) |
+| # | Exercise | Time | What to create |
+|---|----------|------|----------------|
+| 1 | HashMap + TreeMap | ~20 min | Everything in [collections/Main.java](src/com/pao/laboratory04/collections/Main.java) |
+| 2 | Enums | ~20 min | `Priority.java` + [enums/Main.java](src/com/pao/laboratory04/enums/Main.java) |
+| 3 | Custom Exceptions | ~25 min | `InvalidAgeException.java`, `DuplicateEntryException.java` + [exceptions/Main.java](src/com/pao/laboratory04/exceptions/Main.java) |
+| 4 | Integrator: Students + Grades | ~35 min | 6 classes from scratch + [exercise/Main.java](src/com/pao/laboratory04/exercise/Main.java) |
+| 5 | **Bonus:** Task Manager + Audit | ~45 min | ~8 classes from scratch + [bonus/Main.java](src/com/pao/laboratory04/bonus/Main.java) |
 
 ---
 
-### Exercițiul 1 — HashMap și TreeMap
+### Exercise 1 — HashMap and TreeMap
 
-> 📖 **Exemplu:** Rulează mai întâi [collections/ExampleMap.java](src/com/pao/laboratory04/collections/ExampleMap.java) pentru a vedea cum funcționează Map-urile.
+> 📖 **Example:** First run [collections/ExampleMap.java](src/com/pao/laboratory04/collections/ExampleMap.java) to see how Maps work.
 
-Lucrează în [collections/Main.java](src/com/pao/laboratory04/collections/Main.java) — cerințele sunt în Javadoc.
+Work in [collections/Main.java](src/com/pao/laboratory04/collections/Main.java) — requirements are in Javadoc.
 
-**Concepte cheie:**
-- `HashMap<K, V>` — acces O(1), ordine nepredictibilă
-- `TreeMap<K, V>` — chei **sortate**, acces O(log n)
+**Key concepts:**
+- `HashMap<K, V>` — O(1) access, unpredictable order
+- `TreeMap<K, V>` — **sorted** keys, O(log n) access
 - `put`, `get`, `getOrDefault`, `keySet`, `values`, `entrySet`
-- `Map<String, List<String>>` — map cu liste ca valori
+- `Map<String, List<String>>` — map with lists as values
 
 <details>
-<summary><b>Output așteptat</b></summary>
+<summary><b>Expected output</b></summary>
 
 ```
-=== PARTEA A: HashMap — frecvența cuvintelor ===
-Frecvență: {python=2, c++=2, java=3, rust=1, go=1}
-Conține 'rust'? true
-Chei: [python, c++, java, rust, go]
-Valori: [2, 2, 3, 1, 1]
+=== PART A: HashMap — word frequency ===
+Frequency: {python=2, c++=2, java=3, rust=1, go=1}
+Contains 'rust'? true
+Keys: [python, c++, java, rust, go]
+Values: [2, 2, 3, 1, 1]
 python -> 2
 c++ -> 2
 java -> 3
 rust -> 1
 go -> 1
 
-=== PARTEA B: TreeMap — sortare automată ===
-Sortat: {c++=2, go=1, java=3, python=2, rust=1}
-Prima cheie: c++
-Ultima cheie: rust
+=== PART B: TreeMap — automatic sorting ===
+Sorted: {c++=2, go=1, java=3, python=2, rust=1}
+First key: c++
+Last key: rust
 
-=== PARTEA C: Map cu obiecte ===
-Studenți la PAOJ: [Ana, Mihai, Ion]
-Studenți la BD (actualizat): [Ana, Elena, George]
+=== PART C: Map with objects ===
+Students in PAOJ: [Ana, Mihai, Ion]
+Students in DB (updated): [Ana, Elena, George]
 ```
 
 </details>
 
 ---
 
-### Exercițiul 2 — Enum-uri cu câmpuri și metode
+### Exercise 2 — Enums with fields and methods
 
-> 📖 **Exemplu:** Rulează mai întâi [enums/ExampleEnum.java](src/com/pao/laboratory04/enums/ExampleEnum.java) pentru a vedea enum-uri simple și cu metode abstracte.
+> 📖 **Example:** First run [enums/ExampleEnum.java](src/com/pao/laboratory04/enums/ExampleEnum.java) to see simple enums and enums with abstract methods.
 
-Creează `Priority.java` în [enums/](src/com/pao/laboratory04/enums) apoi completează [enums/Main.java](src/com/pao/laboratory04/enums/Main.java).
+Create `Priority.java` in [enums/](src/com/pao/laboratory04/enums) then complete [enums/Main.java](src/com/pao/laboratory04/enums/Main.java).
 
-**Reține:**
-- Enum = set fix de constante singleton
-- Pot avea câmpuri, constructor **privat**, getteri, metode abstracte
+**Remember:**
+- Enum = fixed set of singleton constants
+- Can have fields, **private** constructor, getters, abstract methods
 - `values()`, `valueOf("STRING")`, `name()`, `ordinal()`
-- Comparare cu `==` (nu `.equals()`)
+- Compare with `==` (not `.equals()`)
 
 <details>
-<summary><b>Output așteptat</b></summary>
+<summary><b>Expected output</b></summary>
 
 ```
-=== Toate prioritățile ===
+=== All priorities ===
 🟢 LOW (level=1, color=green)
 🟡 MEDIUM (level=2, color=yellow)
 🟠 HIGH (level=3, color=orange)
 🔴 CRITICAL (level=4, color=red)
 
-=== Switch pe prioritate ===
-⚠️ Atenție! Prioritate ridicată!
+=== Switch on priority ===
+⚠️ Warning! High priority!
 
 === valueOf ===
 Priority.valueOf("HIGH") = HIGH
 
-=== Comparare enum ===
+=== Enum comparison ===
 HIGH == HIGH? true
 HIGH == LOW? false
 
-=== name() și ordinal() ===
+=== name() and ordinal() ===
 LOW: name=LOW, ordinal=0
 MEDIUM: name=MEDIUM, ordinal=1
 HIGH: name=HIGH, ordinal=2
@@ -114,142 +114,142 @@ CRITICAL: name=CRITICAL, ordinal=3
 
 ---
 
-### Exercițiul 3 — Excepții custom
+### Exercise 3 — Custom exceptions
 
-> 📖 **Exemplu:** Rulează mai întâi [exceptions/ExampleExceptions.java](src/com/pao/laboratory04/exceptions/ExampleExceptions.java) pentru a vedea try-catch, custom exceptions, multi-catch.
+> 📖 **Example:** First run [exceptions/ExampleExceptions.java](src/com/pao/laboratory04/exceptions/ExampleExceptions.java) to see try-catch, custom exceptions, multi-catch.
 
-Creează `InvalidAgeException.java` și `DuplicateEntryException.java` în [exceptions/](src/com/pao/laboratory04/exceptions), apoi completează [exceptions/Main.java](src/com/pao/laboratory04/exceptions/Main.java).
+Create `InvalidAgeException.java` and `DuplicateEntryException.java` in [exceptions/](src/com/pao/laboratory04/exceptions), then complete [exceptions/Main.java](src/com/pao/laboratory04/exceptions/Main.java).
 
 <details>
-<summary><b>Ierarhia excepțiilor</b></summary>
+<summary><b>Exception hierarchy</b></summary>
 
 ```
                     Throwable
                    /         \
-             Exception       Error (NU se prind)
+             Exception       Error (DO NOT catch)
               /       \
   checked exceptions   RuntimeException (unchecked)
   (IOException)         /      |       \
                   NullPointer  IndexOutOf  IllegalArgument
                                             \
-                                     excepțiile tale custom
+                                     your custom exceptions
 ```
 
-| Tip | Compilatorul forțează? | Exemple |
-|-----|----------------------|---------|
-| **Checked** | ✅ Da | `IOException`, `SQLException` |
-| **Unchecked** | ❌ Nu | `NullPointerException`, `IllegalArgumentException` |
-| **Error** | ❌ Nu se prind | `OutOfMemoryError`, `StackOverflowError` |
+| Type | Compiler enforces? | Examples |
+|------|-------------------|----------|
+| **Checked** | ✅ Yes | `IOException`, `SQLException` |
+| **Unchecked** | ❌ No | `NullPointerException`, `IllegalArgumentException` |
+| **Error** | ❌ Do not catch | `OutOfMemoryError`, `StackOverflowError` |
 
 </details>
 
-**Reține:**
-- `throw new MyException("mesaj")` — aruncă
-- `throws MyException` — declară în semnătură
+**Remember:**
+- `throw new MyException("message")` — throw
+- `throws MyException` — declare in signature
 - `catch (Ex1 | Ex2 e)` — multi-catch
-- Ordinea: **specific → general**
-- `finally` — se execută **mereu**
+- Order: **specific → general**
+- `finally` — executes **always**
 
 <details>
-<summary><b>Output așteptat</b></summary>
+<summary><b>Expected output</b></summary>
 
 ```
 === a) Unchecked — NullPointerException ===
-Prins: Cannot invoke "String.length()" because "s" is null
-Finally se execută mereu!
+Caught: Cannot invoke "String.length()" because "s" is null
+Finally always executes!
 
 === b) Custom exceptions ===
-InvalidAgeException: Vârsta -5 nu este validă (0-150)
-DuplicateEntryException: 'Ana' există deja în listă
+InvalidAgeException: Age -5 is invalid (0-150)
+DuplicateEntryException: 'Ana' already exists in list
 
 === c) Multi-catch ===
-Excepție prinsă: Vârsta 200 nu este validă (0-150)
+Exception caught: Age 200 is invalid (0-150)
 
 === d) Catch ordering (specific → general) ===
-InvalidAgeException prinsă specific: Vârsta -1 nu este validă (0-150)
+InvalidAgeException caught specifically: Age -1 is invalid (0-150)
 
 === e) Throw vs throws ===
-Metoda process() a aruncat: Vârsta 999 nu este validă (0-150)
+Method process() threw: Age 999 is invalid (0-150)
 ```
 
 </details>
 
 ---
 
-### Exercițiul 4 (Integrator) — Gestiune studenți + note
+### Exercise 4 (Integrator) — Student + Grade Management
 
-Creează **6 clase de la zero** apoi completează TODO-urile din [exercise/Main.java](src/com/pao/laboratory04/exercise/Main.java). Specs complete în Javadoc.
+Create **6 classes from scratch** then complete TODOs in [exercise/Main.java](src/com/pao/laboratory04/exercise/Main.java). Full specs in Javadoc.
 
-| # | Clasă | Pachet | Tip |
-|---|-------|--------|-----|
-| 1 | `Subject.java` | [exercise/model/](src/com/pao/laboratory04/exercise/model) | Enum (PAOJ, BD, SO, RC) cu `fullName` + `credits` |
-| 2 | `Student.java` | [exercise/model/](src/com/pao/laboratory04/exercise/model) | Clasă cu `Map<Subject, Double> grades` |
+| # | Class | Package | Type |
+|---|-------|---------|------|
+| 1 | `Subject.java` | [exercise/model/](src/com/pao/laboratory04/exercise/model) | Enum (PAOJ, BD, SO, RC) with `fullName` + `credits` |
+| 2 | `Student.java` | [exercise/model/](src/com/pao/laboratory04/exercise/model) | Class with `Map<Subject, Double> grades` |
 | 3 | `InvalidStudentException.java` | [exercise/exception/](src/com/pao/laboratory04/exercise/exception) | extends RuntimeException |
 | 4 | `InvalidGradeException.java` | [exercise/exception/](src/com/pao/laboratory04/exercise/exception) | extends RuntimeException |
 | 5 | `StudentNotFoundException.java` | [exercise/exception/](src/com/pao/laboratory04/exercise/exception) | extends RuntimeException |
-| 6 | `StudentService.java` | [exercise/service/](src/com/pao/laboratory04/exercise/service) | Singleton cu `List<Student>` + 6 metode |
+| 6 | `StudentService.java` | [exercise/service/](src/com/pao/laboratory04/exercise/service) | Singleton with `List<Student>` + 6 methods |
 
 <details>
-<summary><b>Exemplu interacțiune</b></summary>
+<summary><b>Example interaction</b></summary>
 
 ```
-=== Sistem Gestiune Studenți ===
+=== Student Management System ===
 
---- Meniu ---
-1. Adaugă student
-2. Adaugă notă
-3. Afișează toți studenții
-4. Top studenți (după medie)
-5. Media pe materie
-0. Ieșire
-Opțiune: 1
-Nume: Ana
-Vârsta: 20
-Student adăugat cu succes!
+--- Menu ---
+1. Add student
+2. Add grade
+3. Display all students
+4. Top students (by average)
+5. Average per subject
+0. Exit
+Option: 1
+Name: Ana
+Age: 20
+Student added successfully!
 
-Opțiune: 2
-Nume student: Ana
-Materie (PAOJ, BD, SO, RC): PAOJ
-Nota (1-10): 9.5
-Notă adăugată!
+Option: 2
+Student name: Ana
+Subject (PAOJ, BD, SO, RC): PAOJ
+Grade (1-10): 9.5
+Grade added!
 
-Opțiune: 3
+Option: 3
 1. Student{name='Ana', age=20, avg=8.75}
    PAOJ = 9.5
    BD = 8.0
 
-Opțiune: 4
-=== Top studenți ===
-1. Ana — media: 8.75
-2. Mihai — media: 7.00
+Option: 4
+=== Top students ===
+1. Ana — average: 8.75
+2. Mihai — average: 7.00
 
-Opțiune: 5
-=== Media pe materie ===
+Option: 5
+=== Average per subject ===
 PAOJ: 8.25
 BD: 8.00
 
-Opțiune: 1
-Nume: Invalid
-Vârsta: -5
-Eroare: Vârsta -5 nu este validă (18-60)
+Option: 1
+Name: Invalid
+Age: -5
+Error: Age -5 is invalid (18-60)
 
-Opțiune: 0
-La revedere!
+Option: 0
+Goodbye!
 ```
 
 </details>
 
 <details>
-<summary><b>Hint-uri</b></summary>
+<summary><b>Hints</b></summary>
 
 **Subject.java (enum):**
 ```java
 public enum Subject {
-    PAOJ("Programare Avansată pe Obiecte", 6),
-    BD("Baze de Date", 5),
+    PAOJ("Advanced Object-Oriented Programming", 6),
+    BD("Databases", 5),
     // ...
     ;
-    // câmpuri, constructor, getteri
+    // fields, constructor, getters
 }
 ```
 
@@ -274,7 +274,7 @@ public static StudentService getInstance() { ... }
 ```java
 Map<Subject, Double> result = new HashMap<>();
 for (Subject subject : Subject.values()) {
-    // colectează note de la toți studenții care au notă la 'subject'
+    // collect grades from all students who have a grade for 'subject'
 }
 ```
 
@@ -282,32 +282,32 @@ for (Subject subject : Subject.values()) {
 
 ---
 
-### Exercițiul 5 (Bonus) — Task Manager cu Audit Log
+### Exercise 5 (Bonus) — Task Manager with Audit Log
 
-Construiește un sistem complet **fără schelet de cod** — primești doar cerințele în [bonus/Main.java](src/com/pao/laboratory04/bonus/Main.java). Tu decizi structura claselor și organizarea pachetelor.
+Build a complete system **without code skeleton** — you only get the requirements in [bonus/Main.java](src/com/pao/laboratory04/bonus/Main.java). You decide the class structure and package organization.
 
-**Ce trebuie creat (~8 clase):**
+**What needs to be created (~8 classes):**
 
-| Tip | Clase | Ce e diferit față de Ex. 4 |
-|-----|-------|---------------------------|
-| Model | `Task` (id, title, status, priority, assignee) | ID generat automat ("T001", "T002"...) |
-| Enum | `Status` cu metodă abstractă `canTransitionTo(Status)` | **State machine**: TODO→IN_PROGRESS→DONE, nu poți merge înapoi |
-| Enum | `Priority` cu `calculateScore(int baseDays)` | Enum cu **logică de calcul**, nu doar date |
-| Excepții | `DuplicateTaskException`, `TaskNotFoundException`, `InvalidTransitionException` | `InvalidTransitionException` are **câmpuri extra** (fromStatus, toStatus) |
-| Serviciu | `TaskService` (Singleton) cu **2 Map-uri** + **audit log** | `Map<String, Task>` + `Map<Priority, List<Task>>` + `List<String>` |
+| Type | Classes | What's different from Ex. 4 |
+|------|---------|---------------------------|
+| Model | `Task` (id, title, status, priority, assignee) | Auto-generated ID ("T001", "T002"...) |
+| Enum | `Status` with abstract method `canTransitionTo(Status)` | **State machine**: TODO→IN_PROGRESS→DONE, cannot go backward |
+| Enum | `Priority` with `calculateScore(int baseDays)` | Enum with **calculation logic**, not just data |
+| Exceptions | `DuplicateTaskException`, `TaskNotFoundException`, `InvalidTransitionException` | `InvalidTransitionException` has **extra fields** (fromStatus, toStatus) |
+| Service | `TaskService` (Singleton) with **2 Maps** + **audit log** | `Map<String, Task>` + `Map<Priority, List<Task>>` + `List<String>` |
 
-**Ce face acest exercițiu mai dificil:**
-- Enum cu **state machine** (tranziții valide/invalide)
-- Excepție custom cu **câmpuri suplimentare** (nu doar message)
-- Serviciu cu **structuri de date multiple** sincronizate
-- **Audit log** — pattern real din aplicații enterprise
-- **Scor de urgență** calculat din enum
-- **Organizare liberă** — tu decizi pachetele
+**What makes this exercise more difficult:**
+- Enum with **state machine** (valid/invalid transitions)
+- Custom exception with **additional fields** (not just message)
+- Service with **multiple synchronized data structures**
+- **Audit log** — real pattern from enterprise applications
+- **Urgency score** calculated from enum
+- **Free organization** — you decide the packages
 
 <details>
-<summary><b>Hint-uri</b></summary>
+<summary><b>Hints</b></summary>
 
-**Status enum cu canTransitionTo:**
+**Status enum with canTransitionTo:**
 ```java
 public enum Status {
     TODO {
@@ -331,7 +331,7 @@ public enum Status {
 }
 ```
 
-**ID automat:**
+**Auto ID:**
 ```java
 private int nextId = 1;
 String id = String.format("T%03d", nextId++);  // "T001", "T002"...
@@ -340,17 +340,17 @@ String id = String.format("T%03d", nextId++);  // "T001", "T002"...
 **Audit log:**
 ```java
 private final List<String> auditLog = new ArrayList<>();
-// la fiecare operație:
+// on each operation:
 auditLog.add("[ADD] " + task.getId() + ": '" + task.getTitle() + "' (" + task.getPriority() + ")");
 ```
 
-**getStatusSummary() — numără pe fiecare status:**
+**getStatusSummary() — count per status:**
 ```java
 Map<Status, Long> summary = new HashMap<>();
 for (Status s : Status.values()) {
     long count = tasksById.values().stream()
         .filter(t -> t.getStatus() == s).count();
-    // sau cu for clasic
+    // or with classic for loop
     summary.put(s, count);
 }
 ```
@@ -362,16 +362,16 @@ for (Status s : Status.values()) {
 <details open>
 <summary><h2>Cheat Sheet</h2></summary>
 
-| Concept | Sintaxă |
-|---------|---------|
-| `HashMap<K,V>` | O(1), ordine nepredictibilă |
-| `TreeMap<K,V>` | **Sortat** după cheie |
-| `map.getOrDefault(k, def)` | Returnează valoare sau default |
+| Concept | Syntax |
+|---------|--------|
+| `HashMap<K,V>` | O(1), unpredictable order |
+| `TreeMap<K,V>` | **Sorted** by key |
+| `map.getOrDefault(k, def)` | Returns value or default |
 | `map.entrySet()` | `for (Map.Entry<K,V> e : map.entrySet())` |
-| `enum` cu câmpuri | Constructor **privat**, getteri, metode abstracte |
-| `values()` / `valueOf("X")` | Toate constantele / String → enum |
+| `enum` with fields | **Private** constructor, getters, abstract methods |
+| `values()` / `valueOf("X")` | All constants / String → enum |
 | `try-catch-finally` | `try { } catch (Ex e) { } finally { }` |
-| `throw` / `throws` | Aruncă excepție / Declară în semnătură |
+| `throw` / `throws` | Throw exception / Declare in signature |
 | Multi-catch | `catch (Ex1 \| Ex2 e)` |
 | Custom exception | `class MyEx extends RuntimeException { MyEx(String m) { super(m); } }` |
 
@@ -379,9 +379,9 @@ for (Status s : Status.values()) {
 
 ---
 
-## Ce urmează la Laboratory 05?
+## What's next in Laboratory 05?
 - Generics (`<T>`, bounded types, wildcards)
-- Stream API & lambdas (introducere)
+- Stream API & lambdas (introduction)
 - Design patterns (Factory, Strategy)
 
 ---
@@ -389,15 +389,15 @@ for (Status s : Status.values()) {
 ## FAQ
 
 <details>
-<summary><b>1. <code>HashMap</code> vs <code>TreeMap</code> — când pe care?</b></summary>
+<summary><b>1. <code>HashMap</code> vs <code>TreeMap</code> — when to use which?</b></summary>
 
 | | `HashMap` | `TreeMap` |
 |---|----------|-----------|
-| **Ordine** | Nepredictibilă | Chei **sortate** |
-| **Performanță** | O(1) | O(log n) |
-| **Null keys** | ✅ 1 cheie null | ❌ Nu |
+| **Order** | Unpredictable | **Sorted** keys |
+| **Performance** | O(1) | O(log n) |
+| **Null keys** | ✅ 1 null key | ❌ Not allowed |
 
-**Frecvența elementelor:**
+**Element frequency:**
 ```java
 Map<String, Integer> freq = new HashMap<>();
 for (String word : words) {
@@ -405,24 +405,24 @@ for (String word : words) {
 }
 ```
 
-**Map cu liste:**
+**Map with lists:**
 ```java
 Map<String, List<String>> groups = new HashMap<>();
 groups.computeIfAbsent("PAOJ", k -> new ArrayList<>()).add("Ana");
 ```
 
-Cheile trebuie să aibă `equals()`/`hashCode()` corecte — vezi [Lab 02 FAQ #4](src/com/pao/laboratory02/Readme.md).
+Keys must have correct `equals()`/`hashCode()` — see [Lab 02 FAQ #4](src/com/pao/laboratory02/Readme.md).
 
 </details>
 
 <details>
-<summary><b>2. Ce este un enum și când îl folosesc?</b></summary>
+<summary><b>2. What is an enum and when should I use it?</b></summary>
 
-Enum = set **fix și finit** de constante singleton.
+Enum = **fixed and finite** set of singleton constants.
 
-**Folosește când:** set fix de valori (zile, stări, priorități), vrei type safety, vrei date/comportament pe constantă.
+**Use when:** fixed set of values (days, states, priorities), you want type safety, you want data/behavior per constant.
 
-**Enum cu câmpuri și metode abstracte:**
+**Enum with fields and abstract methods:**
 ```java
 public enum Priority {
     LOW(1) {
@@ -439,7 +439,7 @@ public enum Priority {
 }
 ```
 
-**Reguli:** Constructor implicit privat · Comparare cu `==` · `values()` = toate constantele · `valueOf("HIGH")` = String → enum.
+**Rules:** Constructor implicitly private · Compare with `==` · `values()` = all constants · `valueOf("HIGH")` = String → enum.
 
 </details>
 
@@ -448,21 +448,21 @@ public enum Priority {
 
 | | Checked | Unchecked |
 |---|---------|-----------|
-| **Superclasă** | `Exception` (dar NU `RuntimeException`) | `RuntimeException` |
-| **Compilatorul forțează** | ✅ Da | ❌ Nu |
-| **Cauza** | Condiții externe (fișier, rețea) | Bug-uri (null, index greșit) |
+| **Superclass** | `Exception` (but NOT `RuntimeException`) | `RuntimeException` |
+| **Compiler enforces** | ✅ Yes | ❌ No |
+| **Cause** | External conditions (file, network) | Bugs (null, wrong index) |
 | **Custom** | `extends Exception` | `extends RuntimeException` |
 
-**Practică:** Pentru excepții custom, de obicei `extends RuntimeException` — mai simplu, nu poluează semnăturile.
+**Practice:** For custom exceptions, usually `extends RuntimeException` — simpler, doesn't pollute signatures.
 
 </details>
 
 <details>
-<summary><b>4. Când creez o excepție custom?</b></summary>
+<summary><b>4. When do I create a custom exception?</b></summary>
 
-**Da:** excepțiile standard nu exprimă problema · vrei catch diferențiat · vrei câmpuri extra.
+**Yes:** standard exceptions don't express the problem · you want differentiated catch · you want extra fields.
 
-**Nu:** `IllegalArgumentException` exprimă deja problema.
+**No:** `IllegalArgumentException` already expresses the problem.
 
 ```java
 public class StudentNotFoundException extends RuntimeException {
@@ -472,43 +472,43 @@ public class StudentNotFoundException extends RuntimeException {
 }
 ```
 
-Pattern-ul `super(message)` e același ca `super(name, age)` din [Lab 02 Dog.java](src/com/pao/laboratory02/exercise4/model/Dog.java).
+The `super(message)` pattern is the same as `super(name, age)` from [Lab 02 Dog.java](src/com/pao/laboratory02/exercise4/model/Dog.java).
 
 </details>
 
 <details>
-<summary><b>5. Ce face <code>finally</code>?</b></summary>
+<summary><b>5. What does <code>finally</code> do?</b></summary>
 
-Se execută **mereu** — și dacă `try` reușește, și dacă `catch` prinde ceva, și chiar dacă ai `return`!
+Executes **always** — whether `try` succeeds, whether `catch` catches something, even if you have `return`!
 
 ```java
 try {
     return;
 } finally {
-    System.out.println("se execută oricum!");
+    System.out.println("executes anyway!");
 }
 ```
 
-**Alternativă modernă:** `try-with-resources` — `try (FileReader r = ...) { }`.
+**Modern alternative:** `try-with-resources` — `try (FileReader r = ...) { }`.
 
 </details>
 
 <details>
-<summary><b>6. De ce contează ordinea catch-urilor?</b></summary>
+<summary><b>6. Why does catch order matter?</b></summary>
 
-Java intră în **primul** catch care se potrivește. Specific → general, altfel eroare de compilare.
+Java enters the **first** catch that matches. Specific → general, otherwise compilation error.
 
 ```java
-// ✅ Corect
+// ✅ Correct
 catch (InvalidAgeException e) { ... }    // specific
 catch (RuntimeException e) { ... }       // general
 
-// ❌ Greșit — nu compilează
-catch (RuntimeException e) { ... }       // prinde TOT
+// ❌ Wrong — doesn't compile
+catch (RuntimeException e) { ... }       // catches EVERYTHING
 catch (InvalidAgeException e) { ... }    // unreachable!
 ```
 
-Multi-catch: `catch (Ex1 | Ex2 e)` — doar dacă NU sunt în relație părinte-copil.
+Multi-catch: `catch (Ex1 | Ex2 e)` — only if they are NOT in parent-child relationship.
 
 </details>
 
@@ -517,35 +517,35 @@ Multi-catch: `catch (Ex1 | Ex2 e)` — doar dacă NU sunt în relație părinte-
 
 | | `throw` | `throws` |
 |---|---------|----------|
-| **Ce face** | Aruncă excepție | Declară că metoda poate arunca |
-| **Unde** | Corpul metodei | Semnătura metodei |
-| **Sintaxă** | `throw new MyEx("msg")` | `void m() throws MyEx` |
+| **What it does** | Throws exception | Declares that method may throw |
+| **Where** | Method body | Method signature |
+| **Syntax** | `throw new MyEx("msg")` | `void m() throws MyEx` |
 
-`throws` obligatoriu doar pentru checked exceptions.
+`throws` is mandatory only for checked exceptions.
 
 </details>
 
 <details>
-<summary><b>8. Utilizări <code>super</code> în Lab 03</b></summary>
+<summary><b>8. <code>super</code> usage in Lab 03</b></summary>
 
-`super` apare în excepții custom — transmite mesajul către `RuntimeException`:
+`super` appears in custom exceptions — passes the message to `RuntimeException`:
 
-| Clasă | Apel | Părinte |
-|-------|------|---------|
+| Class | Call | Parent |
+|-------|------|--------|
 | `InvalidAgeException` | `super(message)` | `RuntimeException` |
 | `DuplicateEntryException` | `super(message)` | `RuntimeException` |
 | `InvalidStudentException` | `super(message)` | `RuntimeException` |
 | `InvalidGradeException` | `super(message)` | `RuntimeException` |
 | `StudentNotFoundException` | `super(message)` | `RuntimeException` |
 
-Același pattern ca `super(name, age)` din Lab 02. Lista completă → [Lab 02 FAQ #1](src/com/pao/laboratory02/Readme.md).
+Same pattern as `super(name, age)` from Lab 02. Complete list → [Lab 02 FAQ #1](src/com/pao/laboratory02/Readme.md).
 
 </details>
 
 <details>
-<summary><b>9. Enum ca cheie în <code>HashMap</code>?</b></summary>
+<summary><b>9. Enum as key in <code>HashMap</code>?</b></summary>
 
-**Da!** Enum-urile sunt ideale — `hashCode()`/`equals()` corecte, imutabile. Java oferă și `EnumMap` optimizat:
+**Yes!** Enums are ideal — correct `hashCode()`/`equals()`, immutable. Java also provides optimized `EnumMap`:
 
 ```java
 Map<Subject, Double> grades = new EnumMap<>(Subject.class);
@@ -558,30 +558,29 @@ grades.put(Subject.PAOJ, 9.5);
 <summary><b>10. <code>List</code> vs <code>Set</code> vs <code>Map</code>?</b></summary>
 
 ```
-Perechi cheie → valoare?  → Map (HashMap / TreeMap)
-Unicitate?                → Set (HashSet / TreeSet)
-Ordine + duplicate?       → ArrayList
-Sortare automată?         → TreeSet / TreeMap
+Key → value pairs?  → Map (HashMap / TreeMap)
+Uniqueness?         → Set (HashSet / TreeSet)
+Order + duplicates? → ArrayList
+Automatic sorting?  → TreeSet / TreeMap
 ```
 
-**Proiect:** minim 2 colecții diferite, una sortată → `ArrayList` + `TreeMap`/`TreeSet`.
+**Project:** minimum 2 different collections, one sorted → `ArrayList` + `TreeMap`/`TreeSet`.
 
 </details>
 
 ---
 
 <details>
-<summary><h2>Legătura cu proiectul individual</h2></summary>
+<summary><h2>Connection to the individual project</h2></summary>
 
-| Cerință proiect | Ce ai învățat |
-|----------------|---------------|
-| 2 colecții diferite, 1 sortată | `HashMap`/`TreeMap` + `ArrayList` |
-| 8 tipuri de obiecte | Enum-uri = tipuri noi |
-| 10 acțiuni/interogări | Serviciu CRUD + validare cu excepții |
-| Clasă serviciu | Singleton din Lab 01-03 |
-| Validare date | Excepții custom |
+| Project requirement | What you learned |
+|---------------------|------------------|
+| 2 different collections, 1 sorted | `HashMap`/`TreeMap` + `ArrayList` |
+| 8 object types | Enums = new types |
+| 10 actions/queries | CRUD service + validation with exceptions |
+| Service class | Singleton from Lab 01-03 |
+| Data validation | Custom exceptions |
 
-**După Lab 03 poți începe Etapa I a proiectului!**
+**After Lab 03 you can start Stage I of the project!**
 
 </details>
-
