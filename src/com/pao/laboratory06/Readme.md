@@ -1,61 +1,61 @@
-# Laboratory 06 — Interfețe
+# Laboratory 06 — Interfaces
 
-> **Pachet:** `com.pao.laboratory06` · **Curs:** 05 ·
-> **Data limită:** miercuri 1 aprilie 2026, ora 23:59
+> **Package:** `com.pao.laboratory06` · **Course:** 05 ·
+> **Deadline:** Wednesday, April 1, 2026, 23:59
 
 ---
 
 <details open>
-<summary><h2>Obiective</h2></summary>
+<summary><h2>Objectives</h2></summary>
 
-1. **Interfețe** — sintaxă, membre (constante, metode abstracte, default, static, private)
-2. **`Comparable<T>`** — sortare naturală, `compareTo`
-3. **`Comparator<T>`** — sortări alternative, clase externe
-4. **Callback** — transmiterea unei metode ca argument folosind interfețe
-5. **Extinderea interfețelor** — `extends` între interfețe, sub-interfețe
-6. **Referința de tip interfață** — accesarea unui obiect prin tipul interfeței (CAN_DO)
-7. **Constante în interfețe** — grupuri de constante (și de ce enum-urile sunt superioare)
+1. **Interfaces** — syntax, members (constants, abstract methods, default, static, private)
+2. **`Comparable<T>`** — natural sorting, `compareTo`
+3. **`Comparator<T>`** — alternative sorting, external classes
+4. **Callback** — passing a method as an argument using interfaces
+5. **Extending interfaces** — `extends` between interfaces, sub-interfaces
+6. **Interface type reference** — accessing an object through the interface type (CAN_DO)
+7. **Constants in interfaces** — constant groups (and why enums are superior)
 
 </details>
 
 ---
 
-## Exerciții
+## Exercises
 
-| # | Pachet | Concept principal | Timp estimat | Teste automate |
-|---|--------|-------------------|--------------|----------------|
-| 1 | [`exercise1/`](exercise1/Readme.md) | EXEMPLU: `Comparable` + `Comparator` + sortări multiple | ~35 min | ✓ (3 părți) |
-| 2 | [`exercise2/`](exercise2/Readme.md) | Cerințe principale (vezi Readme principal) | ~30 min | ✓ (3 părți) |
-| 3 (bonus) | [`exercise3/`](exercise3/Readme.md) | Integrare avansată colaboratori (bonus) | ~45 min | manual |
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+|---|---------|--------------|----------------|-----------------|
+| 1 | [`exercise1/`](exercise1/Readme.md) | EXAMPLE: `Comparable` + `Comparator` + multiple sorts | ~35 min | ✓ (3 parts) |
+| 2 | [`exercise2/`](exercise2/Readme.md) | Main requirements (see main Readme) | ~30 min | ✓ (3 parts) |
+| 3 (bonus) | [`exercise3/`](exercise3/Readme.md) | Advanced collaborator integration (bonus) | ~45 min | manual |
 
-> **Notă:** Doar în acest laborator, exercițiul 1 este un exemplu pentru a vă familiariza cu formatul și testarea automată. Exercițiul 2 este exercițiul principal, cu cerințe bazate pe Readme-ul principal al laboratorului. Exercițiul 3 este bonus: dacă îl rezolvi, poți participa la doar 8 exerciții și poți obține un bonus de 0.5% la nota finală de laborator, astfel încât să poți atinge nota maximă chiar dacă nu se rotunjește la 50% la calculul final.
+> **Note:** Only in this laboratory, exercise 1 is an example to familiarize you with the format and automated testing. Exercise 2 is the main exercise, with requirements based on the main laboratory Readme. Exercise 3 is a bonus: if you solve it, you can participate in only 8 exercises and receive a 0.5% bonus on the final laboratory grade, allowing you to reach the maximum grade even if it doesn't round up to 50% in the final calculation.
 
-> **Total estimat:** ~1h50 min (fără bonus) · ~2h35 min (cu bonus)
+> **Estimated total:** ~1h50 min (without bonus) · ~2h35 min (with bonus)
 
 ---
 
-## Cum rulezi testele automate
+## How to Run Automated Tests
 
-Deschide `exercise1/Test.java` sau `exercise2/Test.java` în IntelliJ și apasă **Run**.
+Open `exercise1/Test.java` or `exercise2/Test.java` in IntelliJ and press **Run**.
 
-Directorul de lucru trebuie să fie **rădăcina proiectului** (`paoj-2026/`):
+The working directory must be the **project root** (`paoj-2026/`):
 `Run → Edit Configurations → Working directory → $PROJECT_DIR$`
 
-Fiecare exercițiu cu teste automate are **mai multe părți** (`partA`, `partB`, `partC`).
-Poți rezolva și testa câte o parte pe rând — la rulare vei vedea un sumar per parte
-și un tabel final cu totalul testelor trecute.
+Each exercise with automated tests has **multiple parts** (`partA`, `partB`, `partC`).
+You can solve and test one part at a time — when running, you'll see a summary per part
+and a final table with the total number of tests passed.
 
 ---
 
-## Fișiere din acest laborator
+## Files in this Laboratory
 
-| Fișier | Rol |
-|--------|-----|
-| [exercise1/Readme.md](exercise1/Readme.md) | Cerință completă Ex 1 (exemplu) |
-| [exercise1/Main.java](exercise1/Main.java) | Punct de intrare Ex 1 |
-| [exercise1/Test.java](exercise1/Test.java) | Runner teste automate Ex 1 |
-| [exercise2/Readme.md](exercise2/Readme.md) | Cerință completă Ex 2 (principal) |
-| [exercise2/Main.java](exercise2/Main.java) | Punct de intrare Ex 2 |
-| [exercise2/Test.java](exercise2/Test.java) | Runner teste automate Ex 2 |
-| [exercise3/Readme.md](exercise3/Readme.md) | Cerință completă Ex 3 (bonus) |
-| [exercise3/Main.java](exercise3/Main.java) | Punct de intrare Ex 3 |
+| File | Role |
+|------|------|
+| [exercise1/Readme.md](exercise1/Readme.md) | Complete requirements Ex 1 (example) |
+| [exercise1/Main.java](exercise1/Main.java) | Entry point Ex 1 |
+| [exercise1/Test.java](exercise1/Test.java) | Automated test runner Ex 1 |
+| [exercise2/Readme.md](exercise2/Readme.md) | Complete requirements Ex 2 (main) |
+| [exercise2/Main.java](exercise2/Main.java) | Entry point Ex 2 |
+| [exercise2/Test.java](exercise2/Test.java) | Automated test runner Ex 2 |
+| [exercise3/Readme.md](exercise3/Readme.md) | Complete requirements Ex 3 (bonus) |
+| [exercise3/Main.java](exercise3/Main.java) | Entry point Ex 3 |

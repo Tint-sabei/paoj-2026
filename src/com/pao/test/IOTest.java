@@ -5,20 +5,22 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Utilitar pentru testarea automată a exercițiilor I/O.
+ * Utility for automated testing of I/O exercises.
  *
- * Folosire dintr-un Test.java al unui exercițiu:
+ * Usage from an exercise's Test.java:
  *   IOTest.runParts("src/com/pao/laboratoryNN/exerciseM/tests", Main::main);
  *
- * Convenție directoare de test:
- *   tests/partA/1.in  → input furnizat la System.in pentru Partea A, testul 1
- *   tests/partA/1.out → output așteptat (comparație exactă, fără spații finale)
- *   tests/partB/1.in, tests/partB/1.out, ... pentru Partea B
- *   ... și tot așa pentru partC, partD etc.
+ * Test directory convention:
+ *   tests/partA/1.in  → input provided to System.in for Part A, test 1
+ *   tests/partA/1.out → expected output (exact comparison, ignoring trailing spaces)
+ *   tests/partB/1.in, tests/partB/1.out, ... for Part B
+ *   ... and so on for partC, partD, etc.
  *
- * Fișierele .in și .out trebuie să aibă același prefix numeric (e.g. 1.in / 1.out).
- * Subdirectoarele sunt procesate în ordine alfabetică.
+ * .in and .out files must have the same numeric prefix (e.g. 1.in / 1.out).
+ * Subdirectories are processed in alphabetical order.
  */
+
+
 public class IOTest {
 
     @FunctionalInterface
@@ -27,21 +29,21 @@ public class IOTest {
     }
 
     /**
-     * Rulează testele din toate subdirectoarele partX/ ale directorului dat.
-     * Fiecare subdirector este o "parte" a exercițiului și primește propriul header și sumar.
-     * La final se afișează un tabel combinat cu rezultatele tuturor părților.
+     * Runs tests from all partX/ subdirectories of the given directory.
+     * Each subdirectory is a "part" of the exercise and receives its own header and summary.
+     * At the end, a combined table with results from all parts is displayed.
      *
-     * @param testsDir calea relativă la rădăcina proiectului (e.g. "src/com/pao/laboratory06/exercise1/tests")
-     * @param main     referință la Main::main al exercițiului testat
+     * @param testsDir relative path to the project root (e.g. "src/com/pao/laboratory06/exercise1/tests")
+     * @param main     reference to the exercise's Main::main being tested
      */
     public static void runParts(String testsDir, MainMethod main) {
         File dir = new File(testsDir);
         if (!dir.exists() || !dir.isDirectory()) {
-            System.out.println("EROARE: directorul de teste nu există: " + dir.getAbsolutePath());
+            System.out.println("ERROR: test directory does not exist: " + dir.getAbsolutePath());
             return;
         }
 
-        // Colectăm subdirectoarele (partA, partB, partC, ...)
+        // We collect the subdirectories (partA, partB, partC, ...)
         File[] all = dir.listFiles();
         File[] partDirs = (all == null) ? new File[0]
                 : Arrays.stream(all)
@@ -50,12 +52,12 @@ public class IOTest {
         Arrays.sort(partDirs, Comparator.comparing(File::getName));
 
         if (partDirs.length == 0) {
-            System.out.println("EROARE: nu există subdirectoare de tip partX/ în " + testsDir);
-            System.out.println("Structura așteptată: tests/partA/, tests/partB/, ...");
+            System.out.println("ERROR: there are no subdirectories of type partX/ in " + testsDir);
+            System.out.println("Expected structure: tests/partA/, tests/partB/, ...");
             return;
         }
 
-        // Rezultate per parte pentru tabelul final
+        // Results per part for the final table
         List<String>  partNames   = new ArrayList<>();
         List<Integer> partPassed  = new ArrayList<>();
         List<Integer> partTotal   = new ArrayList<>();
@@ -73,7 +75,7 @@ public class IOTest {
             partTotal.add(results[1]);
         }
 
-        // Tabel sumar final
+        // Final summary table
         System.out.println();
         System.out.println("══════════════════════════════════════════════════════════════");
         System.out.println("  SUMAR FINAL");
@@ -92,17 +94,17 @@ public class IOTest {
     }
 
     /**
-     * Rulează testele dintr-o singură parte (subdirector).
-     * Util în dezvoltare: IOTest.runPart("src/.../tests", "partA", Main::main)
+     * Runs the tests from a single part (subdirectory).
+     * Useful in development: IOTest.runPart("src/.../tests", "partA", Main::main)
      *
-     * @param testsDir calea relativă la directorul tests/
-     * @param partName numele subdirectorului (e.g. "partA")
-     * @param main     referință la Main::main
+     * @param testsDir the relative path to the tests/ directory
+     * @param partName the name of the subdirectory (e.g. "partA")
+     * @param main reference to Main::main
      */
     public static void runPart(String testsDir, String partName, MainMethod main) {
         File partDir = new File(testsDir, partName);
         if (!partDir.exists() || !partDir.isDirectory()) {
-            System.out.println("EROARE: directorul de parte nu există: " + partDir.getAbsolutePath());
+            System.out.println("ERROR: the party directory does not exist: " + partDir.getAbsolutePath());
             return;
         }
         System.out.println();
@@ -111,13 +113,13 @@ public class IOTest {
         System.out.println("╚══════════════════════════════════════════════════════════════╝");
         int[] results = runPartDir(partDir, main);
         System.out.println();
-        System.out.printf("Rezultat %s: %d/%d teste trecute.%n", partName, results[0], results[1]);
+        System.out.printf("Result %s: %d/%d tests passed.%n", partName, results[0], results[1]);
     }
 
     // ── Internal helpers ─────────────────────────────────────────────────────
 
     /**
-     * Rulează toate testele (.in/.out) dintr-un singur director de parte.
+     * Runs all tests (.in/.out) from a single part directory.
      * @return int[]{passed, total}
      */
     private static int[] runPartDir(File dir, MainMethod main) {

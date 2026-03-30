@@ -10,59 +10,59 @@ public class Main {
 //            Colaborator c = switch (tip) {
 //                case "CIM" -> {
 //                    CIMColaborator obj = new CIMColaborator();
-//                    obj.citeste(in);
+//                    obj.read(in);
 //                    yield obj;
 //                }
 //                case "PFA" -> {
 //                    PFAColaborator obj = new PFAColaborator();
-//                    obj.citeste(in);
+//                    obj.read(in);
 //                    yield obj;
 //                }
 //                case "SRL" -> {
 //                    SRLColaborator obj = new SRLColaborator();
-//                    obj.citeste(in);
+//                    obj.read(in);
 //                    yield obj;
 //                }
-//                default -> throw new IllegalArgumentException("Tip necunoscut: " + tip);
+//                default -> throw new IllegalArgumentException("Unknown type: " + tip);
 //            };
 //            colaboratori.add(c);
 //        }
-//        // Sortează și afișează pe tip, fiecare descrescător după venit net anual
-//        for (TipColaborator tipColab : TipColaborator.values()) {
+//        // Sort and display by type, each descending by annual net income
+//        for (ColaboratorType tipColab : ColaboratorType.values()) {
 //            colaboratori.stream()
-//                    .filter(c -> c.getTip() == tipColab)
-//                    .sorted((a, b) -> Double.compare(b.calculeazaVenitNetAnual(), a.calculeazaVenitNetAnual()))
-//                    .forEach(Colaborator::afiseaza);
+//                    .filter(c -> c.getType() == tipColab)
+//                    .sorted((a, b) -> Double.compare(b.calculateAnnualNetIncome(), a.calculateAnnualNetIncome()))
+//                    .forEach(Colaborator::display);
 //        }
-//        // Colaborator cu venit net maxim
-//        Colaborator max = colaboratori.stream().max(Comparator.comparingDouble(Colaborator::calculeazaVenitNetAnual)).orElse(null);
-//        System.out.printf("\nColaborator cu venit net maxim: ");
-//        if (max != null) max.afiseaza();
-//        // Colaboratori persoane juridice (SRL)
-//        System.out.println("\nColaboratori persoane juridice:");
+//        // Collaborator with maximum net income
+//        Colaborator max = colaboratori.stream().max(Comparator.comparingDouble(Colaborator::calculateAnnualNetIncome)).orElse(null);
+//        System.out.printf("\nCollaborator with maximum net income: ");
+//        if (max != null) max.display();
+//        // Legal entity collaborators (SRL)
+//        System.out.println("\nLegal entity collaborators:");
 //        colaboratori.stream()
-//                .filter(c -> c instanceof PersoanaJuridica)
-//                .sorted((a, b) -> Double.compare(b.calculeazaVenitNetAnual(), a.calculeazaVenitNetAnual()))
-//                .forEach(Colaborator::afiseaza);
-//        // Sume și număr colaboratori pe tip
-//        System.out.println("\nSume și număr colaboratori pe tip:");
-//        Map<TipColaborator, Double> suma = new EnumMap<>(TipColaborator.class);
-//        Map<TipColaborator, Integer> numar = new EnumMap<>(TipColaborator.class);
-//        var typesOfCollaborators = new HashSet<TipColaborator>();
+//                .filter(c -> c instanceof LegalEntity)
+//                .sorted((a, b) -> Double.compare(b.calculateAnnualNetIncome(), a.calculateAnnualNetIncome()))
+//                .forEach(Colaborator::display);
+//        // Sums and counts by collaborator type
+//        System.out.println("\nSums and counts by collaborator type:");
+//        Map<ColaboratorType, Double> sum = new EnumMap<>(ColaboratorType.class);
+//        Map<ColaboratorType, Integer> count = new EnumMap<>(ColaboratorType.class);
+//        var typesOfCollaborators = new HashSet<ColaboratorType>();
 //        for (Colaborator c : colaboratori) {
-//            typesOfCollaborators.add(c.getTip());
+//            typesOfCollaborators.add(c.getType());
 //        }
-//        for (TipColaborator t : typesOfCollaborators) {
-//            suma.put(t, 0.0);
-//            numar.put(t, 0);
+//        for (ColaboratorType t : typesOfCollaborators) {
+//            sum.put(t, 0.0);
+//            count.put(t, 0);
 //        }
 //        for (Colaborator c : colaboratori) {
-//            TipColaborator t = c.getTip();
-//            suma.put(t, suma.get(t) + c.calculeazaVenitNetAnual());
-//            numar.put(t, numar.get(t) + 1);
+//            ColaboratorType t = c.getType();
+//            sum.put(t, sum.get(t) + c.calculateAnnualNetIncome());
+//            count.put(t, count.get(t) + 1);
 //        }
-//        for (TipColaborator t : TipColaborator.values()) {
-//            System.out.printf("%s: suma = %.2f lei, număr = %d\n", t, suma.get(t), numar.get(t));
+//        for (ColaboratorType t : ColaboratorType.values()) {
+//            System.out.printf("%s: sum = %.2f RON, count = %d\n", t, sum.get(t), count.get(t));
 //        }
     }
 }

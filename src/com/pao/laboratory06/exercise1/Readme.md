@@ -1,52 +1,52 @@
-# Exercițiul 1 — Sistemul de management al angajaților
+# Exercise 1 — Employee Management System
 
-> **EXEMPLU:** Acest exercițiu este doar pentru familiarizare cu formatul și testarea automată. Următoarele exerciții vor avea cerințe mai avansate și vor fi punctate conform regulilor laboratorului.
-> **Pachet:** `com.pao.laboratory06.exercise1`
-> **Timp estimat:** ~35 min · **Teste automate:** da (`Test.java`)
-
----
-
-## Scenariul
-
-Ești responsabil de o aplicație internă pentru o companie. Aplicația primește de la
-stdin o listă de angajați și un criteriu de sortare, și trebuie să afișeze lista sortată.
-
-Pe viitor vor apărea noi criterii de sortare — arhitectura trebuie să fie ușor de extins
-fără a modifica clasele existente.
+> **EXAMPLE:** This exercise is only for familiarization with the format and automated testing. The following exercises will have more advanced requirements and will be graded according to laboratory rules.
+> **Package:** `com.pao.laboratory06.exercise1`
+> **Estimated time:** ~35 min · **Automated tests:** yes (`Test.java`)
 
 ---
 
-## Cerința generală
+## Scenario
 
-Creează în pachetul `com.pao.laboratory06.exercise1` toate clasele necesare și
-implementează `Main.java` care citește datele, sortează și afișează rezultatul.
+You are responsible for an internal application for a company. The application receives from
+stdin a list of employees and a sorting criterion, and must display the sorted list.
 
-**Nu există un singur mod corect de a structura clasele** — gândește-te la ce fiecare
-clasă trebuie să știe și să facă, și separă responsabilitățile.
+In the future, new sorting criteria will appear — the architecture must be easy to extend
+without modifying existing classes.
 
 ---
 
-## Format input / output
+## General Requirement
+
+Create in the package `com.pao.laboratory06.exercise1` all necessary classes and
+implement `Main.java` that reads the data, sorts, and displays the result.
+
+**There is no single correct way to structure the classes** — think about what each
+class needs to know and do, and separate responsibilities.
+
+---
+
+## Input / Output Format
 
 ```
 <N>
-<nume> <salariu>      (N linii)
-<criteriu>
+<name> <salary>      (N lines)
+<criterion>
 ```
 
-Criteriile posibile cresc pe parcursul celor trei părți (vezi mai jos).
+Possible criteria increase throughout the three parts (see below).
 
-Output: câte o linie per angajat în ordinea cerută, format `<nume> <salariu_double>`.
+Output: one line per employee in the requested order, format `<name> <salary_double>`.
 
 ---
 
-## Partea A — Sortare după salariu (crescător)
+## Part A — Sort by salary (ascending)
 
-Criteriu de intrare: `by_salary`
+Input criterion: `by_salary`
 
-Implementează sortarea naturală a angajaților după salariu crescător.
+Implement natural sorting of employees by ascending salary.
 
-**Exemplu:**
+**Example:**
 ```
 Input:        Output:
 3             Bob 3000.0
@@ -56,18 +56,18 @@ Carol 7000
 by_salary
 ```
 
-> 💡 Hint: există o interfață standard în Java care permite unui obiect să se compare
-> cu alt obiect de același tip. `Arrays.sort` o folosește automat.
+> 💡 Hint: there is a standard interface in Java that allows an object to compare itself
+> with another object of the same type. `Arrays.sort` uses it automatically.
 
 ---
 
-## Partea B — Sortare după nume (alfabetic)
+## Part B — Sort by name (alphabetical)
 
-Criteriu de intrare: `by_name`
+Input criterion: `by_name`
 
-Adaugă posibilitatea de a sorta după nume alfabetic, fără a modifica clasa `Angajat`.
+Add the ability to sort alphabetically by name, without modifying the `Angajat` class.
 
-**Exemplu:**
+**Example:**
 ```
 Input:        Output:
 3             Alice 5000.0
@@ -77,18 +77,18 @@ Carol 7000
 by_name
 ```
 
-> 💡 Hint: există un mecanism standard pentru a defini criterii de sortare alternative,
-> separat de clasa sortată. `Arrays.sort` are o variantă care acceptă acest obiect.
+> 💡 Hint: there is a standard mechanism for defining alternative sorting criteria,
+> separate from the class being sorted. `Arrays.sort` has a variant that accepts this object.
 
 ---
 
-## Partea C — Sortare după salariu descrescător
+## Part C — Sort by salary descending
 
-Criteriu de intrare: `by_salary_desc`
+Input criterion: `by_salary_desc`
 
-Adaugă un al treilea criteriu. La egalitate de salariu, ordinea originală trebuie păstrată.
+Add a third criterion. In case of equal salary, the original order must be preserved.
 
-**Exemplu:**
+**Example:**
 ```
 Input:          Output:
 4               Carol 7000.0
@@ -99,13 +99,13 @@ Dave 3000
 by_salary_desc
 ```
 
-> 💡 Hint: poți reutiliza criteriile deja existente — inversarea unei comparații
-> se poate exprima simplu. Gândește-te și la cum tratezi egalitățile.
+> 💡 Hint: you can reuse already existing criteria — reversing a comparison
+> can be expressed simply. Think also about how to handle ties.
 
 ---
 
-## Cum rulezi testele
+## How to run tests
 
-Deschide `Test.java` și apasă **Run** în IntelliJ.
-Directorul de lucru trebuie să fie rădăcina proiectului (`paoj-2026/`).
-Vei vedea câte un bloc `Partea: partA / partB / partC` cu `[PASS]` / `[FAIL]` per test.
+Open `Test.java` and press **Run** in IntelliJ.
+The working directory must be the project root (`paoj-2026/`).
+You will see a block `Partea: partA / partB / partC` with `[PASS]` / `[FAIL]` per test.
