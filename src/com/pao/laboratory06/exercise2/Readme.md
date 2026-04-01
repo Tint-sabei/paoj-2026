@@ -7,7 +7,10 @@
 
 ## Scenario
 
-We extend the Employee hierarchy to cover multiple types of collaborators: employees with employment contracts (CIM), sole proprietors (PFA), and limited liability companies (SRL). Each type has different rules for calculating annual net income. You will use interfaces, abstract classes, enums, and implement sorting, filtering, and summarization based on this data.
+We extend the Employee hierarchy to cover multiple types of collaborators: employees with employment contracts (CIM), 
+sole proprietors (PFA), and limited liability companies (SRL). Each type has different rules for calculating annual 
+net income. You will use interfaces, abstract classes, enums, and implement sorting, filtering, 
+and summarization based on this data.
 
 ---
 
