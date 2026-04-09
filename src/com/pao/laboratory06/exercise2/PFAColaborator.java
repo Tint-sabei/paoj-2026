@@ -54,6 +54,7 @@ public class PFAColaborator extends Colaborator implements Individual {
         System.out.printf("PFA: %s %s, venit net anual: %.2f lei\n", lastName, firstName, calculateAnnualNetIncome());
     }
 
+    @Override
     public ColaboratorType getType(){
         return ColaboratorType.PFA;
     }

@@ -3,7 +3,12 @@ import java.util.Scanner;
 
 public class CIMColaborator extends Colaborator implements Individual{
 
-    public Boolean hasBonus = false;
+    private boolean hasBonus = false;
+
+    @Override
+    public boolean hasBonus() {
+        return this.hasBonus;
+    }
 
     @Override
     public void read(Scanner in) {
@@ -23,7 +28,8 @@ public class CIMColaborator extends Colaborator implements Individual{
     public double calculateAnnualNetIncome(){
         double netIncome = grossMonthlyIncome * 12 * 0.55;
         if (hasBonus){
-            netIncome = netIncome * 1.1;}
+            double bonusAmount = netIncome * 0.10;
+            netIncome = netIncome + bonusAmount;}
         return netIncome;
 
     }
@@ -32,7 +38,7 @@ public class CIMColaborator extends Colaborator implements Individual{
         System.out.printf("CIM: %s %s, venit net anual: %.2f lei\n", lastName, firstName, calculateAnnualNetIncome());
     }
 
-
+    @Override
     public ColaboratorType getType(){
         return ColaboratorType.CIM;
     }

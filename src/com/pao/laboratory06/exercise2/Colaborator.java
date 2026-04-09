@@ -13,14 +13,16 @@ public abstract class Colaborator implements IOperationsReadWrite{
 
     public abstract ColaboratorType getType();
 
-    @Override
-    public String contractType(){
-        return getType().toString();
-    }
+
     @Override
     public void read(Scanner in) {
         this.lastName = in.next();
         this.firstName = in.next();
         this.grossMonthlyIncome = in.nextDouble();
+    }
+
+    @Override
+    public String contractType(){
+        return getType().toString();
     }
 }

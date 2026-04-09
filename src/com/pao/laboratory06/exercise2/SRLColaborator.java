@@ -20,6 +20,7 @@ public class SRLColaborator extends Colaborator implements LegalEntity{
         System.out.printf("SRL: %s %s, venit net anual: %.2f lei\n", lastName, firstName, calculateAnnualNetIncome());
     }
 
+    @Override
     public ColaboratorType getType(){
         return ColaboratorType.SRL;
     };

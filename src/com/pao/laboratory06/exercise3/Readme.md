@@ -36,8 +36,7 @@ You are modeling an online payment platform for a bank, with support for multipl
 - `Engineer` (extends `Employee`, implements `OnlinePayment`, `Comparable<Engineer>`):
   - Natural order: by `lastName` (alphabetical)
   - All methods from `OnlinePayment` must be implemented
-- `LegalEntity` (extends `Person`, implements `OnlinePaymentSMS`):
-  - Field: `List<String> sentSMS` (initialized empty)
+                                                                                                                                                                                                                 - Field: `List<String> sentSMS` (initialized empty)
   - Implementation of `sendSMS`: if `phone` is null/empty, returns `false` and does not add the message; otherwise, adds the message to the list and returns `true`.
 - `EngineerSalaryComparator` (Comparator<Engineer>):
   - Sorts engineers in descending order by salary.
