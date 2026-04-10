@@ -13,3 +13,4 @@ public class Checker {
 //        IOTest.runPart("src/com/pao/laboratory07/exercise1/tests", "partC", Main::main);
     }
 }
+

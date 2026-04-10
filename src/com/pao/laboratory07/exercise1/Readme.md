@@ -1,27 +1,27 @@
-# Exercițiul 1 — Sistem simplu de tracking pentru comenzi eCommerce
+# Exercise 1 — Simple order tracking system for eCommerce
 
-> **Pachet:** `com.pao.laboratory07.exercise1`
-> **Timp estimat:** ~35 min · **Teste automate:** da (`Test.java`)
-
----
-
-## Scop
-
-Acest exercițiu te familiarizează cu structura laboratorului și testarea automată. Vei implementa un sistem simplu de urmărire a comenzilor pentru un magazin online, folosind un singur fișier `Main.java` și un enum pentru stări.
+> **Package:** `com.pao.laboratory07.exercise1`
+> **Estimated time:** ~35 min · **Automated tests:** yes (`Test.java`)
 
 ---
 
-## Cerință generală
+## Purpose
 
-Creează în pachetul `com.pao.laboratory07.exercise1`:
-- un enum `StareComanda` cu stările posibile ale unei comenzi;
-- un `Main.java` care citește comenzile de la tastatură, procesează tranzițiile și afișează rezultatele conform cerințelor.
+This exercise familiarizes you with the lab structure and automated testing. You will implement a simple order tracking system for an online store, using a single `Main.java` file and an enum for states.
 
 ---
 
-## Stările comenzii
+## General Requirement
 
-O comandă poate fi în una din următoarele stări:
+Create in the package `com.pao.laboratory07.exercise1`:
+- an enum `OrderState` with the possible states of an order;
+- a `Main.java` that reads orders from the keyboard, processes transitions, and displays results according to the requirements.
+
+---
+
+## Order States
+
+An order can be in one of the following states:
 - `PLACED` (the order has been placed)
 - `PROCESSED` (the order is processed)
 - `SHIPPED` (the order has been shipped)
@@ -30,22 +30,22 @@ O comandă poate fi în una din următoarele stări:
 
 ---
 
-## Input și Output
+## Input and Output
 
-- Prima linie: starea inițială (`PLACED`, `PROCESSED`, `SHIPPED`, `DELIVERED`, `CANCELED`)
-- Următoarele linii: comenzi (`next`, `cancel`, `undo`) până la `QUIT`
-- Pentru fiecare comandă, afișează noua stare sau un mesaj special dacă nu se poate face tranziția
+- First line: initial state (`PLACED`, `PROCESSED`, `SHIPPED`, `DELIVERED`, `CANCELED`)
+- Following lines: commands (`next`, `cancel`, `undo`) until `QUIT`
+- For each command, display the new state or a special message if the transition cannot be made
 
 ---
 
-## Partea A — Tranziții de bază
+## Part A — Basic Transitions
 
-- Comenzi acceptate: `next`, `QUIT`
-- Tranziții:
-  - `PLACED` → `PROCESSED` → `SHIPPED` → `DELIVERED` (stare finală)
-- La fiecare pas, afișează starea curentă
+- Accepted commands: `next`, `QUIT`
+- Transitions:
+  - `PLACED` → `PROCESSED` → `SHIPPED` → `DELIVERED` (final state)
+- At each step, display the current state
 
-**Exemple:**
+**Examples:**
 ```
 Input:           Output:
 PLACED           PLACED
@@ -57,39 +57,39 @@ QUIT             User quit the program.
 
 ---
 
-## Partea B — Anulare și stări finale
+## Part B — Cancel and Final States
 
-- Comandă suplimentară: `cancel`
-- Dacă primești `cancel` din orice stare non-finală, treci la `CANCELED`
-- Dacă ești într-o stare finală (`DELIVERED` sau `CANCELED`), orice comandă (`next`, `cancel`) afișează: `Comanda este in stare finala.`
-- Comenzile continuă să fie citite până la `QUIT`, dar sunt ignorate
+- Additional command: `cancel`
+- If you receive `cancel` from any non-final state, transition to `CANCELED`
+- If you are in a final state (`DELIVERED` or `CANCELED`), any command (`next`, `cancel`) displays: `Order is in final state.`
+- Commands continue to be read until `QUIT`, but are ignored
 
-- TODO daca comanda este in stare finala, orice comanda (next, cancel) afiseaza: Comanda este in stare finala.
-  - Programul continua sa citeasca comenzi pana la QUIT, dar orice comanda este ignorata (afiseaza doar mesajul de stare finala)
+- TODO if the order is in final state, any command (next, cancel) displays: Order is in final state.
+  - The program continues to read commands until QUIT, but any command is ignored (only displays the final state message)
 
-### Indicatii programare:
-  - Folositi o exceptie custom pentru anularea unei comenzi in stare finala
+### Programming hints:
+- Use a custom exception for canceling an order in final state
 
-### **Exemplu:**
+### **Example:**
 ```
 Input:           Output:
 DELIVERED          DELIVERED
-next             Comanda este in stare finala.
-cancel           Comanda este in stare finala.
+next             Order is in final state.
+cancel           Order is in final state.
 QUIT
 ```
 
 ---
 
-## Partea C — Undo (revenire la starea anterioară)
+## Part C — Undo (return to previous state)
 
-- Comandă suplimentară: `undo`
-- `undo` revine la starea anterioară (dacă există una în istoric, altfel rămâne la starea curentă)
-- Dacă nu există nicio stare anterioară în istoric, afișează mesajul: `Nu există stare anterioară pentru undo.`
-- `undo` funcționează și dacă starea curentă este finală (ieși din starea finală!)
-- La `undo` nu se afișează mesaj de stare finală, ci doar noua stare sau mesajul de mai sus
+- Additional command: `undo`
+- `undo` returns to the previous state (if there is one in history, otherwise stays in current state)
+- If there is no previous state in history, display the message: `No previous state for undo.`
+- `undo` also works if the current state is final (exit the final state!)
+- On `undo`, do not display the final state message, only the new state or the message above
 
-**Exemplu:**
+**Example:**
 ```
 Input:           Output:
 PLACED          PLACED
@@ -97,27 +97,27 @@ next             PROCESSED
 next             SHIPPED
 undo             PROCESSED
 undo             PLACED
-undo             Nu există stare anterioară pentru undo.
+undo             No previous state for undo.
 QUIT
 ```
 
-**Exemplu cu stare finală și undo:**
+**Example with final state and undo:**
 ```
 Input:           Output:
 DELIVERED        DELIVERED
-undo             Nu există stare anterioară pentru undo.
+undo             No previous state for undo.
 QUIT
 ```
 
 ---
 
 ## Hints
-- Folosește un enum pentru stări și metode simple pentru tranziții
-- Pentru `undo`, poți folosi o listă sau un stack pentru a ține istoricul stărilor
+- Use an enum for states and simple methods for transitions
+- For `undo`, you can use a list or a stack to keep the state history
 
 ---
 
-## Cum rulezi testele
+## How to run the tests
 
-Deschide `Test.java` și apasă **Run** în IntelliJ.
-Directorul de lucru trebuie să fie rădăcina proiectului (`paoj-2026/`).
+Open `Test.java` and press **Run** in IntelliJ.
+The working directory must be the project root (`paoj-2026/`).

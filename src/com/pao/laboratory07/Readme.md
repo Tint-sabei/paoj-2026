@@ -1,69 +1,74 @@
-# Laboratory 07 — Mașini de stări, Enum avansat și Sisteme de Comenzi în eCommerce
+Here is the English translation of your laboratory document.
 
-> **Pachet:** `com.pao.laboratory07` · **Curs:** 06 ·
-> **Data limită:** miercuri 8 aprilie 2026, ora 23:59
+# Laboratory 07 — State Machines, Advanced Enums, and Order Systems in eCommerce
 
----
+> **Package:** `com.pao.laboratory07` · **Course:** 06 ·  
+> **Deadline:** Wednesday, April 8, 2026, at 23:59
 
-## Noțiuni teoretice: Mașini de stări, Enumuri și Command Pattern
+-----
 
-### Mașina de stări (State Machine)
-O mașină de stări este un model de calcul care descrie un sistem printr-un set finit de stări, tranziții între stări și acțiuni posibile. În contextul unui magazin online, o comandă trece prin stări precum plasată, procesată, expediată, livrată sau anulată. Fiecare acțiune (ex: "next", "cancel", "undo") determină o tranziție între stări.
+## Theoretical Concepts: State Machines, Enums, and Command Pattern
 
-### Enumuri avansate în Java
-Un `enum` poate modela elegant stările și tranzițiile unei mașini de stări. Fiecare constantă din enum poate avea implementări proprii pentru metode abstracte, permițând comportamente diferite pentru fiecare stare. Enumurile pot avea câmpuri, constructori privați și metode, fiind utile pentru a asocia logică specifică fiecărei stări.
+### State Machine
+
+A state machine is a computational model that describes a system through a finite set of states, transitions between those states, and possible actions. In the context of an online store, an order passes through states such as placed, processed, shipped, delivered, or canceled. Each action (e.g., "next", "cancel", "undo") triggers a transition between states.
+
+### Advanced Enums in Java
+
+An `enum` can elegantly model the states and transitions of a state machine. Each constant in the enum can have its own implementation for abstract methods, allowing for different behaviors for each state. Enums can have fields, private constructors, and methods, making them useful for associating specific logic with each state.
 
 ### Command Pattern
-Command Pattern separă obiectul care emite o comandă de cel care o execută. În sistemele de tracking comenzi, comenzile (ex: "next", "cancel", "undo") pot fi modelate ca obiecte sau acțiuni distincte, facilitând extinderea și gestionarea istoricului de acțiuni (ex: implementarea funcționalității de undo).
 
----
+The Command Pattern decouples the object that issues a command from the one that executes it. In order tracking systems, commands (e.g., "next", "cancel", "undo") can be modeled as distinct objects or actions, facilitating extension and the management of action history (e.g., implementing undo functionality).
 
-<details open>
-<summary><h2>Obiective</h2></summary>
+-----
 
-1. **Mașini de stări și enumuri avansate** — modelarea ciclului de viață al unei comenzi
-2. **Command Pattern și istoricul acțiunilor** — implementarea comenzilor și a funcționalității de undo/redo
-3. **Sealed classes și interfețe marker** — ierarhii de tipuri sigure și extensibile
-4. **Metode default/private în interfețe** — reutilizare și extindere a funcționalității
+\<details open\>
+\<summary\>\<h2\>Objectives\</h2\>\</summary\>
 
-</details>
+1.  **State Machines and Advanced Enums** — modeling the lifecycle of an order.
+2.  **Command Pattern and Action History** — implementing commands and undo/redo functionality.
+3.  **Sealed Classes and Marker Interfaces** — safe and extensible type hierarchies.
+4.  **Default/Private Methods in Interfaces** — reuse and extension of functionality.
 
----
+\</details\>
 
-## Exerciții
+-----
 
-| # | Pachet | Concept principal | Timp estimat | Teste automate |
+## Exercises
+
+| \# | Package | Main Concept | Estimated Time | Automated Tests |
 |---|--------|-------------------|--------------|----------------|
-| 1 | [`exercise1/`](exercise1/Readme.md) | Enum cu metode abstracte, mașină de stări, undo, sistem de tracking comenzi eCommerce | ~35 min | ✓ (3 părți) |
-| 2 | [`exercise2/`](exercise2/Readme.md) | Sealed class hierarchy, compoziție, extindere sistem comenzi eCommerce | ~20 min | ✓ (flat) |
-| 3 | [`exercise3/`](exercise3/Readme.md) | Analiză avansată: rapoarte, statistici și workflow-uri automate pentru comenzi | ~45 min | manual |
-| 4 *(bonus)* | [`exercise4/Readme.md`](exercise4/Readme.md) | Enum singleton, validator chain Java 9 | ~30 min | manual |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | Enum with abstract methods, state machine, undo, eCommerce order tracking system | \~35 min | ✓ (3 parts) |
+| 2 | [`exercise2/`](https://www.google.com/search?q=exercise2/Readme.md) | Sealed class hierarchy, composition, eCommerce order system extension | \~20 min | ✓ (flat) |
+| 3 | [`exercise3/`](https://www.google.com/search?q=exercise3/Readme.md) | Advanced analysis: reports, statistics, and automated workflows for orders | \~45 min | manual |
+| 4 *(bonus)* | [`exercise4/Readme.md`](https://www.google.com/search?q=exercise4/Readme.md) | Enum singleton, Java 9 validator chain | \~30 min | manual |
 
-> **Total estimat:** ~1h40 min (fără bonus) · ~2h10 min (cu bonus)
+> **Total estimated:** \~1h 40 min (without bonus) · \~2h 10 min (with bonus)
 
----
+-----
 
-## Cum rulezi testele automate
+## How to Run Automated Tests
 
-Deschide `exercise1/Test.java` sau `exercise2/Checker.java` în IntelliJ și apasă **Run**.
+Open `exercise1/Test.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
 
-Directorul de lucru trebuie să fie **rădăcina proiectului** (`paoj-2026/`):
+The working directory must be the **project root** (`paoj-2026/`):  
 `Run → Edit Configurations → Working directory → $PROJECT_DIR$`
 
-- Pentru **exercise1**, testele sunt organizate pe părți (`partA`, `partB`, `partC`).
-- Pentru **exercise2**, testele sunt fișiere `.in`/`.out` direct în `tests/` (nu există subdirectoare partA/partB/partC).
+- For **exercise1**, tests are organized by parts (`partA`, `partB`, `partC`).
+- For **exercise2**, tests are `.in`/`.out` files located directly in `tests/` (no partA/partB/partC subdirectories).
 
----
+-----
 
-## Fișiere din acest laborator
+## Files in This Laboratory
 
-| Fișier                                     | Rol                           |
+| File | Role |
 |--------------------------------------------|-------------------------------|
-| [exercise1/Readme.md](exercise1/Readme.md) | Cerința completă Ex 1         |
-| [exercise1/Main.java](exercise1/Main.java) | Punct de intrare Ex 1         |
-| [exercise1/Test.java](exercise1/Test.java) | Runner teste automate Ex 1    |
-| [exercise2/Readme.md](exercise2/Readme.md) | Cerința completă Ex 2         |
-| [exercise2/Main.java](exercise2/Main.java) | Punct de intrare Ex 2         |
-| [exercise2/Checker.java](exercise2/Checker.java) | Runner teste automate Ex 2    |
-| [exercise3/Readme.md](exercise3/Readme.md) | Cerința completă Ex 3         |
-| [exercise3/Main.java](exercise3/Main.java) | Punct de intrare Ex 3         |
+| [exercise1/Readme.md](https://www.google.com/search?q=exercise1/Readme.md) | Full requirements for Ex 1 |
+| [exercise1/Main.java](https://www.google.com/search?q=exercise1/Main.java) | Entry point for Ex 1 |
+| [exercise1/Test.java](https://www.google.com/search?q=exercise1/Test.java) | Automated test runner for Ex 1 |
+| [exercise2/Readme.md](https://www.google.com/search?q=exercise2/Readme.md) | Full requirements for Ex 2 |
+| [exercise2/Main.java](https://www.google.com/search?q=exercise2/Main.java) | Entry point for Ex 2 |
+| [exercise2/Checker.java](https://www.google.com/search?q=exercise2/Checker.java) | Automated test runner for Ex 2 |
+| [exercise3/Readme.md](https://www.google.com/search?q=exercise3/Readme.md) | Full requirements for Ex 3 |
+| [exercise3/Main.java](https://www.google.com/search?q=exercise3/Main.java) | Entry point for Ex 3 |

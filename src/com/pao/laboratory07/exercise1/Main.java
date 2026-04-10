@@ -4,10 +4,13 @@ import com.pao.laboratory07.exercise1.exceptions.CannotCancelFinalOrderException
 import com.pao.laboratory07.exercise1.exceptions.CannotRevertInitialOrderStateException;
 import com.pao.laboratory07.exercise1.exceptions.OrderIsAlreadyFinalException;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+
+        java.util.Locale.setDefault(java.util.Locale.US);
+
         Scanner scanner = new Scanner(System.in);
         // Part A
         // load initial state

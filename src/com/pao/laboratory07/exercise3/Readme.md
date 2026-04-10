@@ -1,59 +1,59 @@
-# Exercițiul 3 (BONUS) — Analiză cu Stream API pentru comenzi
+# Exercise 3 (BONUS) — Analysis with Stream API for orders
 
-> **Pachet:** `com.pao.laboratory07.exercise3`
-> **Timp estimat:** ~30 min · **Teste automate:** nu (demonstrație în `Main.java`)
-
----
-
-## Scop
-
-Extinde clasele `Comanda` din exercițiul 2 (adaugă câmpul `client`) și implementează operații de analiză și filtrare folosind **Stream API**.
+> **Package:** `com.pao.laboratory07.exercise3`
+> **Estimated time:** ~30 min · **Automated tests:** no (demonstration in `Main.java`)
 
 ---
 
-## Extensia claselor din Exercițiul 2
+## Purpose
 
-Refolosește ierarhia sealed din exercițiul 2. Adaugă câmpul `String client` la clasa `Comanda`:
+Extend the `Comanda` classes from Exercise 2 (add the `client` field) and implement analysis and filtering operations using **Stream API**.
+
+---
+
+## Extension of Classes from Exercise 2
+
+Reuse the sealed hierarchy from exercise 2. Add the `String client` field to the `Comanda` class:
 
 ```java
 public abstract sealed class Comanda permits ComandaStandard, ComandaRedusa, ComandaGratuita {
-    protected String nume;
-    protected String client;  // ← ADAUG ACEASTA
+    protected String name;
+    protected String client;  // ← ADD THIS
     // ...
 }
 ```
 
 ---
 
-## Structura inputului
+## Input structure
 
-- Prima linie: numărul de comenzi `N`
-- Următoarele `N` linii, fiecare în formatul din exercițiul 2, urmat de clientul comenzii:
-  - `STANDARD <nume> <pret> <client>`
-  - `DISCOUNTED <nume> <pret> <discountProcent> <client>`
-  - `GIFT <nume> <client>`
-- Următoarele linii: comenzi (`STATS`, `FILTER <threshold>`, `SORT`, `SPECIAL`, `QUIT`)
-
----
-
-## Structura outputului
-
-**Pentru fiecare comandă**, pe câte o linie (format din exercițiul 2):
-```
-STANDARD: <nume>, pret: X.XX lei [PLACED] - client: <client>
-```
-
-**Apoi, la fiecare comandă primită:**
-
-- `STATS` — Afișează mediile prețurilor finale grupate pe tip (STANDARD, DISCOUNTED, GIFT)
-- `FILTER <threshold>` — Afișează comenzile cu preț final ≥ threshold
-- `SORT` — Afișează comenzile sortate după client, apoi după preț final (crescător)
-- `SPECIAL` — Afișează comenzile cu discont mai mare de 15% (dacă sunt DISCOUNTED)
-- `QUIT` — Programul se termină
+- First line: number of commands `N`
+- Next `N` lines, each in the format from exercise 2, followed by the order's client:
+  - `STANDARD <name> <price> <client>`
+  - `DISCOUNTED <name> <price> <discountPercent> <client>`
+  - `GIFT <name> <client>`
+- Following lines: commands (`STATS`, `FILTER <threshold>`, `SORT`, `SPECIAL`, `QUIT`)
 
 ---
 
-## Exemplu complet
+## Output structure
+
+**For each command**, on separate lines (format from exercise 2):
+```
+STANDARD: <name>, price: X.XX lei [PLACED] - client: <client>
+```
+
+**Then, for each received command:**
+
+- `STATS` — Display the averages of final prices grouped by type (STANDARD, DISCOUNTED, GIFT)
+- `FILTER <threshold>` — Display orders with final price ≥ threshold
+- `SORT` — Display orders sorted by client, then by final price (ascending)
+- `SPECIAL` — Display orders with discount greater than 15% (if they are DISCOUNTED)
+- `QUIT` — The program ends
+
+---
+
+## Complete example
 
 **Input:**
 ```
@@ -70,50 +70,50 @@ SPECIAL
 QUIT
 ```
 
-**Output (exemplu cu flexibilitate):**
+**Output (example with flexibility):**
 ```
-STANDARD: Laptop, pret: 2500.00 lei [PLACED] - client: Alice
-DISCOUNTED: Headphones, pret: 160.00 lei (-20%) [PLACED] - client: Bob
-GIFT: Sticker, gratuit [PLACED] - client: Charlie
-STANDARD: Mouse, pret: 80.00 lei [PLACED] - client: Alice
-DISCOUNTED: Keyboard, pret: 270.00 lei (-10%) [PLACED] - client: Dave
+STANDARD: Laptop, price: 2500.00 lei [PLACED] - client: Alice
+DISCOUNTED: Headphones, price: 160.00 lei (-20%) [PLACED] - client: Bob
+GIFT: Sticker, free [PLACED] - client: Charlie
+STANDARD: Mouse, price: 80.00 lei [PLACED] - client: Alice
+DISCOUNTED: Keyboard, price: 270.00 lei (-10%) [PLACED] - client: Dave
 
 --- STATS ---
-STANDARD: medie = 1290.00 lei
-DISCOUNTED: medie = 215.00 lei
-GIFT: medie = 0.00 lei
+STANDARD: average = 1290.00 lei
+DISCOUNTED: average = 215.00 lei
+GIFT: average = 0.00 lei
 
 --- FILTER (>= 100.00) ---
-STANDARD: Laptop, pret: 2500.00 lei - client: Alice
-DISCOUNTED: Headphones, pret: 160.00 lei - client: Bob
-DISCOUNTED: Keyboard, pret: 270.00 lei - client: Dave
+STANDARD: Laptop, price: 2500.00 lei - client: Alice
+DISCOUNTED: Headphones, price: 160.00 lei - client: Bob
+DISCOUNTED: Keyboard, price: 270.00 lei - client: Dave
 
---- SORT (by client, then by pret) ---
-STANDARD: Mouse, pret: 80.00 lei - client: Alice
-STANDARD: Laptop, pret: 2500.00 lei - client: Alice
-DISCOUNTED: Keyboard, pret: 270.00 lei - client: Dave
-DISCOUNTED: Headphones, pret: 160.00 lei - client: Bob
-GIFT: Sticker, gratuit - client: Charlie
+--- SORT (by client, then by price) ---
+STANDARD: Mouse, price: 80.00 lei - client: Alice
+STANDARD: Laptop, price: 2500.00 lei - client: Alice
+DISCOUNTED: Keyboard, price: 270.00 lei - client: Dave
+DISCOUNTED: Headphones, price: 160.00 lei - client: Bob
+GIFT: Sticker, free - client: Charlie
 
 --- SPECIAL (discount > 15%) ---
-DISCOUNTED: Headphones, pret: 160.00 lei (-20%) - client: Bob
+DISCOUNTED: Headphones, price: 160.00 lei (-20%) - client: Bob
 ```
 
 ---
 
-## Indicații
+## Instructions
 
-Utilizează următoarele concepte Java:
-- `Stream.collect(groupingBy(...))` pentru grupare și `averagingDouble()` pentru medii
-- `stream().filter(...).toList()` pentru filtrare
-- `Comparator.comparing(...).thenComparing(...)` pentru sortare compusă
-- `instanceof` pattern matching pentru identificarea tipului comenzii
-- Excepții custom pentru input invalid
+Use the following Java concepts:
+- `Stream.collect(groupingBy(...))` for grouping and `averagingDouble()` for averages
+- `stream().filter(...).toList()` for filtering
+- `Comparator.comparing(...).thenComparing(...)` for compound sorting
+- `instanceof` pattern matching for identifying order type
+- Custom exceptions for invalid input
 
 ---
 
-## Testare
+## Testing
 
-Demonstrează în `Main.java` toate operațiile de mai sus. Output-ul trebuie să fie clar și ușor de urmărit.
+Demonstrate all the above operations in `Main.java`. The output must be clear and easy to follow.
 
-Se acordă **0.4% bonus** la nota finală dacă exercițiul este complet și funcțional.
+A **0.4% bonus** towards the final grade is awarded if the exercise is complete and functional.

@@ -1,87 +1,87 @@
-# Exercițiul 2 — Ierarhie sealed de comenzi
+# Exercise 2 — Sealed command hierarchy
 
-> **Pachet:** `com.pao.laboratory07.exercise2`
-> **Timp estimat:** ~20 min · **Teste automate:** da (`Checker.java`)
-
----
-
-## Scop
-
-Vei modela tipuri de comenzi folosind **sealed classes** și vei reutiliza enum-ul `OrderState` din exercițiul 1 pentru a marca starea inițială a fiecărei comenzi.
+> **Package:** `com.pao.laboratory07.exercise2`
+> **Estimated time:** ~20 min · **Automated tests:** yes (`Checker.java`)
 
 ---
 
-## Ierarhia sealed
+## Purpose
 
-Creează o sealed class `Comanda` care permite exact trei subclase:
+You will model command types using **sealed classes** and reuse the `OrderState` enum from Exercise 1 to mark the initial state of each command.
+
+---
+
+## Sealed hierarchy
+
+Create a sealed class `Comanda` that allows exactly three subclasses:
 
 ```java
 public abstract sealed class Comanda permits ComandaStandard, ComandaRedusa, ComandaGratuita {
-    protected String nume;
+    protected String name;
     // ...
-    public abstract double pretFinal();
-    public abstract String descriere();
+    public abstract double finalPrice();
+    public abstract String description();
 }
 ```
 
-| Subclasă | Câmpuri extra | `pretFinal()` |
+| Subclass | Extra fields | `finalPrice()` |
 |---|---|---|
-| `ComandaStandard` | — | `pret` |
-| `ComandaRedusa` | `int discountProcent` | `pret * (1 - discountProcent / 100.0)` |
+| `ComandaStandard` | — | `price` |
+| `ComandaRedusa` | `int discountPercent` | `price * (1 - discountPercent / 100.0)` |
 | `ComandaGratuita` | — | `0.0` |
 
 ---
 
-## Import din exercițiul 1
+## Import from Exercise 1
 
-Importă enum-ul de stări din exercițiul anterior:
+Import the state enum from the previous exercise:
 
 ```java
 import com.pao.laboratory07.exercise1.OrderState;
 ```
 
-Fiecare comandă primește automat starea inițială `OrderState.PLACED` la construire. Nu este nevoie să o citești din input — este mereu `PLACED`.
+Each command automatically receives the initial state `OrderState.PLACED` upon construction. There's no need to read it from input — it's always `PLACED`.
 
 ---
 
-## Structura inputului
+## Input structure
 
-- Prima linie: numărul de comenzi `N`
-- Următoarele `N` linii, fiecare în unul din formatele:
-  - `STANDARD <nume> <pret>`
-  - `DISCOUNTED <nume> <pret> <discountProcent>`
-  - `GIFT <nume>`
-
----
-
-## Structura outputului
-
-**Pentru fiecare comandă**, pe câte o linie, în ordinea citirii:
-
-```
-STANDARD: <nume>, pret: X.XX lei [PLACED]
-DISCOUNTED: <nume>, pret: X.XX lei (-D%) [PLACED]
-GIFT: <nume>, gratuit [PLACED]
-```
-
-> Prețul afișat este **prețul final** (după discount).
-
-**O linie goală**, apoi blocul de statistici:
-
-```
-Statistici:
-STANDARD: suma = X.XX lei, numar = N
-DISCOUNTED: suma = X.XX lei, numar = N
-GIFT: suma = 0.00 lei, numar = N
-Total platit: X.XX lei
-```
-
-> Afișează doar tipurile prezente în input (nu afișa o linie de statistici pentru un tip cu 0 comenzi).  
-> Ordinea tipurilor în statistici: `STANDARD`, `DISCOUNTED`, `GIFT` (dacă există).
+- First line: number of commands `N`
+- Next `N` lines, each in one of the formats:
+  - `STANDARD <name> <price>`
+  - `DISCOUNTED <name> <price> <discountPercent>`
+  - `GIFT <name>`
 
 ---
 
-## Exemplu complet
+## Output structure
+
+**For each command**, on separate lines, in the order read:
+
+```
+STANDARD: <name>, price: X.XX lei [PLACED]
+DISCOUNTED: <name>, price: X.XX lei (-D%) [PLACED]
+GIFT: <name>, free [PLACED]
+```
+
+> The displayed price is the **final price** (after discount).
+
+**One blank line**, then the statistics block:
+
+```
+Statistics:
+STANDARD: sum = X.XX lei, count = N
+DISCOUNTED: sum = X.XX lei, count = N
+GIFT: sum = 0.00 lei, count = N
+Total paid: X.XX lei
+```
+
+> Display only the types present in the input (do not display a statistics line for a type with 0 commands).  
+> Order of types in statistics: `STANDARD`, `DISCOUNTED`, `GIFT` (if they exist).
+
+---
+
+## Complete example
 
 **Input:**
 ```
@@ -94,30 +94,30 @@ STANDARD Mouse 80.0
 
 **Output:**
 ```
-STANDARD: Laptop, pret: 2500.00 lei [PLACED]
-DISCOUNTED: Headphones, pret: 160.00 lei (-20%) [PLACED]
-GIFT: Sticker, gratuit [PLACED]
-STANDARD: Mouse, pret: 80.00 lei [PLACED]
+STANDARD: Laptop, price: 2500.00 lei [PLACED]
+DISCOUNTED: Headphones, price: 160.00 lei (-20%) [PLACED]
+GIFT: Sticker, free [PLACED]
+STANDARD: Mouse, price: 80.00 lei [PLACED]
 
-Statistici:
-STANDARD: suma = 2580.00 lei, numar = 2
-DISCOUNTED: suma = 160.00 lei, numar = 1
-GIFT: suma = 0.00 lei, numar = 1
-Total platit: 2740.00 lei
+Statistics:
+STANDARD: sum = 2580.00 lei, count = 2
+DISCOUNTED: sum = 160.00 lei, count = 1
+GIFT: sum = 0.00 lei, count = 1
+Total paid: 2740.00 lei
 ```
 
 ---
 
-## Indicații
+## Instructions
 
-- Folosește `pattern matching` cu `instanceof` sau un `switch` pe tipul sealed pentru a genera descrierea.
-- Colectează statisticile într-un `Map<String, Double>` pentru sume și un `Map<String, Integer>` pentru numărare, sau simplu cu trei variabile per tip.
-- Formatează valorile monetare cu `String.format("%.2f", ...)`.
-- `sealed` și `permits` necesită Java 17+.
+- Use `pattern matching` with `instanceof` or a `switch` on the sealed type to generate the description.
+- Collect statistics in a `Map<String, Double>` for sums and a `Map<String, Integer>` for counts, or simply with three variables per type.
+- Format monetary values with `String.format("%.2f", ...)`.
+- `sealed` and `permits` require Java 17+.
 
 ---
 
-## Testare automată
+## Automated testing
 
-Deschide `Checker.java` și apasă **Run** în IntelliJ. Testele se află direct în `tests/` (fișiere `1.in`/`1.out` … `4.in`/`4.out`).  
-Directorul de lucru trebuie să fie rădăcina proiectului (`paoj-2026/`).
+Open `Checker.java` and press **Run** in IntelliJ. The tests are located directly in `tests/` (files `1.in`/`1.out` … `4.in`/`4.out`).  
+The working directory must be the project root (`paoj-2026/`).

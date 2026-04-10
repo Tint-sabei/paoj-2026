@@ -5,6 +5,8 @@ import com.pao.laboratory07.exercise1.OrderState;
 
 public class Main {
     public static void main(String[] args) {
+        java.util.Locale.setDefault(java.util.Locale.US);
+
         Scanner sc = new Scanner(System.in);
         int n = Integer.parseInt(sc.nextLine().trim());
         List<Comanda> comenzi = new ArrayList<>();
@@ -35,11 +37,14 @@ public class Main {
                 nrGift++;
             }
         }
+
         for (Comanda c : comenzi) {
-            System.out.println(c.descriere());
+            System.out.println(c.description());
         }
+
         System.out.println();
         System.out.println("Statistici:");
+
         if (nrStandard > 0)
             System.out.printf("STANDARD: suma = %.2f lei, numar = %d\n", sumaStandard, nrStandard);
         if (nrDiscounted > 0)
