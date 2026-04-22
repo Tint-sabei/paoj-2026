@@ -33,6 +33,8 @@ public class Main {
             }
         }
 
+        System.out.println();
+
         for (Comanda c : comenzi) {
             System.out.println(c.description());
         }
@@ -44,9 +46,11 @@ public class Main {
             String[] tokens = commandLine.split(" ");
             String cmd = tokens[0];
 
-            if (cmd.equals("QUIT")) return;
+            if (cmd.equals("QUIT")) {
+                System.out.println();
+                return;
+            }
 
-            System.out.println();
             switch (cmd) {
                 case "STATS":
                     System.out.println("--- STATS ---");

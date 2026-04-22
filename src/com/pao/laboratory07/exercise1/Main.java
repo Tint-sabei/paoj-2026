@@ -25,7 +25,8 @@ public class Main {
                     try {
                         order.nextState();
                     } catch (OrderIsAlreadyFinalException e) {
-                        System.out.println("Order is already in a final state.");
+                        System.out.println("Order is already in a final state."); // user friendly
+                        // System.out.println(e.getMessage()); // lazy way
                     }
                 }
                 case cancel -> {

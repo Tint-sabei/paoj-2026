@@ -8,9 +8,12 @@ public final class ComandaStandard extends Comanda {
         super(name, client);
         this.price = price;
     }
-    @Override public double pretFinal() { return price; }
 
-    @Override public String description() {
+    @Override
+    public double pretFinal() { return price; }
+
+    @Override
+    public String description() {
         return String.format("STANDARD: %s, pret: %.2f lei [%s] - client: %s", name, pretFinal(), state, client);
     }
     @Override
