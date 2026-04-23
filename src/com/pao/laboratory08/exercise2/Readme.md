@@ -1,17 +1,17 @@
-# Exercițiul 2 (BONUS) — Filtrare și scriere în fișier
+# Exercise 2 (BONUS) — Filtering and Writing to a File
 
-> **Pachet:** `com.pao.laboratory08.exercise2`
-> **Timp estimat:** ~25 min · **Fără teste automate**
-
----
-
-## Scop
-
-Vei reutiliza clasele `Student` și `Adresa` din exercițiul 1 și vei adăuga funcționalitate de **scriere în fișier** folosind `BufferedWriter`. Programul citește studenții din `studenti.txt`, filtrează după un prag de vârstă citit din stdin, scrie rezultatele într-un fișier de ieșire și afișează un sumar la consolă.
+> **Package:** `com.pao.laboratory08.exercise2`
+> **Estimated time:** ~25 min · **No automated tests**
 
 ---
 
-## Import din exercițiul 1
+## Purpose
+
+You will reuse the `Student` and `Adresa` classes from Exercise 1 and add **file writing** functionality using `BufferedWriter`. The program reads students from `studenti.txt`, filters them based on an age threshold read from stdin, writes the results to an output file, and displays a summary in the console.
+
+---
+
+## Import from Exercise 1
 
 ```java
 import com.pao.laboratory08.exercise1.Student;
@@ -20,15 +20,15 @@ import com.pao.laboratory08.exercise1.Adresa;
 
 ---
 
-## Fișierul de date
+## Data File
 
-Același ca la exercițiul 1: `src/com/pao/laboratory08/tests/studenti.txt`
+The same as in Exercise 1: `src/com/pao/laboratory08/tests/studenti.txt`
 
 ---
 
-## Protocolul de intrare (stdin)
+## Input Protocol (stdin)
 
-O singură linie cu un număr întreg — pragul minim de vârstă:
+A single line containing an integer — the minimum age threshold:
 
 ```
 20
@@ -36,24 +36,24 @@ O singură linie cu un număr întreg — pragul minim de vârstă:
 
 ---
 
-## Ce faci
+## What to do
 
-1. Citește studenții din `studenti.txt` cu `BufferedReader` (ca la Ex 1)
-2. Citește pragul de vârstă din stdin cu `Scanner`
-3. Filtrează studenții cu `varsta >= prag`
-4. Scrie studenții filtrați în `rezultate.txt` (în directorul curent) folosind `BufferedWriter`
-   - Fiecare student pe câte o linie, format identic cu `toString()`
-5. Afișează la consolă:
-   - `Filtru: varsta >= <prag>`
+1. Read the students from `studenti.txt` using `BufferedReader` (same as Ex 1).
+2. Read the age threshold from stdin using `Scanner`.
+3. Filter the students where `varsta >= threshold`.
+4. Write the filtered students to `rezultate.txt` (in the current directory) using `BufferedWriter`.
+   - Each student on a new line, formatted identically to `toString()`.
+5. Display in the console:
+   - `Filtru: varsta >= <threshold>`
    - `Rezultate: <N> studenti`
-   - O linie goală
-   - Studenții filtrați, câte unul pe linie
-   - O linie goală
+   - A blank line
+   - The filtered students, one per line
+   - A blank line
    - `Scris in: rezultate.txt`
 
 ---
 
-## Exemplu
+## Example
 
 **Input (stdin):**
 ```
@@ -73,7 +73,7 @@ Student{nume='Andrei', varsta=21, adresa=Adresa{oras='Constanța', strada='Bulev
 Scris in: rezultate.txt
 ```
 
-**Fișierul `rezultate.txt` (creat, dar NU verificat automat):**
+**The file `rezultate.txt` (created, but NOT automatically verified):**
 ```
 Student{nume='Mihai', varsta=22, adresa=Adresa{oras='Cluj', strada='Strada Mărășești'}}
 Student{nume='Elena', varsta=20, adresa=Adresa{oras='Iași', strada='Bulevardul Independenței'}}
@@ -83,11 +83,10 @@ Student{nume='Andrei', varsta=21, adresa=Adresa{oras='Constanța', strada='Bulev
 
 ---
 
-## Indicații
+## Hints
 
-- Refolosește clasele din exercițiul 1 (import)
+- Reuse the classes from Exercise 1 (import them).
 - `BufferedWriter fout = new BufferedWriter(new FileWriter("rezultate.txt"))`
-- Nu uita `fout.newLine()` sau `fout.write("\n")` după fiecare linie
-- Nu uita `fout.close()` (sau folosește try-with-resources dacă ai citit secțiunea de teorie viitoare)
-- Fișierul `rezultate.txt` nu este verificat automat — verifică manual conținutul
-
+- Don't forget `fout.newLine()` or `fout.write("\n")` after each line.
+- Don't forget `fout.close()` (or use try-with-resources if you have read the upcoming theory section).
+- The `rezultate.txt` file is not automatically checked — verify its content manually.

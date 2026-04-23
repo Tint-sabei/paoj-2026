@@ -1,20 +1,22 @@
-# Teorie avansată I/O pentru Laboratory 09
+# Advanced I/O Theory for Laboratory 09
 
-> **Scop:** Această secțiune oferă teoria detaliată pentru exercițiul bonus din Lab 08 și pregătește terenul pentru Laboratory 09.
-> 
-> Dacă nu ai timp să rezolvi exercițiul bonus acum, citește totuși această teorie — vei avea nevoie de ea săptămâna viitoare.
+> **Goal:** This section provides detailed theory for the bonus exercise in Lab 08 and sets the stage for Laboratory 09.
+>
+> If you don't have time to solve the bonus exercise now, read this theory anyway — you will need it next week.
 
 ---
 
-## Interfața `Serializable` — serializarea obiectelor
+## The `Serializable` Interface — Object Serialization
 
-### Ce este serializarea?
+### What is Serialization?
 
-**Serializarea** este procesul de conversie a unui obiect Java într-un flux de octeți (byte stream), care poate fi salvat într-un fișier binar sau transmis prin rețea. **Deserializarea** este procesul invers — reconstruirea obiectului din fluxul de octeți.
+**Serialization** is the process of converting a Java object into a byte stream, which can be saved to a binary file or transmitted over a network. **Deserialization** is the reverse process — reconstructing the object from the byte stream.
 
-### Interfața marker `java.io.Serializable`
 
-Pentru ca o clasă să poată fi serializată, trebuie să implementeze interfața marker `Serializable`:
+
+### The `java.io.Serializable` Marker Interface
+
+For a class to be serializable, it must implement the `Serializable` marker interface:
 
 ```java
 import java.io.Serializable;
@@ -24,62 +26,62 @@ public class Student implements Serializable {
     
     private String nume;
     private int varsta;
-    private transient String parola; // NU va fi serializat
+    private transient String parola; // Will NOT be serialized
     
-    // constructor, getteri, setteri
+    // constructor, getters, setters
 }
 ```
 
-### Câmpul `serialVersionUID`
+### The `serialVersionUID` Field
 
-Este un identificator de versiune al clasei. JVM-ul îl folosește pentru a verifica dacă obiectul deserializat este compatibil cu versiunea actuală a clasei.
+This is a version identifier for the class. The JVM uses it to verify that the deserialized object is compatible with the current version of the class.
 
-- Dacă lipseşte, JVM-ul îl generează automat (poate fi instabil între compilări)
-- **Best practice:** declară-l întotdeauna explicit:
+- If missing, the JVM generates it automatically (it can be unstable between compilations).
+- **Best practice:** always declare it explicitly:
 
 ```java
 private static final long serialVersionUID = 1L;
 ```
 
-Când modifici structura clasei (adaugi/ștergi câmpuri), incrementează valoarea pentru a indica incompatibilitate.
+When you change the class structure (add/remove fields), increment the value to indicate incompatibility.
 
-### Câmpuri `transient`
+### `transient` Fields
 
-Marchează câmpurile care **nu** trebuie serializate:
+Marks fields that **should not** be serialized:
 
 ```java
-private transient String parola;           // date sensibile
-private transient Socket conexiune;        // resurse care nu pot fi serializate
-private transient int counterTemporar;     // date temporare
+private transient String parola;           // sensitive data
+private transient Socket conexiune;        // non-serializable resources
+private transient int counterTemporar;     // temporary data
 ```
 
-La deserializare, câmpurile `transient` primesc valori implicite (`null`, `0`, `false`).
+During deserialization, `transient` fields receive default values (`null`, `0`, `false`).
 
 ---
 
-## Scriere și citire obiecte serializate
+## Reading and Writing Serialized Objects
 
-### `ObjectOutputStream` — scriere
+### `ObjectOutputStream` — Writing
 
 ```java
 try (FileOutputStream fout = new FileOutputStream("studenti.ser");
      ObjectOutputStream out = new ObjectOutputStream(fout)) {
     
     Student s = new Student("Ana", 20);
-    out.writeObject(s);  // serializează obiectul
+    out.writeObject(s);  // serializes the object
     
 } catch (IOException e) {
     e.printStackTrace();
 }
 ```
 
-### `ObjectInputStream` — citire
+### `ObjectInputStream` — Reading
 
 ```java
 try (FileInputStream fin = new FileInputStream("studenti.ser");
      ObjectInputStream in = new ObjectInputStream(fin)) {
     
-    Student s = (Student) in.readObject();  // deserializează
+    Student s = (Student) in.readObject();  // deserializes
     System.out.println(s.getNume());        // "Ana"
     
 } catch (IOException | ClassNotFoundException e) {
@@ -87,9 +89,9 @@ try (FileInputStream fin = new FileInputStream("studenti.ser");
 }
 ```
 
-### Serializarea agregării/compoziției
+### Serialization of Aggregation/Composition
 
-Dacă clasa `Student` conține un câmp `Adresa`, atunci și `Adresa` trebuie să fie `Serializable`:
+If the `Student` class contains an `Adresa` field, then `Adresa` must also be `Serializable`:
 
 ```java
 public class Adresa implements Serializable {
@@ -101,19 +103,19 @@ public class Adresa implements Serializable {
 public class Student implements Serializable {
     private static final long serialVersionUID = 1L;
     private String nume;
-    private Adresa adresa;  // OK — Adresa e Serializable
+    private Adresa adresa;  // OK — Adresa is Serializable
 }
 ```
 
-Dacă `Adresa` nu este `Serializable`, se aruncă `NotSerializableException` la runtime.
+If `Adresa` is not `Serializable`, a `NotSerializableException` is thrown at runtime.
 
 ---
 
-## `DataInputStream` / `DataOutputStream` — citire/scriere date primitive
+## `DataInputStream` / `DataOutputStream` — Reading/Writing Primitive Data
 
-Acestea permit citirea/scrierea **formatată** a tipurilor primitive (`int`, `double`, `String`) din/în fișiere binare, fără a serializa obiecte întregi.
+These allow for **formatted** reading/writing of primitive types (`int`, `double`, `String`) from/to binary files without serializing entire objects.
 
-### Scriere
+### Writing
 
 ```java
 try (DataOutputStream out = new DataOutputStream(
@@ -121,7 +123,7 @@ try (DataOutputStream out = new DataOutputStream(
     
     out.writeInt(42);
     out.writeDouble(3.14);
-    out.writeUTF("Ana");      // String în format UTF-8
+    out.writeUTF("Ana");      // String in UTF-8 format
     out.writeBoolean(true);
     
 } catch (IOException e) {
@@ -129,9 +131,9 @@ try (DataOutputStream out = new DataOutputStream(
 }
 ```
 
-### Citire
+### Reading
 
-**⚠️ Important:** Trebuie să citești **în aceeași ordine** în care ai scris!
+**⚠️ Important:** You must read **in the same order** as you wrote!
 
 ```java
 try (DataInputStream in = new DataInputStream(
@@ -147,9 +149,9 @@ try (DataInputStream in = new DataInputStream(
 }
 ```
 
-### Metode disponibile
+### Available Methods
 
-| Tip | Scriere | Citire |
+| Type | Writing | Reading |
 |-----|---------|--------|
 | `int` | `writeInt(int v)` | `int readInt()` |
 | `long` | `writeLong(long v)` | `long readLong()` |
@@ -161,73 +163,73 @@ try (DataInputStream in = new DataInputStream(
 
 ---
 
-## `BufferedInputStream` / `BufferedOutputStream` — buffering pentru octeți
+## `BufferedInputStream` / `BufferedOutputStream` — Byte Buffering
 
-Similar cu `BufferedReader`/`BufferedWriter`, dar pentru fluxuri de octeți (nu caractere).
+Similar to `BufferedReader`/`BufferedWriter`, but for byte streams (not characters).
 
 ```java
-// Scriere cu buffer — mult mai rapid decât FileOutputStream direct
+// Buffered writing — much faster than direct FileOutputStream
 try (BufferedOutputStream out = new BufferedOutputStream(
         new FileOutputStream("mare.bin"))) {
     
     for (int i = 0; i < 1_000_000; i++) {
-        out.write(i % 256);  // se scriu în buffer, nu direct pe disc
+        out.write(i % 256);  // written to buffer, not directly to disk
     }
     
-} // flush automat la închidere
+} // automatic flush upon closing
 
-// Citire cu buffer
+// Buffered reading
 try (BufferedInputStream in = new BufferedInputStream(
         new FileInputStream("mare.bin"))) {
     
     int b;
     while ((b = in.read()) != -1) {
-        // procesează octetul
+        // process byte
     }
 }
 ```
 
-**Când să folosești:**
-- Fișiere binare mari
-- Multe operații mici de citire/scriere
-- Performanță critică
+**When to use:**
+- Large binary files
+- Many small read/write operations
+- Critical performance
 
 ---
 
-## `RandomAccessFile` — acces aleatoriu
+## `RandomAccessFile` — Random Access
 
-Permite citirea și scrierea **la orice poziție** dintr-un fișier, nu doar secvențial.
+Allows reading and writing **at any position** within a file, not just sequentially.
 
-### Deschidere
+### Opening
 
 ```java
-// "r" — doar citire
-// "rw" — citire și scriere
+// "r" — read only
+// "rw" — read and write
 RandomAccessFile raf = new RandomAccessFile("date.bin", "rw");
 ```
 
 ### Cursor (`file pointer`)
 
-Fișierul e privit ca un tablou de octeți. Cursorul indică poziția curentă (indexul octetului).
+The file is treated as an array of bytes. The cursor indicates the current position (byte index).
 
 ```java
-long pos = raf.getFilePointer();  // poziția curentă (0 la început)
-raf.seek(100);                     // mută cursorul la octetul 100
-raf.skipBytes(20);                 // sare peste 20 de octeți
+long pos = raf.getFilePointer();  // current position (0 at start)
+raf.seek(100);                     // moves cursor to byte 100
+raf.skipBytes(20);                 // skips 20 bytes
 ```
 
-### Citire/scriere
+### Reading/Writing
 
-`RandomAccessFile` implementează `DataInput` și `DataOutput`, deci are toate metodele `read*()` și `write*()`:
+`RandomAccessFile` implements `DataInput` and `DataOutput`, so it has all the `read*()` and `write*()` methods:
 
 ```java
 RandomAccessFile raf = new RandomAccessFile("student.bin", "rw");
 
-// Scriere la poziția 0
+// Writing at position 0
 raf.writeUTF("Ana");
 raf.writeInt(20);
 
-// Citire de la început
+// Reading from the beginning
 raf.seek(0);
 String nume = raf.readUTF();
 int varsta = raf.readInt();
@@ -235,34 +237,36 @@ int varsta = raf.readInt();
 raf.close();
 ```
 
-### Exemplu practic — imagine BMP
+### Practical Example — BMP Image
 
-Lățimea unei imagini BMP este stocată pe 4 octeți, începând cu octetul 18:
+The width of a BMP image is stored in 4 bytes, starting at byte 18:
 
 ```java
 RandomAccessFile img = new RandomAccessFile("photo.bmp", "r");
-img.seek(18);                    // mută cursorul la octetul 18
-int width = img.readInt();       // citește lățimea (4 octeți)
-width = Integer.reverseBytes(width);  // BMP e little-endian
-System.out.println("Lățime: " + width + " pixeli");
+img.seek(18);                    // moves cursor to byte 18
+int width = img.readInt();       // reads width (4 bytes)
+width = Integer.reverseBytes(width);  // BMP is little-endian
+System.out.println("Width: " + width + " pixels");
 img.close();
 ```
 
 ---
 
-## `ByteBuffer` și endianness
+## `ByteBuffer` and Endianness
 
-### Big-endian vs. little-endian
+### Big-endian vs. Little-endian
 
-Când un număr întreg (`int` = 4 octeți) este scris într-un fișier binar, ordinea octeților poate varia:
+When an integer (`int` = 4 bytes) is written to a binary file, the byte order can vary:
 
-| Valoare | Big-endian (Java implicit) | Little-endian (Windows, BMP) |
+| Value | Big-endian (Java default) | Little-endian (Windows, BMP) |
 |---------|----------------------------|------------------------------|
 | `720` (decimal) | `00 00 02 D0` | `D0 02 00 00` |
 
-**Java scrie/citește implicit în big-endian.** Fișierele Windows (BMP, executabile) folosesc little-endian.
+**Java reads/writes in big-endian by default.** Windows files (BMP, executables) use little-endian.
 
-### `ByteBuffer` — conversie
+
+
+### `ByteBuffer` — Conversion
 
 ```java
 import java.nio.ByteBuffer;
@@ -270,9 +274,9 @@ import java.nio.ByteOrder;
 
 RandomAccessFile raf = new RandomAccessFile("date.bin", "r");
 byte[] bytes = new byte[4];
-raf.read(bytes);  // citește 4 octeți
+raf.read(bytes);  // reads 4 bytes
 
-// Convertește la int little-endian
+// Converts to little-endian int
 ByteBuffer buffer = ByteBuffer.wrap(bytes);
 buffer.order(ByteOrder.LITTLE_ENDIAN);
 int value = buffer.getInt();
@@ -281,9 +285,9 @@ System.out.println(value);
 raf.close();
 ```
 
-### Alternativă — `Integer.reverseBytes()`
+### Alternative — `Integer.reverseBytes()`
 
-Pentru `int`, `short`, `long`:
+For `int`, `short`, `long`:
 
 ```java
 int valueBigEndian = raf.readInt();
@@ -292,18 +296,18 @@ int valueLittleEndian = Integer.reverseBytes(valueBigEndian);
 
 ---
 
-## `try-with-resources` — gestionare automată resurse
+## `try-with-resources` — Automatic Resource Management
 
-Introdus în **Java 7**, elimină nevoia de bloc `finally` pentru închiderea resurselor.
+Introduced in **Java 7**, it eliminates the need for a `finally` block to close resources.
 
-### Sintaxă veche (fără try-with-resources)
+### Old Syntax (without try-with-resources)
 
 ```java
 BufferedReader br = null;
 try {
     br = new BufferedReader(new FileReader("date.txt"));
     String linie = br.readLine();
-    // procesare
+    // processing
 } catch (IOException e) {
     e.printStackTrace();
 } finally {
@@ -317,19 +321,19 @@ try {
 }
 ```
 
-### Sintaxă nouă (try-with-resources)
+### New Syntax (try-with-resources)
 
 ```java
 try (BufferedReader br = new BufferedReader(new FileReader("date.txt"))) {
     String linie = br.readLine();
-    // procesare
+    // processing
 } catch (IOException e) {
     e.printStackTrace();
 }
-// br.close() e apelat AUTOMAT
+// br.close() is called AUTOMATICALLY
 ```
 
-### Multiple resurse
+### Multiple Resources
 
 ```java
 try (BufferedReader in = new BufferedReader(new FileReader("input.txt"));
@@ -341,12 +345,12 @@ try (BufferedReader in = new BufferedReader(new FileReader("input.txt"));
         out.newLine();
     }
     
-} // ambele se închid automat, în ordine inversă (out, apoi in)
+} // both close automatically, in reverse order (out, then in)
 ```
 
-### Condiția — interfața `AutoCloseable`
+### The Condition — The `AutoCloseable` Interface
 
-Orice clasă care implementează `AutoCloseable` (sau `Closeable`, care extinde `AutoCloseable`) poate fi folosită:
+Any class that implements `AutoCloseable` (or `Closeable`, which extends `AutoCloseable`) can be used:
 
 - `BufferedReader`, `BufferedWriter`
 - `FileReader`, `FileWriter`
@@ -357,33 +361,32 @@ Orice clasă care implementează `AutoCloseable` (sau `Closeable`, care extinde 
 
 ---
 
-## Comparație — când folosești fiecare flux
+## Comparison — When to Use Each Stream
 
-| Flux | Scop | Exemplu de utilizare |
+| Stream | Purpose | Example Usage |
 |------|------|---------------------|
-| `FileReader` / `FileWriter` | Fișiere text mici, caracter cu caracter | Log-uri simple |
-| `BufferedReader` / `BufferedWriter` | Fișiere text, linie cu linie (recomandat) | CSV, configurări, output procesare |
-| `FileInputStream` / `FileOutputStream` | Fișiere binare, octet cu octet | Copiere fișiere |
-| `BufferedInputStream` / `BufferedOutputStream` | Fișiere binare mari, performanță | Imagini, video, arhive |
-| `DataInputStream` / `DataOutputStream` | Date primitive formatate în binar | Structuri de date custom |
-| `ObjectInputStream` / `ObjectOutputStream` | Obiecte Java complete | Salvare stare aplicație, cache |
-| `RandomAccessFile` | Acces la poziții specifice | BMP headers, baze de date simple |
+| `FileReader` / `FileWriter` | Small text files, character by character | Simple logs |
+| `BufferedReader` / `BufferedWriter` | Text files, line by line (recommended) | CSV, configurations, processing output |
+| `FileInputStream` / `FileOutputStream` | Binary files, byte by byte | Copying files |
+| `BufferedInputStream` / `BufferedOutputStream` | Large binary files, performance | Images, video, archives |
+| `DataInputStream` / `DataOutputStream` | Formatted binary primitive data | Custom data structures |
+| `ObjectInputStream` / `ObjectOutputStream` | Complete Java objects | Saving app state, cache |
+| `RandomAccessFile` | Access at specific positions | BMP headers, simple databases |
 
 ---
 
-## Ce vei face în Laboratory 09
+## What You Will Do in Laboratory 09
 
-1. **Exercițiu obligatoriu:** Serializare completă cu `Serializable`, `serialVersionUID`, `transient`
-2. **Citire/scriere formatată:** `DataInputStream`/`DataOutputStream` pentru structuri custom
-3. **Acces aleatoriu:** `RandomAccessFile` pentru prelucrare imagini BMP sau header-e fișiere
-4. **Buffer pentru performanță:** Comparație viteză cu/fără `BufferedInputStream`
-5. **`try-with-resources`:** Refactorizare cod vechi cu sintaxa modernă
+1. **Mandatory Exercise:** Full serialization with `Serializable`, `serialVersionUID`, `transient`.
+2. **Formatted Read/Write:** `DataInputStream`/`DataOutputStream` for custom structures.
+3. **Random Access:** `RandomAccessFile` for processing BMP images or file headers.
+4. **Buffering for Performance:** Speed comparison with/without `BufferedInputStream`.
+5. **`try-with-resources`:** Refactoring old code using modern syntax.
 
 ---
 
-## Resurse suplimentare
+## Additional Resources
 
-- **Oracle Java Tutorials — I/O:** https://docs.oracle.com/javase/tutorial/essential/io/
-- **Serialization Guide:** https://docs.oracle.com/javase/8/docs/technotes/guides/serialization/
-- **RandomAccessFile JavaDoc:** https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/RandomAccessFile.html
-
+- **Oracle Java Tutorials — I/O:** [https://docs.oracle.com/javase/tutorial/essential/io/](https://docs.oracle.com/javase/tutorial/essential/io/)
+- **Serialization Guide:** [https://docs.oracle.com/javase/8/docs/technotes/guides/serialization/](https://docs.oracle.com/javase/8/docs/technotes/guides/serialization/)
+- **RandomAccessFile JavaDoc:** [https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/RandomAccessFile.html](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/RandomAccessFile.html)

@@ -1,22 +1,22 @@
-# Exercițiul 1 — Clonare și citire din fișier
+# Exercise 1 — Cloning and Reading from a File
 
-> **Pachet:** `com.pao.laboratory08.exercise1`
-> **Timp estimat:** ~1h · **Teste automate:** da (`Checker.java`, 3 părți)
-
----
-
-## Scop
-
-Vei citi date despre studenți dintr-un fișier text folosind `BufferedReader`, vei construi obiecte `Student` și `Adresa`, apoi vei demonstra diferența dintre **clonarea superficială** (shallow) și **clonarea profundă** (deep) folosind interfața marker `Cloneable`.
+> **Package:** `com.pao.laboratory08.exercise1`
+> **Estimated time:** ~1h · **Automated tests:** yes (`Checker.java`, 3 parts)
 
 ---
 
-## Fișierul de date
+## Purpose
 
-Programul citește **întotdeauna** din `src/com/pao/laboratory08/tests/studenti.txt`.
-Calea este relativă la rădăcina proiectului (working directory = `paoj-2026/`).
+You will read student data from a text file using `BufferedReader`, construct `Student` and `Adresa` (Address) objects, and then demonstrate the difference between **shallow cloning** and **deep cloning** using the `Cloneable` marker interface.
 
-Format CSV — fiecare linie: `Nume,Varsta,Oras,Strada`
+---
+
+## Data File
+
+The program **always** reads from `src/com/pao/laboratory08/tests/studenti.txt`.
+The path is relative to the project root (working directory = `paoj-2026/`).
+
+CSV Format — each line: `Name,Age,City,Street`
 
 ```
 Ana,19,București,Calea Victoriei
@@ -26,7 +26,7 @@ Mihai,22,Cluj,Strada Mărășești
 
 ---
 
-## Clase de creat
+## Classes to Create
 
 ### `Adresa`
 
@@ -36,7 +36,7 @@ public class Adresa implements Cloneable {
     private String strada;
 
     // constructor(String oras, String strada)
-    // getteri, setteri
+    // getters, setters
     // toString() → "Adresa{oras='...', strada='...'}"
 
     @Override
@@ -55,36 +55,36 @@ public class Student implements Cloneable {
     private Adresa adresa;
 
     // constructor(String nume, int varsta, Adresa adresa)
-    // getteri, setteri
+    // getters, setters
     // toString() → "Student{nume='...', varsta=..., adresa=Adresa{oras='...', strada='...'}}"
 
-    // clone() — implementare diferită pentru shallow vs. deep (vezi mai jos)
+    // clone() — different implementation for shallow vs. deep (see below)
 }
 ```
 
 ---
 
-## Protocolul de intrare (stdin)
+## Input Protocol (stdin)
 
-Programul citește **o singură linie** din stdin, care este o comandă:
+The program reads **a single line** from stdin, which is a command:
 
-| Comandă | Descriere |
+| Command | Description |
 |---------|-----------|
-| `PRINT` | Afișează toți studenții citiți din fișier |
-| `SHALLOW <nume>` | Shallow clone pe studentul cu numele dat, modifică orașul clonei, afișează |
-| `DEEP <nume>` | Deep clone pe studentul cu numele dat, modifică orașul clonei, afișează |
+| `PRINT` | Displays all students read from the file |
+| `SHALLOW <name>` | Shallow clone of the student with the given name, modify the clone's city, display |
+| `DEEP <name>` | Deep clone of the student with the given name, modify the clone's city, display |
 
 ---
 
-## Partea A — Citire din fișier și afișare
+## Part A — Reading from File and Displaying
 
-**Comandă (stdin):** `PRINT`
+**Command (stdin):** `PRINT`
 
-**Ce faci:**
-1. Deschide `studenti.txt` cu `new BufferedReader(new FileReader(...))`
-2. Citește linie cu linie, parsează CSV-ul, creează obiecte `Student` + `Adresa`
-3. Închide fișierul
-4. Afișează toți studenții, câte unul pe linie
+**What to do:**
+1. Open `studenti.txt` using `new BufferedReader(new FileReader(...))`
+2. Read line by line, parse the CSV, create `Student` + `Adresa` objects
+3. Close the file
+4. Display all students, one per line
 
 **Output:**
 ```
@@ -98,37 +98,37 @@ Student{nume='Andrei', varsta=21, adresa=Adresa{oras='Constanța', strada='Bulev
 
 ---
 
-## Partea B — Shallow clone
+## Part B — Shallow Clone
 
-**Comandă (stdin):** `SHALLOW Ana`
+**Command (stdin):** `SHALLOW Ana`
 
-**Ce faci:**
-1. Citește studenții din fișier (ca la Partea A)
-2. Parsează comanda — extrage numele `Ana`
-3. Găsește studentul cu acel nume
-4. Implementează `clone()` în `Student` **doar cu `super.clone()`** (shallow)
-5. Clonează studentul găsit
-6. Modifică **orașul clonei** la `"MODIFICAT"`
-7. Afișează originalul și clona
+**What to do:**
+1. Read students from the file (same as Part A)
+2. Parse the command — extract the name `Ana`
+3. Find the student with that name
+4. Implement `clone()` in `Student` **using only `super.clone()`** (shallow)
+5. Clone the found student
+6. Modify the **clone's city** to `"MODIFICAT"`
+7. Display the original and the clone
 
-**Output (shallow — ambele afișează `MODIFICAT`):**
+**Output (shallow — both display `MODIFICAT`):**
 ```
 Original: Student{nume='Ana', varsta=19, adresa=Adresa{oras='MODIFICAT', strada='Calea Victoriei'}}
 Clona: Student{nume='Ana', varsta=19, adresa=Adresa{oras='MODIFICAT', strada='Calea Victoriei'}}
 ```
 
-> ⚠️ Observă: originalul a fost afectat! Aceasta este problema clonării superficiale.
+> ⚠️ Note: the original was affected! This is the problem with shallow cloning.
 
 ---
 
-## Partea C — Deep clone
+## Part C — Deep Clone
 
-**Comandă (stdin):** `DEEP Ana`
+**Command (stdin):** `DEEP Ana`
 
-**Ce faci:**
-1. Citește studenții din fișier (ca la Partea A)
-2. Parsează comanda — extrage numele `Ana`
-3. Găsește studentul, dar acum `Student.clone()` face **deep clone**:
+**What to do:**
+1. Read students from the file (same as Part A)
+2. Parse the command — extract the name `Ana`
+3. Find the student, but now `Student.clone()` performs a **deep clone**:
    ```java
    @Override
    public Object clone() throws CloneNotSupportedException {
@@ -137,44 +137,44 @@ Clona: Student{nume='Ana', varsta=19, adresa=Adresa{oras='MODIFICAT', strada='Ca
        return clona;
    }
    ```
-4. Clonează, modifică orașul clonei la `"MODIFICAT"`
-5. Afișează originalul și clona
+4. Clone, modify the clone's city to `"MODIFICAT"`
+5. Display the original and the clone
 
-**Output (deep — originalul păstrează orașul inițial):**
+**Output (deep — original keeps its initial city):**
 ```
 Original: Student{nume='Ana', varsta=19, adresa=Adresa{oras='București', strada='Calea Victoriei'}}
 Clona: Student{nume='Ana', varsta=19, adresa=Adresa{oras='MODIFICAT', strada='Calea Victoriei'}}
 ```
 
-> ✅ Originalul nu a fost afectat — clonarea profundă funcționează corect.
+> ✅ The original was not affected — deep cloning works correctly.
 
 ---
 
-## Cum diferă Partea B de Partea C?
+## How does Part B differ from Part C?
 
-Singura diferență este implementarea metodei `clone()` din clasa `Student`:
+The only difference is the implementation of the `clone()` method in the `Student` class:
 
-| Parte | `Student.clone()` | Rezultat |
+| Part | `Student.clone()` | Result |
 |-------|-------------------|----------|
-| B | `return super.clone();` | Shallow — originalul se modifică |
-| C | `super.clone()` + `clona.setAdresa((Adresa) adresa.clone())` | Deep — originalul rămâne intact |
+| B | `return super.clone();` | Shallow — original is modified |
+| C | `super.clone()` + `clona.setAdresa((Adresa) adresa.clone())` | Deep — original remains intact |
 
-> 💡 **Indicație practică:** Poți folosi `Main.java` cu un singur program care decide comportamentul pe baza comenzii (`SHALLOW` vs. `DEEP`). Când comanda este `SHALLOW`, metoda `clone()` din `Student` face doar `super.clone()`. Când este `DEEP`, face și clonarea adresei. O modalitate simplă: două metode diferite (`shallowClone()` și `deepClone()`) sau un parametru boolean.
-
----
-
-## Indicații
-
-- Folosește `line.split(",")` pentru a parsa fiecare linie CSV
-- `Integer.parseInt(parts[1].trim())` pentru vârstă
-- Stochează studenții într-un `ArrayList<Student>`
-- `Adresa` trebuie să implementeze `Cloneable` și să aibă `clone()` public — altfel deep clone nu funcționează
-- Parsează comanda cu `split(" ", 2)` — primul element e tipul, al doilea e numele
+> 💡 **Practical Tip:** You can use `Main.java` with a single program that decides behavior based on the command (`SHALLOW` vs. `DEEP`). When the command is `SHALLOW`, the `clone()` method in `Student` only performs `super.clone()`. When it is `DEEP`, it also clones the address. A simple way: two different methods (`shallowClone()` and `deepClone()`) or a boolean parameter.
 
 ---
 
-## Testare automată
+## Hints
 
-Deschide `Checker.java` și apasă **Run** în IntelliJ.
-Testele se află în `tests/partA/`, `tests/partB/`, `tests/partC/`.
-Directorul de lucru trebuie să fie rădăcina proiectului (`paoj-2026/`).
+- Use `line.split(",")` to parse each CSV line
+- Use `Integer.parseInt(parts[1].trim())` for the age
+- Store students in an `ArrayList<Student>`
+- `Adresa` must implement `Cloneable` and have a public `clone()` — otherwise deep clone won't work
+- Parse the command with `split(" ", 2)` — the first element is the type, the second is the name
+
+---
+
+## Automated Testing
+
+Open `Checker.java` and press **Run** in IntelliJ.
+The tests are located in `tests/partA/`, `tests/partB/`, `tests/partC/`.
+The working directory must be the project root (`paoj-2026/`).

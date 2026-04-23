@@ -1,52 +1,54 @@
-# Laboratory 08 — Interfețe Marker, Clonare și Fluxuri de I/O (Introducere)
+# Laboratory 08 — Marker Interfaces, Cloning, and I/O Streams (Introduction)
 
-> **Pachet:** `com.pao.laboratory08`
-> **Data limită:** miercuri 25 aprilie 2026, ora 23:59
+> **Package:** `com.pao.laboratory08`
+> **Deadline:** Wednesday, April 25, 2026, at 23:59
 
----
+-----
 
-## Sumar
+## Summary
 
-| # | Pachet | Concept principal | Timp estimat | Teste automate |
+| \# | Package | Main Concept | Estimated Time | Automated Tests |
 |---|--------|-------------------|--------------|----------------|
-| 1 | [`exercise1/`](exercise1/Readme.md) | `BufferedReader` + `Cloneable`, shallow vs. deep clone — domeniu Student | ~1h | ✓ (3 părți) |
-| 2 *(bonus)* | [`exercise2/`](exercise2/Readme.md) | `BufferedWriter` / `FileWriter` — filtrare și scriere studenți în fișier | ~25 min | manual |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `BufferedReader` + `Cloneable`, shallow vs. deep clone — Student domain | \~1h | ✓ (3 parts) |
+| 2 *(bonus)* | [`exercise2/`](https://www.google.com/search?q=exercise2/Readme.md) | `BufferedWriter` / `FileWriter` — filtering and writing students to file | \~25 min | manual |
 
-> **Total estimat:** ~1h (fără bonus) · ~1h25 min (cu bonus)
+> **Estimated Total:** \~1h (without bonus) · \~1h25 min (with bonus)
 
----
+-----
 
-## Noțiuni teoretice
+## Theoretical Notions
 
-### Interfețe marker
+### Marker Interfaces
 
-O **interfață marker** este o interfață fără metode — rolul ei este să asocieze metadate unei clase, pe care JVM-ul le folosește la rulare:
+A **marker interface** is an interface with no methods — its role is to associate metadata with a class, which the JVM uses at runtime:
 
-- `java.lang.Cloneable` — permite apelul `Object.clone()`; fără ea, JVM aruncă `CloneNotSupportedException`
-- `java.io.Serializable` — permite serializarea obiectelor (conversie în șir de octeți)
+- `java.lang.Cloneable` — allows the call to `Object.clone()`; without it, the JVM throws `CloneNotSupportedException`.
+- `java.io.Serializable` — allows object serialization (conversion into a byte stream).
 
-### Clonare superficială vs. profundă
+### Shallow vs. Deep Cloning
 
-- **Shallow cloning** — `super.clone()` copiază câmpurile primitive și referințele, dar **nu** obiectele referite. Modificarea unui câmp obiect în clonă afectează și originalul.
-- **Deep cloning** — se redefinește `clone()` la fiecare nivel de referință, creând copii independente.
+- **Shallow cloning** — `super.clone()` copies primitive fields and references, but **not** the referenced objects themselves. Modifying an object field in the clone affects the original as well.
+- **Deep cloning** — `clone()` is redefined at every reference level, creating independent copies.
+
+<!-- end list -->
 
 ```java
 // Deep clone:
 @Override
 public Object clone() throws CloneNotSupportedException {
     Student clona = (Student) super.clone();
-    clona.setAdresa((Adresa) this.adresa.clone()); // copie independentă
+    clona.setAdresa((Adresa) this.adresa.clone()); // independent copy
     return clona;
 }
 ```
 
-### Fluxuri de I/O — Introducere
+### I/O Streams — Introduction
 
-| Flux | Tip | Când să folosești |
+| Stream | Type | When to Use |
 |------|-----|-------------------|
-| `FileReader` / `FileWriter` | caracter | Fișiere text mici, caracter cu caracter |
-| `BufferedReader` / `BufferedWriter` | caracter + buffer | **Recomandat** — fișiere text, linie cu linie |
-| `FileInputStream` / `FileOutputStream` | octet | Fișiere binare |
+| `FileReader` / `FileWriter` | character | Small text files, character by character |
+| `BufferedReader` / `BufferedWriter` | character + buffer | **Recommended** — text files, line by line |
+| `FileInputStream` / `FileOutputStream` | byte | Binary files |
 
 ```java
 BufferedReader fin = new BufferedReader(new FileReader("studenti.txt"));
@@ -60,45 +62,45 @@ fin.close();
 fout.close();
 ```
 
-### `Serializable` *(previzualizare — obligatoriu în Lab 09)*
+### `Serializable` *(preview — mandatory in Lab 09)*
 
-- Declarați `private static final long serialVersionUID` pentru compatibilitate între versiuni
-- Câmpurile `transient` **nu** sunt serializate
+- Declare `private static final long serialVersionUID` for compatibility between versions.
+- `transient` fields are **not** serialized.
 
----
+-----
 
-## ⏭️ Ce urmează la Laboratory 09
+## ⏭️ What's Next in Laboratory 09
 
-> 📖 Teorie detaliată: [`theory1/Readme.md`](theory1/Readme.md)
+> 📖 Detailed Theory: [`theory1/Readme.md`](https://www.google.com/search?q=theory1/Readme.md)
 
-- **`Serializable`** aprofundat: `serialVersionUID`, `transient`, `ObjectInputStream`/`ObjectOutputStream`
-- **`DataInputStream` / `DataOutputStream`** — tipuri primitive în fișiere binare
-- **`BufferedInputStream` / `BufferedOutputStream`** — buffering pentru fluxuri binare
-- **`RandomAccessFile`** — acces aleatoriu, `seek()`, prelucrare imagini BMP
-- **`ByteBuffer`** și endianness — big-endian ↔ little-endian
-- **`try-with-resources`** — închidere automată a resurselor `AutoCloseable`
+- **`Serializable`** in depth: `serialVersionUID`, `transient`, `ObjectInputStream`/`ObjectOutputStream`.
+- **`DataInputStream` / `DataOutputStream`** — primitive types in binary files.
+- **`BufferedInputStream` / `BufferedOutputStream`** — buffering for binary streams.
+- **`RandomAccessFile`** — random access, `seek()`, BMP image processing.
+- **`ByteBuffer`** and endianness — big-endian ↔ little-endian.
+- **`try-with-resources`** — automatic closing of `AutoCloseable` resources.
 
----
+-----
 
-## Cum rulezi testele automate
+## How to Run Automated Tests
 
-Deschide `exercise1/Test.java` în IntelliJ și apasă **Run**.
-Directorul de lucru trebuie să fie rădăcina proiectului (`paoj-2026/`):
+Open `exercise1/Test.java` in IntelliJ and press **Run**.
+The working directory must be the project root (`paoj-2026/`):
 `Run → Edit Configurations → Working directory → $PROJECT_DIR$`
 
-- **exercise1**: teste pe părți (`partA`, `partB`, `partC`); citesc din `tests/studenti.txt` via `BufferedReader`, parametrii suplimentari din `stdin`
-- **exercise2** (bonus): fără teste automate — verifică manual output-ul și `rezultate.txt`
+- **exercise1**: tests in parts (`partA`, `partB`, `partC`); they read from `tests/studenti.txt` via `BufferedReader`, additional parameters from `stdin`.
+- **exercise2** (bonus): no automated tests — manually verify the output and `rezultate.txt`.
 
----
+-----
 
-## Fișiere din acest laborator
+## Files in this Laboratory
 
-| Fișier | Rol |
+| File | Role |
 |--------|-----|
-| [tests/studenti.txt](tests/studenti.txt) | Fișier CSV partajat — citit de ambele exerciții |
-| [exercise1/Readme.md](exercise1/Readme.md) | Cerința completă Ex 1 |
-| [exercise1/Main.java](exercise1/Main.java) | Punct de intrare Ex 1 |
-| [exercise1/Test.java](exercise1/Test.java) | Runner teste automate Ex 1 |
-| [exercise2/Readme.md](exercise2/Readme.md) | Cerința completă Ex 2 (bonus) |
-| [exercise2/Main.java](exercise2/Main.java) | Punct de intrare Ex 2 (bonus) |
-| [theory1/Readme.md](theory1/Readme.md) | Teorie detaliată pentru Lab 09 |
+| [tests/studenti.txt](https://www.google.com/search?q=tests/studenti.txt) | Shared CSV file — read by both exercises |
+| [exercise1/Readme.md](https://www.google.com/search?q=exercise1/Readme.md) | Full requirement for Ex 1 |
+| [exercise1/Main.java](https://www.google.com/search?q=exercise1/Main.java) | Entry point for Ex 1 |
+| [exercise1/Test.java](https://www.google.com/search?q=exercise1/Test.java) | Automated test runner for Ex 1 |
+| [exercise2/Readme.md](https://www.google.com/search?q=exercise2/Readme.md) | Full requirement for Ex 2 (bonus) |
+| [exercise2/Main.java](https://www.google.com/search?q=exercise2/Main.java) | Entry point for Ex 2 (bonus) |
+| [theory1/Readme.md](https://www.google.com/search?q=theory1/Readme.md) | Detailed theory for Lab 09 |
