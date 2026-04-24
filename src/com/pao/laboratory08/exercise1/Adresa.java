@@ -9,8 +9,9 @@ public class Adresa implements Cloneable {
         this.strada = strada;
     }
 
-//    public String getOras() { return oras; }
+    public String getOras() { return oras; }
     public void setOras(String oras) { this.oras = oras; }
+
     public String getStrada() { return strada; }
     public void setStrada(String strada) { this.strada = strada; }
 

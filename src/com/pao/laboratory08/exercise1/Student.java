@@ -12,27 +12,31 @@ public class Student implements Cloneable {
     }
 
     public String getNume() { return nume; }
+    public void setNume(String nume){this.nume = nume;}
+
+    public int getVarsta() {return varsta;}
+    public void setVarsta(int varsta) { this.varsta = varsta;}
+
     public Adresa getAdresa() { return adresa; }
+    public void setAdresa(Adresa adresa) { this.adresa = adresa;}
+
 
     @Override
     public String toString() {
         return "Student{nume='" + nume + "', varsta=" + varsta + ", adresa=" + adresa + "}";
     }
 
-    // Part B: Shallow Clone
+    // Shallow Clone
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 
-    // Part C: Deep Clone
+    // Deep Clone
     public Student deepClone() throws CloneNotSupportedException {
         Student clona = (Student) super.clone();
         clona.adresa = (Adresa) this.adresa.clone();
         return clona;
     }
 
-    public int getVarsta() {
-        return varsta;
-    }
 }
