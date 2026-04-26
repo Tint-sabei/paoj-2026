@@ -25,6 +25,7 @@ public class Appointment {
         this.dateTime = dateTime;
         this.clientReason = clientReason;
         this.doctorNote = doctorNote;
+        this.history.add(currentState);
     }
 
     public Appointment(State initialState) {

@@ -192,14 +192,28 @@ public class Main {
                     System.out.print("Enter Appointment ID: ");
                     Appointment app = appointmentService.getAppointmentById(scanner.nextLine());
                     if (app == null) { System.out.println("Not found."); break; }
+
                     System.out.println("Current State: " + app.getState());
                     System.out.print("a. Check-in | b. Cancel | c. Undo: ");
-                    String state = scanner.nextLine();
+                    String stateChoice = scanner.nextLine();
+
                     try {
-                        if (state.equalsIgnoreCase("a")) app.nextState();
-                        else if (state.equalsIgnoreCase("b")) app.cancel();
-                        else if (state.equalsIgnoreCase("c")) app.undoState();
-                    } catch (Exception e) { System.out.println("Error: " + e.getMessage()); }
+                        if (stateChoice.equalsIgnoreCase("a")) {
+                            app.nextState();
+                        } else if (stateChoice.equalsIgnoreCase("b")) {
+                            app.cancel();
+                        } else if (stateChoice.equalsIgnoreCase("c")) {
+                            app.undoState();
+                        }
+                    }
+                    catch (AppointmentIsAlreadyFinalException |
+                           CannotCancelFinalAppointmentException |
+                           CannotRevertInitialAppointmentStateException e) {
+                        System.out.println("\n[VALIDATION ERROR]: " + e.getMessage());
+                    }
+                    catch (Exception e) {
+                        System.out.println("\n[SYSTEM ERROR]: An unexpected error occurred.");
+                    }
                     break;
 
                 case 5: // Vet: Add Notes
