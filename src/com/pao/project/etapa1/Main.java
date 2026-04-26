@@ -304,13 +304,16 @@ public class Main {
                     }
                     break;
 
+
                 case 14:
                     System.out.println("\n--- Master Appointment List ---");
                     List<Appointment> allApps = appointmentService.getAll();
                     if (allApps.isEmpty()) {
                         System.out.println("No appointments found.");
                     } else {
-                        allApps.forEach(System.out::println);
+                        for (Appointment a : allApps){
+                            System.out.println(a);
+                        }
                     }
                     break;
 
