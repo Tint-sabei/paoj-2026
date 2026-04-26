@@ -64,15 +64,29 @@ public class Appointment {
         System.out.println("State reverted to: " + currentState);
     }
 
+
+    public String getId(){return id;}
+    public Pet getPet() { return pet; }
+    public Vet getVet(){return vet;}
     public ServiceType getService(){
         return service;
     }
+    public State getState() { return currentState; }
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+    public String getClientReason() { return clientReason; }
+    public String getDoctorNote() { return doctorNote; }
 
-    public Vet getVet(){return vet;}
-
-    public void getMedicalNote(String clientReason, String doctorNote){
+    public void setMedicalNote(String clientReason, String doctorNote){
         this.clientReason = clientReason;
         this.doctorNote = doctorNote;
+    }
+
+    @Override
+    public String toString() {
+        java.time.format.DateTimeFormatter fmt = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        return String.format("ID: %s | Pet: %s | Vet: Dr. %s | Time: %s | State: %s", id, pet.getPetName(), vet.getLastName(), dateTime.format(fmt), currentState);
     }
 
 }

@@ -1,81 +1,53 @@
 #### 1.1 — A list of at least 10 possible actions/queries in the system
 
-Examples (for the *Library* topic):
-- Add a new book to the library
-- Register a new reader
-- Loan a book to a reader
-- Return a book
-- Search for books by author
-- List all books in a section
-- Display a reader's loan history
-- Check book availability
-- Display books with the most loans
-- Remove a reader from the system
 
-for *Pet Clinic* topic: 
-- add a pet to the system
-- add an owner to the system
-- update pet in the system
-- update owner in the system 
-- schedule for appointment select a service, select an available consultation slot)
-- modify service and slot (by undo)
-- cancel the appointment 
-- pay the fee after consultation (optional)
-- display services 
-- display available consultation slots (date, time, doctor)
-- add an appointment to the system 
-- show an appointment confirmation (optional)
-- remove a cancelled appointment 
-- check the appointment list per doctor
-- show the total fee to pay (optional)
-- record the consultation info (medical info + fee)
-- display service with the most appointments 
-- display the consultation history (medical info + fee) by pet id 
+for *Pet Clinic* topic:
 
-Extra 
-- find owner 
+1. Register Pet & Owner 
+2. Update Pet Information 
+3. Schedule Appointment
+4. Manage Appointment State (Check-in/Cancel/Undo)
+5. Vet: Add Medical Notes & Diagnosis
+6. Staff: Process Payment & Finalize Consultation
+7. View Vet Schedule (by Vet ID)
+8. Most Popular Services Statistics
+9. Search/List Consultations (Sorted by Price)
+10. Remove Pet Record
+11. Show All Pets
+12. Show All Owners
+13. Show All Vets
+14. Show All Appointments
+
 
 
 #### 1.2 — A list of at least 8 domain object types
+Pet, Person, Owner, Vet, Staff, MedicalService, DiscountedService, EmergencyService, StandardService, Appointment, Consultation
 
-Examples (for the *Library* topic):
-`Book`, `Author`, `Reader`, `Section`, `Loan`, `Library`, `Copy`, `Reservation`
-
-for the *Pet Clinic* topic: 
-`Pet`, `Owner`, `Vet`, `Service`, `Process`, `Appointment`, `Consultation`, `Payment` 
----
 
 ### 2. Java Implementation
 
 #### 2.1 — Classes and OOP
 
-- [ ] At least **8 classes** modeling the objects defined in point 1.
-- [ ] **`private`** or **`protected`** attributes, with getters/setters where necessary.
-- [ ] Overridden `toString()`, `equals()`, and `hashCode()` methods in at least **2 classes**.
-- [ ] At least **one inheritance hierarchy** (`extends`) with at least **2 levels**.  
-  *(e.g., `Person` → `Employee` → `Manager`, or `Person` → `Student` + `Teacher`)*
-- [ ] At least **one abstract class** or **one interface** used in the hierarchy.  
-  *(e.g., abstract class `Person` with abstract method `getRole()`)*
-- [ ] At least **one immutable class**: `final` attributes, no setters, fully initialized in the constructor.  
-  *(e.g., `ISBN`, `ProductCode`, `TransactionRecord` — a type of identifier or read-only record)*
-- [ ] At least **2 custom exceptions** thrown and handled in the code.  
-  *(e.g., `BookUnavailableException`, `ReaderNotFoundException`)*
+- 11 classes in model 
+- Used only private and protected with getters/setters where necessary 
+- Used `toString()`, `equals()`, and `hashCode()` methods in Pet and Person classes. 
+- Person (Abstract) → Staff → Vet
+- MedicalService (Abstract) → StandardService, DiscountedService, EmergencyService.
+- Abstract Classes: Person (defines getDescription()) and MedicalService (defines getPrice()).
+- Immutable Class: Consultation (all final fields, no setters, initialized via constructor).
+- Custom Exceptions: Handled via AppointmentIsAlreadyFinalException, CannotCancelFinalAppointmentException, and CannotRevertInitialAppointmentStateException.
 
 #### 2.2 — Collections
-
-- [ ] At least **2 different types of collections** (`List`, `Set`, `Map`, `Queue`, etc.).
-- [ ] At least **one sorted collection** — via `Comparable` on the class or via `Comparator`.  
-  *(e.g., `TreeSet<Book>` sorted by title, or `List<Student>` sorted by average grade with `Collections.sort`)*
-- [ ] At least **one `Map`** used for indexing or grouping.  
-  *(e.g., `Map<String, List<Book>>` — books grouped by author, `Map<String, Account>` — accounts indexed by IBAN)*
+Map for Indexing: Used in PetService, OwnerService, and AppointmentService (e.g., Map<String, Pet>) to allow fast lookup of objects by their unique ID String.
+Map for Grouping: Used in AppointmentService.showServiceStatistics() to group and count appointments by ServiceType.
+Sorted Collection: Implemented in BillingService.getConsultationsSortedByPrice(), which uses a Comparator to sort a List of records.
+List for History: The Appointment class uses a List<State> to maintain a stack of states, enabling the "Undo" functionality.
 
 #### 2.3 — Services
 
-- [ ] At least **2 service classes** exposing system operations.  
-  *(e.g., `BookService`, `ReaderService` — each managing operations for one object type)*
-- [ ] Each service implemented as a **Singleton** (private constructor + static `getInstance()` method).
-- [ ] Services expose at least these operations: **add, delete, search by id/name, list all**.
-- [ ] A **`Main`** class that calls **all 10 actions** defined in point 1, demonstrating full system functionality.
+Singleton Pattern: All services (PetService, OwnerService, etc.) are implemented as Singletons.
+Service Operations: Each service exposes standardized methods for add, delete, findById, and list all.
+Main Class: The Main.java class demonstrates 14 actions.
 
 #### 2.4 — Organization and Quality
 
@@ -91,3 +63,5 @@ for the *Pet Clinic* topic:
 - [ ] No `NullPointerException` at runtime — validate inputs in services.
 
 ---
+
+

@@ -17,15 +17,15 @@ public final class Consultation {
         this.dateTime = LocalDateTime.now();
     }
 
-
     public Pet getPetId(){return petId;}
     public String getDiagnosis(){return diagnosis;}
-    public double price(){return price;}
+    public double getPrice(){return price;}
     public LocalDateTime getDateTime(){return dateTime;}
 
+
     @Override
-    public String toString(){
-        return "Consultation for Pet ID: " + petId + ", Diagnosis: " + diagnosis + ", Total fee: " + price + ", Date an Time: " + dateTime + ".";
+    public String toString() {
+        return String.format("Consultation [Pet: %s, Diagnosis: %s, Total: %.2f, Date: %s]", petId.getPetName(), diagnosis, price, dateTime.format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
     }
 
 

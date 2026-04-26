@@ -14,6 +14,6 @@ public abstract class MedicalService {
 
     @Override
     public String toString(){
-        return "Service Type: " + service + ", Total fee: " + price + ".";
+        return "Service Type: " + service + ", Total fee: " + getPrice() + ".";
     }
 }

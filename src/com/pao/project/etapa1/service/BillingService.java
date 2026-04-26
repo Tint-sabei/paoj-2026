@@ -8,8 +8,6 @@ public class BillingService {
 
     private final List<Consultation> consultations = new ArrayList<>();
 
-//    private final Map<String, List<Consultation>> history = new HashMap<>();
-
     private BillingService(){};
 
     private static class Holder {
@@ -20,36 +18,39 @@ public class BillingService {
         return Holder.instance;
     }
 
-    // CRUD
-    // Create
+
+    // add
     public void addConsultation(Consultation c){
         consultations.add(c);
         System.out.println("Record added for Pet: " + c.getPetId());
     }
 
-    // List all
+
+    // find
+    public List<Consultation> findByPetId(Pet pet){
+        return consultations.stream().filter(c -> c.getPetId().getPetId().equalsIgnoreCase(pet.getPetId())).collect(Collectors.toList());
+    }
+
+    // list all
     public List<Consultation> getAll(){
         return new ArrayList<>(consultations);
     }
 
-    // Read
-    public List<Consultation> findByPetId(Pet petId){
-        return consultations.stream().filter(c -> c.getPetId().equalsIgnoreCase(petId)).collect(Collectors.toList());
-    }
-
-    // Delete by Pet ID (to improve later)
-    public void deleteByPetId(String petId){
+    // delete
+    public void deleteByPetId(String petId) {
         int initialSize = consultations.size();
-        consultations.removeIf(c -> c.getPetId().equalsIgnoreCase(petId);
-        System.out.println("Removed " + (initialSize - consultations.size()) + " records.");
+
+        consultations.removeIf(c -> c.getPetId().getPetId().equalsIgnoreCase(petId));
+
+        int removedCount = initialSize - consultations.size();
+        System.out.println("Removed " + removedCount + " billing records.");
     }
 
+    // sort by price
     public List<Consultation> getConsultationsSortedByPrice(){
         List<Consultation> sortedConsultations = new ArrayList<>(consultations);
         sortedConsultations.sort((c1, c2) -> Double.compare(c2.getPrice(), c1.getPrice()));
-        return sortedConsultations
+        return sortedConsultations;
     }
-    // Statistics Actions (later)
-
 
 }
