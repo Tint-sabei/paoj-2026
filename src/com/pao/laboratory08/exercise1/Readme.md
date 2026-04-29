@@ -40,11 +40,13 @@ public class Adresa implements Cloneable {
     // toString() → "Adresa{oras='...', strada='...'}"
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Object clone() throws CloneNotSupportedException {        return super.clone();
     }
 }
-```
+
+
+
+``
 
 ### `Student`
 

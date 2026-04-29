@@ -13,6 +13,7 @@ public class Student implements Cloneable {
 
     public String getNume() { return nume; }
     public Adresa getAdresa() { return adresa; }
+    public int getVarsta() {return varsta;}
 
     @Override
     public String toString() {
@@ -20,8 +21,8 @@ public class Student implements Cloneable {
     }
 
     // Part B: Shallow Clone
-    @Override
-    public Object clone() throws CloneNotSupportedException {
+//    @Override
+    public Object shallowClone() throws CloneNotSupportedException {
         return super.clone();
     }
 
@@ -32,7 +33,5 @@ public class Student implements Cloneable {
         return clona;
     }
 
-    public int getVarsta() {
-        return varsta;
-    }
+
 }

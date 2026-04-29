@@ -49,7 +49,6 @@ public class Main {
 
         // 2. Read command from stdin
         Scanner scanner = new Scanner(System.in);
-        if (!scanner.hasNextLine()) return;
         String input = scanner.nextLine();
         String[] commandParts = input.split(" ", 2);
         String cmd = commandParts[0];
