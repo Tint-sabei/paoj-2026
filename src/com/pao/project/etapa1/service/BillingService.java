@@ -22,13 +22,13 @@ public class BillingService {
     // add
     public void addConsultation(Consultation c){
         consultations.add(c);
-        System.out.println("Record added for Pet: " + c.getPetId());
+        System.out.println("Record added for Pet: " + c.getPet());
     }
 
 
     // find
     public List<Consultation> findByPetId(Pet pet){
-        return consultations.stream().filter(c -> c.getPetId().getPetId().equalsIgnoreCase(pet.getPetId())).collect(Collectors.toList());
+        return consultations.stream().filter(c -> c.getPet().getPetId().equalsIgnoreCase(pet.getPetId())).collect(Collectors.toList());
     }
 
     // list all
@@ -40,7 +40,7 @@ public class BillingService {
     public void deleteByPetId(String petId) {
         int initialSize = consultations.size();
 
-        consultations.removeIf(c -> c.getPetId().getPetId().equalsIgnoreCase(petId));
+        consultations.removeIf(c -> c.getPet().getPetId().equalsIgnoreCase(petId));
 
         int removedCount = initialSize - consultations.size();
         System.out.println("Removed " + removedCount + " billing records.");

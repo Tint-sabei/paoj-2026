@@ -2,6 +2,6 @@ package com.pao.project.etapa1.exceptions;
 
 public class CannotCancelFinalAppointmentException extends Exception {
     public CannotCancelFinalAppointmentException() {
-        super("Cannot cancel an appointment that has already been paid.");
+        super("Cannot cancel an appointment that has already been paid/cancelled.");
     }
 }

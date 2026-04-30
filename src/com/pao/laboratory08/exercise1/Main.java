@@ -72,7 +72,7 @@ public class Main {
     private static void processClone(List<Student> students, String name, boolean isDeep) throws CloneNotSupportedException {
         for (Student s : students) {
             if (s.getNume().equalsIgnoreCase(name)) {
-                Student clona = isDeep ? s.deepClone() : (Student) s.clone();
+                Student clona = isDeep ? s.deepClone() : (Student) s.shallowClone();
 
                 clona.getAdresa().setOras("MODIFICAT");
 
