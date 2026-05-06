@@ -1,75 +1,77 @@
-# Exercițiul 3 (BONUS) — Procesator asincron de tranzacții bancare
+# Exercise 3 (BONUS) — Asynchronous Bank Transaction Processor
 
-> **Pachet:** `com.pao.laboratory09.exercise3`
-> **Timp estimat:** ~30 min · **Fără teste automate** — demonstrație în `Main.java`
-
----
-
-## Scop
-
-Trei ATM-uri trimit tranzacții în paralel pe o bandă partajată de capacitate fixă 5. Un fir „Processor" le consumă și generează confirmări de factură. Vei implementa pattern-ul **Producător–Consumator** cu `synchronized`, `wait()` și `notifyAll()`.
+> **Package:** `com.pao.laboratory09.exercise3`  
+> **Estimated time:** ~30 min · **No automated tests** — demonstration in `Main.java`
 
 ---
 
-## Noțiuni demonstrate
+## Purpose
 
-- `Thread` și `Runnable` — două moduri de creare a firelor
-- `synchronized` pe metodele benzii — excludere reciprocă
-- `wait()` — producătorul suspendă când banda e plină; consumatorul suspendă când e goală
-- `notifyAll()` — trezește toți firele care asteaptă după fiecare operație
-- `volatile boolean activ` — oprire gracioasă a consumatorului
-- `join()` — firul principal așteaptă terminarea tuturor producătorilor
+Three ATMs send transactions in parallel to a shared belt (queue) with a fixed capacity of 5. A "Processor" thread consumes them and generates invoice confirmations. You will implement the **Producer–Consumer** pattern using `synchronized`, `wait()`, and `notifyAll()`.
 
 ---
 
-## Clase de creat
+## Demonstrated Concepts
 
-**`CoadaTranzactii`** — bandă partajată, capacitate maximă 5:
-- Metodele `adauga(Tranzactie t)` și `extrage()` sunt `synchronized`
-- `adauga` face `wait()` cât timp banda e plină, `notifyAll()` după adăugare
-- `extrage` face `wait()` cât timp banda e goală, `notifyAll()` după extragere
+- `Thread` and `Runnable` — two ways of creating threads
+- `synchronized` on queue methods — mutual exclusion
+- `wait()` — the producer suspends when the belt is full; the consumer suspends when it is empty
+- `notifyAll()` — wakes up all waiting threads after each operation
+- `volatile boolean active` — graceful shutdown of the consumer
+- `join()` — the main thread waits for all producers to finish
 
-**`ATMThread extends Thread`** — producător:
-- Primește un id (1, 2, 3) și produce 4 tranzacții
-- `Thread.sleep(50)` între tranzacții consecutive
-- Afișează `[ATM-N] trimite: Tranzactie #id suma RON` la fiecare trimitere
-- Opțional: `[ATM-N] astept loc...` înainte de `wait()` în `adauga`
 
-**`ProcessorThread implements Runnable`** — consumator:
-- `volatile boolean activ` — bucla rulează cât timp `activ == true`
-- `Thread.sleep(80)` între procesări
-- Afișează `[Processor] Factura #id - suma RON | data` la fiecare procesare
 
 ---
 
-## Cerințe minime pentru `Main.java`
+## Classes to Create
 
-1. Creează 3 instanțe `ATMThread` și un `ProcessorThread` pe un fir separat
-2. Pornește toți producătorii cu `start()`
-3. Pornește consumatorul cu `new Thread(processorThread).start()`
-4. Fă `join()` pe toți cei 3 ATM-uri (firul principal așteaptă terminarea lor)
-5. Setează `processorThread.activ = false` și `notifyAll()` pe bandă (pentru a trezi consumatorul din eventual `wait()`)
-6. Fă `join()` pe firul consumatorului
-7. Afișează `Toate tranzactiile procesate. Total: 12`
+**`TransactionQueue`** — shared belt, maximum capacity 5:
+- The methods `add(Transaction t)` and `extract()` are `synchronized`
+- `add` calls `wait()` as long as the belt is full, `notifyAll()` after adding
+- `extract` calls `wait()` as long as the belt is empty, `notifyAll()` after extraction
 
-**Outputul demonstrează:**
-- 12 linii `[ATM-N] trimite:` (3 ATM × 4 tranzacții)
-- 12 linii `[Processor] Factura #...`
-- Cel puțin o linie `[ATM-N] astept loc...` (banda se umple la un moment dat)
-- Linia finală `Toate tranzactiile procesate. Total: 12`
+**`ATMThread extends Thread`** — producer: 
+- Receives an id (1, 2, 3) and produces 4 transactions
+- `Thread.sleep(50)` between consecutive transactions
+- Displays `[ATM-N] sends: Transaction #id amount RON` upon each send
+- Optional: `[ATM-N] waiting for space...` before `wait()` in `add`
 
----
-
-## Libertate de implementare
-
-Datele de test sunt hardcodate sau generate (id secvențial, sume aleatoare, date fixe). Ordinea liniilor de output poate varia (fire concurente). Important: toate cele 12 tranzacții apar în output și consumatorul generează factură pentru fiecare.
+**`ProcessorThread implements Runnable`** — consumer:
+- `volatile boolean active` — the loop runs as long as `active == true`
+- `Thread.sleep(80)` between processings
+- Displays `[Processor] Invoice #id - amount RON | date` upon each processing
 
 ---
 
-## Hint-uri
+## Minimum Requirements for `Main.java`
 
-- `start()` vs `run()` — apelul `run()` direct nu creează fir nou; tot codul rulează pe firul curent
-- `synchronized` pe metodă nestatică → lock pe **obiect** (pe instanța `CoadaTranzactii`)
-- `wait()` și `notify()` se apelează **numai în bloc `synchronized`**, altfel `IllegalMonitorStateException`
-- `notifyAll()` preferabil față de `notify()` — trezește toți firele, nu unul aleator
-- `volatile boolean activ` — fără `volatile`, firul consumatorului poate lucra cu o copie locală a variabilei (din cache CPU) și nu vede modificarea din firul principal
+1. Create 3 instances of `ATMThread` and one `ProcessorThread` on a separate thread
+2. Start all producers with `start()`
+3. Start the consumer with `new Thread(processorThread).start()`
+4. Call `join()` on all 3 ATMs (the main thread waits for them to finish)
+5. Set `processorThread.active = false` and call `notifyAll()` on the queue (to wake the consumer from a potential `wait()`)
+6. Call `join()` on the consumer thread
+7. Display `All transactions processed. Total: 12`
+
+**The output demonstrates:**
+- 12 lines of `[ATM-N] sends:` (3 ATMs × 4 transactions)
+- 12 lines of `[Processor] Invoice #...`
+- At least one line of `[ATM-N] waiting for space...` (the belt fills up at some point)
+- The final line `All transactions processed. Total: 12`
+
+---
+
+## Implementation Freedom
+
+Test data can be hardcoded or generated (sequential IDs, random amounts, fixed dates). The order of output lines may vary (concurrent threads). Important: all 12 transactions appear in the output and the consumer generates an invoice for each.
+
+---
+
+## Hints
+
+- `start()` vs `run()` — calling `run()` directly does not create a new thread; all code runs on the current thread
+- `synchronized` on a non-static method → lock on the **object** (on the `TransactionQueue` instance)
+- `wait()` and `notify()` are called **only within a `synchronized` block**, otherwise `IllegalMonitorStateException` occurs
+- `notifyAll()` is preferable to `notify()` — it wakes up all threads, not just a random one
+- `volatile boolean active` — without `volatile`, the consumer thread might work with a local copy of the variable (from CPU cache) and not see the modification made in the main thread

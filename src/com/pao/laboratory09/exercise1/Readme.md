@@ -1,63 +1,63 @@
-# Exercițiul 1 — Serializarea istoricului de tranzacții bancare
+# Exercise 1 — Bank Transaction History Serialization
 
-> **Pachet:** `com.pao.laboratory09.exercise1`
-> **Timp estimat:** ~45 min · **Teste automate:** da (`Checker.java`, 3 părți)
-
----
-
-## Scop
-
-Banca Digitală trebuie să salveze un lot de tranzacții zilnice într-un fișier binar și să le restaureze ulterior pentru interogare. Vei implementa serializarea și deserializarea unui obiect complex, observând comportamentul câmpurilor `transient` și garantând stabilitatea clasei cu `serialVersionUID`.
+> **Package:** `com.pao.laboratory09.exercise1`  
+> **Estimated time:** ~45 min · **Automated tests:** yes (`Checker.java`, 3 parts)
 
 ---
 
-## Cerință generală
+## Purpose
 
-Creează în pachetul `com.pao.laboratory09.exercise1`:
+The Digital Bank needs to save a batch of daily transactions into a binary file and restore them later for querying. You will implement the serialization and deserialization of a complex object, observing the behavior of `transient` fields and ensuring class stability with `serialVersionUID`.
 
-- `enum TipTranzactie` cu valorile `CREDIT` și `DEBIT`
-- `class Tranzactie implements Serializable` cu câmpurile: `id` (int), `suma` (double), `data` (String, format `yyyy-MM-dd`), `contSursa` (String), `contDestinatie` (String), `tip` (TipTranzactie), `transient String note`
+---
+
+## General Requirements
+
+Create in the package `com.pao.laboratory09.exercise1`:
+
+- `enum TransactionType` with values `CREDIT` and `DEBIT`
+- `class Transaction implements Serializable` with fields: `id` (int), `amount` (double), `date` (String, format `yyyy-MM-dd`), `sourceAccount` (String), `destinationAccount` (String), `type` (TransactionType), `transient String note`
   - `serialVersionUID = 1L`
-  - `note` se setează la `"procesat"` înainte de serializare și devine `null` la deserializare
-- `Main.java` cu protocolul de comenzi descris mai jos
+  - `note` is set to `"processed"` before serialization and becomes `null` upon deserialization
+- `Main.java` with the command protocol described below
 
-**Fișier intermediar:** `output/lab09_ex1.ser` (relativ la rădăcina proiectului)
+**Intermediate file:** `output/lab09_ex1.ser` (relative to the project root)
 
 ---
 
-## Format input
+## Input Format
 
 ```
 N
-id suma data(yyyy-MM-dd) contSursa contDestinatie tip(CREDIT|DEBIT)
-... (N linii)
-comandă*
+id amount date(yyyy-MM-dd) sourceAccount destinationAccount type(CREDIT|DEBIT)
+... (N lines)
+command*
 ```
 
-Comenzile se citesc până la EOF.
+Commands are read until EOF.
 
-## Format output
+## Output Format
 
-**Format linie tranzacție** (folosit de `LIST` și `FILTER`):
+**Transaction line format** (used by `LIST` and `FILTER`):
 ```
-[id] data tip: suma RON | contSursa -> contDestinatie
+[id] date type: amount RON | sourceAccount -> destinationAccount
 ```
 
-**Comenzi disponibile:**
+**Available commands:**
 
-| Comandă | Output |
+| Command | Output |
 |---------|--------|
-| `LIST` | Toate tranzacțiile deserializate, în ordinea serializării |
-| `FILTER yyyy-MM` | Tranzacțiile cu `data` care începe cu `yyyy-MM`, sau `Niciun rezultat.` |
-| `NOTE id` | `NOTE[id]: <valoarea câmpului note>` sau `NOTE[id]: not found` |
+| `LIST` | All deserialized transactions, in serialization order |
+| `FILTER yyyy-MM` | Transactions with `date` starting with `yyyy-MM`, or `No results.` |
+| `NOTE id` | `NOTE[id]: <value of note field>` or `NOTE[id]: not found` |
 
 ---
 
-## Partea A — Serializare și LIST
+## Part A — Serialization and LIST
 
-Citește N tranzacții, setează `note = "procesat"` pe fiecare, serializează lista în `output/lab09_ex1.ser`, deserializează, apoi execută comanda `LIST`.
+Read N transactions, set `note = "processed"` on each, serialize the list to `output/lab09_ex1.ser`, deserialize it, then execute the `LIST` command.
 
-**Exemplu:**
+**Example:**
 ```
 Input:                       Output:
 3                            [1] 2024-01-15 CREDIT: 1500.00 RON | RO01SRC1 -> RO01DST1
@@ -66,35 +66,35 @@ Input:                       Output:
 LIST
 ```
 
-> Ordinea în output este ordinea originală de inserare (serializarea păstrează ordinea listei).
+> The output order is the original insertion order (serialization preserves list order).
 
 ---
 
-## Partea B — Filtrare lunară cu FILTER
+## Part B — Monthly Filtering with FILTER
 
-Comandă suplimentară: `FILTER yyyy-MM` — afișează tranzacțiile al căror câmp `data` începe cu prefixul dat.
+Additional command: `FILTER yyyy-MM` — displays transactions whose `date` field starts with the given prefix.
 
-Dacă nu există nicio tranzacție în luna respectivă, afișează:
+If no transaction exists for that month, display:
 ```
-Niciun rezultat.
+No results.
 ```
 
-**Exemplu (fără rezultate):**
+**Example (no results):**
 ```
 Input:          Output:
-...             Niciun rezultat.
+...             No results.
 FILTER 2024-03
 ```
 
 ---
 
-## Partea C — Câmpul transient și NOTE
+## Part C — The transient field and NOTE
 
-Comandă suplimentară: `NOTE id` — afișează valoarea câmpului `note` al tranzacției cu `id`-ul dat, după deserializare.
+Additional command: `NOTE id` — displays the value of the `note` field of the transaction with the given `id`, after deserialization.
 
-Deoarece `note` este `transient`, valoarea sa devine `null` la deserializare, indiferent că a fost setată la `"procesat"` înainte de serializare.
+Since `note` is `transient`, its value becomes `null` upon deserialization, regardless of it being set to `"processed"` before serialization.
 
-**Exemplu:**
+**Example:**
 ```
 Input:          Output:
 ...             NOTE[1]: null
@@ -102,14 +102,14 @@ NOTE 1          NOTE[99]: not found
 NOTE 99
 ```
 
-> **De reținut:** câmpul `transient` nu participă la serializare. La deserializare primește valoarea implicită (`null` pentru obiecte, `0` pentru primitive, `false` pentru boolean).
+> **Remember:** the `transient` field does not participate in serialization. Upon deserialization, it receives the default value (`null` for objects, `0` for primitives, `false` for booleans).
 
 ---
 
-## Hint-uri
+## Hints
 
-- `ObjectOutputStream(new FileOutputStream(...))` / `ObjectInputStream(new FileInputStream(...))` — folosește `try-with-resources` pentru ambele
-- `serialVersionUID` declarat explicit — fără el, JVM calculează automat un UID instabil care se poate schimba la recompilare
-- `transient` pe câmpul `note` — marchează câmpul ca exclus din serializare
-- Dacă `TipTranzactie` este `Serializable`? Nu este nevoie să implementeze — enum-urile din Java sunt implicit serializabile
-- `List<Tranzactie>` implementează `Serializable` (ca și `ArrayList`) — poți serializa lista direct
+- `ObjectOutputStream(new FileOutputStream(...))` / `ObjectInputStream(new FileInputStream(...))` — use `try-with-resources` for both
+- `serialVersionUID` explicitly declared — without it, the JVM automatically calculates an unstable UID that can change upon recompilation
+- `transient` on the `note` field — marks the field as excluded from serialization
+- Does `TransactionType` need to be `Serializable`? No need to implement it — Java enums are implicitly serializable
+- `List<Transaction>` implements `Serializable` (as does `ArrayList`) — you can serialize the list directly</Transaction>

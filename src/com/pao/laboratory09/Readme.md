@@ -1,72 +1,72 @@
-# Laboratory 09 — Serializare, I/O Binar și Fire de Executare
+# Laboratory 09 — Serialization, Binary I/O, and Threads
 
-> **Pachet:** `com.pao.laboratory09` · **Cursuri:** 08 + 09
-> **Data limită:** miercuri 14 mai 2026, ora 23:59
+> **Package:** `com.pao.laboratory09` · **Lectures:** 08 + 09  
+> **Deadline:** Wednesday, May 14, 2026, 11:59 PM
 
 ---
 
-## Noțiuni teoretice
+## Theoretical Concepts
 
-### Serializare Java
+### Java Serialization
 
-Serializarea transformă un obiect Java într-un șir de octeți care poate fi salvat pe disc sau transmis în rețea, și reconstituit ulterior (**deserializare**). O clasă devine serializabilă implementând interfața marker `java.io.Serializable`. Câmpul `static final long serialVersionUID` garantează compatibilitatea versiunilor. Câmpurile marcate `transient` nu participă la serializare și primesc valoarea implicită (`null` / `0`) la deserializare.
+Serialization transforms a Java object into a sequence of bytes that can be saved to a disk or transmitted over a network and later reconstructed (**deserialization**). A class becomes serializable by implementing the `java.io.Serializable` marker interface. The `static final long serialVersionUID` field ensures version compatibility. Fields marked as `transient` do not participate in serialization and receive their default value (`null` / `0`) upon deserialization.
 
-### I/O Binar și acces aleatoriu
+### Binary I/O and Random Access
 
-`DataOutputStream` wrapping `FileOutputStream` permite scrierea tipurilor primitive în format binar (`writeInt`, `writeDouble`, `write(byte[])`). `RandomAccessFile` permite accesul non-secvențial: `seek(position)` mută cursorul la orice octet, fără a rescrie tot fișierul. Java folosește **big-endian** implicit; formatul Windows/x86 este **little-endian** — `ByteBuffer.order(ByteOrder.LITTLE_ENDIAN)` face conversia.
+`DataOutputStream` wrapping `FileOutputStream` allows writing primitive types in binary format (`writeInt`, `writeDouble`, `write(byte[])`). `RandomAccessFile` enables non-sequential access: `seek(position)` moves the cursor to any byte without rewriting the entire file. Java uses **big-endian** by default; the Windows/x86 format is **little-endian** — `ByteBuffer.order(ByteOrder.LITTLE_ENDIAN)` performs the conversion.
 
-### Fire de executare (Threads)
+### Threads
 
-Un fir de executare are propria stivă și execută codul `run()` concurent cu alte fire. `start()` creează stivă nouă; `run()` direct execută pe firul curent (greșeală comună). Datele partajate trebuie protejate cu `synchronized`. Câmpurile citite din mai multe fire trebuie declarate `volatile`. `wait()` / `notifyAll()` permit cooperarea (Producător–Consumator). `join()` face firul apelant să aștepte terminarea altui fir.
+A thread of execution has its own stack and executes the `run()` code concurrently with other threads. `start()` creates a new stack; calling `run()` directly executes it on the current thread (a common mistake). Shared data must be protected with `synchronized`. Fields read from multiple threads should be declared `volatile`. `wait()` / `notifyAll()` allow cooperation (Producer–Consumer). `join()` makes the calling thread wait for the completion of another thread.
 
 ---
 
 <details open>
-<summary><h2>Obiective</h2></summary>
+<summary><h2>Objectives</h2></summary>
 
-1. **Serializare** — `Serializable`, `serialVersionUID`, `transient`, `ObjectOutputStream` / `ObjectInputStream`, `try-with-resources`
-2. **I/O binar cu acces aleatoriu** — `DataOutputStream`, `RandomAccessFile`, `ByteBuffer`, endianness
-3. **Fire de executare** — `Thread` / `Runnable`, `synchronized`, `volatile`, `wait()` / `notifyAll()`, `join()`, Producător–Consumator
+1. **Serialization** — `Serializable`, `serialVersionUID`, `transient`, `ObjectOutputStream` / `ObjectInputStream`, `try-with-resources`
+2. **Binary I/O with Random Access** — `DataOutputStream`, `RandomAccessFile`, `ByteBuffer`, endianness
+3. **Threads** — `Thread` / `Runnable`, `synchronized`, `volatile`, `wait()` / `notifyAll()`, `join()`, Producer–Consumer
 
 </details>
 
 ---
 
-## Exerciții
+## Exercises
 
-| # | Pachet | Concept principal | Timp estimat | Teste automate |
-|---|--------|-------------------|--------------|----------------|
-| 1 | [`exercise1/`](exercise1/Readme.md) | Serializare tranzacții bancare — `Serializable`, `transient`, `ObjectOutputStream`, `try-with-resources` | ~45 min | ✓ (3 părți) |
-| 2 | [`exercise2/`](exercise2/Readme.md) | Registru binar cu acces aleatoriu — `DataOutputStream`, `RandomAccessFile`, `ByteBuffer` little-endian | ~40 min | ✓ (flat) |
-| 3 *(bonus)* | [`exercise3/`](exercise3/Readme.md) | Procesator asincron — `Thread` / `Runnable`, `synchronized`, `volatile`, `wait()` / `notifyAll()` | ~30 min | manual |
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+|---|---------|--------------|----------------|-----------------|
+| 1 | [`exercise1/`](exercise1/Readme.md) | Bank transaction serialization — `Serializable`, `transient`, `ObjectOutputStream`, `try-with-resources` | ~45 min | ✓ (3 parts) |
+| 2 | [`exercise2/`](exercise2/Readme.md) | Binary registry with random access — `DataOutputStream`, `RandomAccessFile`, `ByteBuffer` little-endian | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`](exercise3/Readme.md) | Asynchronous processor — `Thread` / `Runnable`, `synchronized`, `volatile`, `wait()` / `notifyAll()` | ~30 min | manual |
 
-> **Total estimat:** ~1h25 min (fără bonus) · ~1h55 min (cu bonus)
+> **Total estimated:** ~1h25 min (without bonus) · ~1h55 min (with bonus)
 
 ---
 
-## Cum rulezi testele automate
+## How to Run Automated Tests
 
-Deschide `exercise1/Checker.java` sau `exercise2/Checker.java` în IntelliJ și apasă **Run**.
+Open `exercise1/Checker.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
 
-Directorul de lucru trebuie să fie **rădăcina proiectului** (`paoj-2026/`):
+The working directory must be the **project root** (`paoj-2026/`):  
 `Run → Edit Configurations → Working directory → $PROJECT_DIR$`
 
-- **exercise1** — teste organizate pe părți (`partA`, `partB`, `partC`); Checker apelează `IOTest.runParts`.
-- **exercise2** — teste flat (fișiere `.in` / `.out` direct în `tests/`); Checker apelează `IOTest.runFlat`.
+- **exercise1** — tests organized by parts (`partA`, `partB`, `partC`); Checker calls `IOTest.runParts`.
+- **exercise2** — flat tests (`.in` / `.out` files directly in `tests/`); Checker calls `IOTest.runFlat`.
 
-> **Fișiere intermediare:** exercise1 creează `output/lab09_ex1.ser`, exercise2 creează `output/lab09_ex2.bin`. Directorul `output/` există deja la rădăcina proiectului.
+> **Intermediate files:** exercise1 creates `output/lab09_ex1.ser`, exercise2 creates `output/lab09_ex2.bin`. The `output/` directory already exists at the project root.
 
 ---
 
-## Fișiere din acest laborator
+## Files in this Laboratory
 
-| Fișier | Rol |
-|--------|-----|
-| `exercise1/Readme.md` | Cerințe exercițiu 1 |
-| `exercise1/Main.java` | Implementează cerința (completează TODO-urile) |
-| `exercise1/Checker.java` | Rulează testele automate pentru exercițiul 1 |
-| `exercise2/Readme.md` | Cerințe exercițiu 2 |
-| `exercise2/Main.java` | Implementează cerința (completează TODO-urile) |
-| `exercise2/Checker.java` | Rulează testele automate pentru exercițiul 2 |
-| `exercise3/Readme.md` | Cerințe exercițiu bonus |
-| `exercise3/Main.java` | Demonstrație (completează conform cerințelor din Readme) |
+| File | Role |
+|------|------|
+| `exercise1/Readme.md` | Exercise 1 requirements |
+| `exercise1/Main.java` | Implement the requirement (complete the TODOs) |
+| `exercise1/Checker.java` | Runs automated tests for exercise 1 |
+| `exercise2/Readme.md` | Exercise 2 requirements |
+| `exercise2/Main.java` | Implement the requirement (complete the TODOs) |
+| `exercise2/Checker.java` | Runs automated tests for exercise 2 |
+| `exercise3/Readme.md` | Bonus exercise requirements |
+| `exercise3/Main.java` | Demonstration (complete according to the Readme requirements) |
