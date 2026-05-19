@@ -77,7 +77,6 @@ public class Main {
                             countBelow++;
                         }
                     }
-                    // Forcing Locale.US here ensures the checker sees "100.00" with a dot instead of a comma
                     System.out.println("Eliminat " + countBelow + " tranzactii sub " + String.format(Locale.US, "%.2f", threshold) + " RON.");
                     break;
                 }
