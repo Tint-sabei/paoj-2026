@@ -1,59 +1,62 @@
-# Exercițiul 3 (BONUS) — Extrase de cont lunare cu Stream API
+# Exercise 3 (BONUS) — Monthly Account Statements with Stream API
 
-> **Pachet:** `com.pao.laboratory10.exercise3`
-> **Timp estimat:** ~30 min · **Fără teste automate** — demonstrație în `Main.java`
-
----
-
-## Scop
-
-Generarea extraselor de cont lunare cu Stream API — pasul final al narativului BancaDigitala. Datele sunt în memorie; acum le analizezi elegant fără bucle explicite, folosind `filter`, `map`, `Collectors.groupingBy` și `summingDouble`. Aceasta este finalizarea operației de „generate invoices grouped by month" planificate pentru sistem.
+> **Package:** `com.pao.laboratory10.exercise3`
+> **Estimated Time:** ~30 min · **No automated tests** — demonstration in `Main.java`
 
 ---
 
-## Noțiuni demonstrate
+## Purpose
 
-- `stream().filter()` — filtrare pe criteriu
-- `stream().mapToDouble().sum()` — agregare numerică
-- `Collectors.groupingBy()` + `Collectors.summingDouble()` — grupare + sumare per grup
-- `stream().sorted().limit()` — sortare și trunchiere
-- `stream().map().distinct().collect()` — proiecție + deduplicare
-- `stream().mapToDouble().average()` — medie
-- Streams sunt **lazy și single-use** — pornești `stream()` de la zero pentru fiecare operație
+Generating monthly account statements using the Stream API — the final step in the DigitalBank narrative. 
+The data is already in memory; now you will analyze it elegantly without explicit loops, 
+using `filter`, `map`, `Collectors.groupingBy`, and `summingDouble`. 
+This completes the "generate invoices grouped by month" operation planned for the system.
 
 ---
 
-## Cerințe minime pentru `Main.java`
+## Concepts Demonstrated
 
-Definește minim 10 tranzacții hardcodate acoperind cel puțin 3 luni diferite, cu ambele tipuri CREDIT și DEBIT.
-
-Demonstrează **7 operații**, fiecare precedată de un titlu afișat la consolă:
-
-| # | Operație | Output |
-|---|---------|--------|
-| 1 | `filter(tip == CREDIT)` | Lista tuturor tranzacțiilor CREDIT |
-| 2 | `mapToDouble(suma).sum()` | `Total procesat: X.XX RON` |
-| 3 | `Collectors.groupingBy(luna, summingDouble(suma))` | Per lună: `yyyy-MM: X.XX RON` |
-| 4 | `sorted(comparingDouble.reversed()).limit(3)` | `Top 3 tranzactii:` + 3 linii |
-| 5 | `map(contSursa).distinct().collect(toList())` | `Conturi sursa unice: [CONT_A, CONT_B, ...]` |
-| 6 | `mapToDouble(suma).average()` | `Suma medie: X.XX RON` |
-| 7 | `Collectors.groupingBy(luna)` cu format extras | `EXTRAS DE CONT - yyyy-MM: N tranzactii, total: X.XX RON` per lună |
-
-> **Notă operația 5:** pentru această demonstrație extinde clasa `Tranzactie` locală cu un câmp `contSursa` sau folosește o structură proprie — libertate totală de implementare.
+* `stream().filter()` — filtering based on criteria
+* `stream().mapToDouble().sum()` — numerical aggregation
+* `Collectors.groupingBy()` + `Collectors.summingDouble()` — grouping + summation per group
+* `stream().sorted().limit()` — sorting and truncation
+* `stream().map().distinct().collect()` — projection + deduplication
+* `stream().mapToDouble().average()` — average calculation
+* Streams are **lazy and single-use** — you must start a new `stream()` from the source for each operation
 
 ---
 
-## Libertate de implementare
+## Minimum Requirements for `Main.java`
 
-Ordinea outputului, formatarea exactă și datele demo sunt alese de student. Important: toate cele 7 operații sunt demonstrate și outputul este clar etichetat cu un titlu înainte de fiecare bloc de rezultate.
+Define at least 10 hardcoded transactions covering at least 3 different months, including both CREDIT and DEBIT types.
+
+Demonstrate **7 operations**, each preceded by a title displayed in the console:
+
+| # | Operation | Output |
+| --- | --- | --- |
+| 1 | `filter(type == CREDIT)` | List of all CREDIT transactions |
+| 2 | `mapToDouble(amount).sum()` | `Total processed: X.XX RON` |
+| 3 | `Collectors.groupingBy(month, summingDouble(amount))` | Per month: `yyyy-MM: X.XX RON` |
+| 4 | `sorted(comparingDouble.reversed()).limit(3)` | `Top 3 transactions:` + 3 lines |
+| 5 | `map(sourceAccount).distinct().collect(toList())` | `Unique source accounts: [ACC_A, ACC_B, ...]` |
+| 6 | `mapToDouble(amount).average()` | `Average amount: X.XX RON` |
+| 7 | `Collectors.groupingBy(month)` with statement format | `ACCOUNT STATEMENT - yyyy-MM: N transactions, total: X.XX RON` per month |
+
+> **Note on Operation 5:** For this demonstration, extend the local `Transaction` class with a `sourceAccount` field or use your own structure — you have total implementation freedom.
 
 ---
 
-## Hint-uri
+## Implementation Freedom
 
-- Grupare pe lună: `Collectors.groupingBy(t -> t.getData().substring(0, 7))`
-- Suma per grup: `Collectors.groupingBy(cheie, Collectors.summingDouble(Tranzactie::getSuma))`
-- `OptionalDouble avg = stream().mapToDouble(...).average()` — `.getAsDouble()` sau `.orElse(0.0)`
-- Streams sunt lazy și single-use — un `stream()` poate fi consumat o singură dată; creează unul nou pentru fiecare operație
-- `Collectors.toUnmodifiableList()` sau `Collectors.toList()` pentru colectare
-- `TreeMap` pe rezultatul `groupingBy` dacă vrei luni sortate: `Collectors.groupingBy(..., TreeMap::new, Collectors.summingDouble(...))`
+The output order, exact formatting, and demo data are chosen by the student. **Important:** All 7 operations must be demonstrated, and the output must be clearly labeled with a title before each block of results.
+
+---
+
+## Hints
+
+* Grouping by month: `Collectors.groupingBy(t -> t.getDate().substring(0, 7))`
+* Sum per group: `Collectors.groupingBy(key, Collectors.summingDouble(Transaction::getAmount))`
+* `OptionalDouble avg = stream().mapToDouble(...).average()` — use `.getAsDouble()` or `.orElse(0.0)`
+* Streams are lazy and single-use — a `stream()` can be consumed only once; create a new one for every operation.
+* Use `Collectors.toUnmodifiableList()` or `Collectors.toList()` for collection.
+* Use a `TreeMap` on the `groupingBy` result if you want sorted months: `Collectors.groupingBy(..., TreeMap::new, Collectors.summingDouble(...))`

@@ -25,5 +25,6 @@ public class Main {
         //   Ex: [1] 2024-01-15 CREDIT: 1500.00 RON | RO01SRC1 -> RO01DST1
 
         System.out.println("TODO: implementează exercițiul 1");
+
     }
 }

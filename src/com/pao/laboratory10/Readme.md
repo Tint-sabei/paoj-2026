@@ -1,80 +1,791 @@
-# Laboratory 10 — Java Collections Framework: LinkedList, Iterator și Stream API
+`implements both`List`and`Deque`. Unlike `ArrayList`, the `addFirst`/`removeFirst`operations are $O(1)$, but index-based access`get(i)`is $O(n)$. Use`LinkedList`when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods:`addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
 
-> **Pachet:** `com.pao.laboratory10` · **Curs:** 10
-> **Data limită:** miercuri 21 mai 2026, ora 23:59
+### Explicit Iterator and ConcurrentModificationException
 
----
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
 
-## Noțiuni teoretice
+### The `Collections` Class — Utility Methods
 
-### LinkedList — Listă dublu înlănțuită
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
 
-`LinkedList<E>` implementează atât `List<E>` cât și `Deque<E>`. Spre deosebire de `ArrayList`, operațiile `addFirst` / `removeFirst` sunt **O(1)**, dar accesul prin index `get(i)` este **O(n)**. Folosește `LinkedList` când ai nevoie de inserări / ștergeri frecvente la capete (coadă FIFO sau stivă LIFO). Metode cheie: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+### LinkedHashSet — Set with Guaranteed Order
 
-### Iterator explicit și ConcurrentModificationException
-
-`enhanced-for` nu permite modificarea colecției în timpul iterației — orice `add()` sau `remove()` aruncă `ConcurrentModificationException`. Soluția: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` este singura ștergere sigură în iterație. `ConcurrentModificationException` apare și **single-thread**, nu doar în multi-thread.
-
-### Clasa `Collections` — metode utilitare
-
-`Collections.sort(list, comparator)` — sortare (refolosești `Comparator` din labs anterioare).
-`Collections.reverse(list)` — inversare in-place.
-`Collections.min(col) / max(col)` — extremele (necesită `Comparable` sau `Comparator`).
-`Collections.frequency(col, elem)` — numărul de apariții.
-
-### LinkedHashSet — Set cu ordine garantată
-
-`LinkedHashSet<E>` combină viteza lui `HashSet` (O(1) add/contains) cu păstrarea **ordinii de inserare**. Util când deduplicezi o colecție și vrei să menții ordinea primei apariții a fiecărui element.
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
 
 ---
 
-<details open>
-<summary><h2>Obiective</h2></summary>
-
-1. **LinkedList** — operații deque, contrast structural cu `ArrayList`
-2. **Iterator explicit + `itr.remove()`** — singura ștergere sigură în iterație
-3. **`ConcurrentModificationException`** — cauza (fail-fast) și remedierea
-4. **`LinkedHashSet`** — deduplicare cu ordine de inserare garantată
-5. **`Collections` utilitar** — `sort`, `reverse`, `min`, `max`
-6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, extrase lunare
-
-</details>
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
 
 ---
 
-## Exerciții
+## Exercises
 
-| # | Pachet | Concept principal | Timp estimat | Teste automate |
-|---|--------|-------------------|--------------|----------------|
-| 1 | [`exercise1/`](exercise1/Readme.md) | `LinkedList` (operații deque + `Iterator.remove()`), contrast `ArrayList` | ~40 min | ✓ (2 părți) |
-| 2 | [`exercise2/`](exercise2/Readme.md) | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
-| 3 *(bonus)* | [`exercise3/`](exercise3/Readme.md) | Stream API — `filter`, `groupingBy`, `summingDouble`, extrase de cont pe luni | ~30 min | manual |
+# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API
 
-> **Total estimat:** ~1h20 min (fără bonus) · ~1h50 min (cu bonus)
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
 
 ---
 
-## Cum rulezi testele automate
+## Theoretical Concepts
 
-Deschide `exercise1/Checker.java` sau `exercise2/Checker.java` în IntelliJ și apasă **Run**.
+### LinkedList — Doubly Linked List
 
-Directorul de lucru trebuie să fie **rădăcina proiectului** (`paoj-2026/`):
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API |
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API |  |  |
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]()# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API |  |  |  |
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h20 min (without bonus) · ~1h50 min (with bonus)
+
+---
+
+## How to Run Automated Tests
+
+Open `exercise1/Checker.java# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h20 min (without bonus) · ~1h50 min (with bonus)
+
+---
+
+## How to Run Automated Tests
+
+Open `exercise1/Checker.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
+
+The working directory must be the **project root** (`paoj-202# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h20 min (without bonus) · ~1h50 min (with bonus)
+
+---
+
+## How to Run Automated Tests
+
+Open `exercise1/Checker.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
+
+The working directory must be the **project root** (`paoj-2026/`):
 `Run → Edit Configurations → Working directory → $PROJECT_DIR$`
 
-- **exercise1** — teste pe 2 părți (`partA`, `partB`); Checker apelează `IOTest.runParts`.
-- **exercise2** — teste flat; Checker apelează `IOTest.runFlat`.
+* **exercise1** — tested in 2 parts (`partA`,# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
 
 ---
 
-## Fișiere din acest laborator
+## Theoretical Concepts
 
-| Fișier | Rol |
-|--------|-----|
-| `exercise1/Readme.md` | Cerințe exercițiu 1 |
-| `exercise1/Main.java` | Implementează cerința (completează TODO-urile) |
-| `exercise1/Checker.java` | Rulează testele automate pentru exercițiul 1 |
-| `exercise2/Readme.md` | Cerințe exercițiu 2 |
-| `exercise2/Main.java` | Implementează cerința (completează TODO-urile) |
-| `exercise2/Checker.java` | Rulează testele automate pentru exercițiul 2 |
-| `exercise3/Readme.md` | Cerințe exercițiu bonus |
-| `exercise3/Main.java` | Demonstrație (completează conform cerințelor din Readme) |
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h20 min (without bonus) · ~1h50 min (with bonus)
+
+---
+
+## How to Run Automated Tests
+
+Open `exercise1/Checker.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
+
+The working directory must be the **project root** (`paoj-2026/`):
+`Run → Edit Configurations → Working directory → $PROJECT_DIR$`
+
+* **exercise1** — tested in 2 parts (`partA`, `partB`); Checker calls `IOTest.runParts`.
+* **exercise2** — flat tests; Checker calls `IOTest.runFlat`.
+
+# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h20 min (without bonus) · ~1h50 min (with bonus)
+
+---
+
+## How to Run Automated Tests
+
+Open `exercise1/Checker.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
+
+The working directory must be the **project root** (`paoj-2026/`):
+`Run → Edit Configurations → Working directory → $PROJECT_DIR$`
+
+* **exercise1** — tested in 2 parts (`partA`, `partB`); Checker calls `IOTest.runParts`.
+* **exercise2** — flat tests; Checker calls `IOTest.runFlat`.
+
+---
+
+## Files in this Laboratory
+
+| File | Role |
+| --- | --- |
+| `exercise1/Readme.md` | Requirements for Exercise 1 |
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h20 min (without bonus) · ~1h50 min (with bonus)
+
+---
+
+## How to Run Automated Tests
+
+Open `exercise1/Checker.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
+
+The working directory must be the **project root** (`paoj-2026/`):
+`Run → Edit Configurations → Working directory → $PROJECT_DIR$`
+
+* **exercise1** — tested in 2 parts (`partA`, `partB`); Checker calls `IOTest.runParts`.
+* **exercise2** — flat tests; Checker calls `IOTest.runFlat`.
+
+---
+
+## Files in this Laboratory
+
+| File | Role |
+| --- | --- |
+| `exercise1/Readme.md` | Requirements for Exercise 1 |
+| `exercise1/Main.java` | Implementation (complete the TODOs) |
+| `exercise1/Checker.java` | Runs automated tests for Exercise # Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API |
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h20 min (without bonus) · ~1h50 min (with bonus)
+
+---
+
+## How to Run Automated Tests
+
+Open `exercise1/Checker.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
+
+The working directory must be the **project root** (`paoj-2026/`):
+`Run → Edit Configurations → Working directory → $PROJECT_DIR$`
+
+* **exercise1** — tested in 2 parts (`partA`, `partB`); Checker calls `IOTest.runParts`.
+* **exercise2** — flat tests; Checker calls `IOTest.runFlat`.
+
+---
+
+## Files in this Laboratory
+
+| File | Role |
+| --- | --- |
+| `exercise1/Readme.md` | Requirements for Exercise 1 |
+| `exercise1/Main.java` | Implementation (complete the TODOs) |
+| `exercise1/Checker.java` | Runs automated tests for Exercise 1 |
+| `exercise2/Readme.md` | Requirements for Exercise 2 |
+| `exercise2/Main.java` | Implementation (complete the TODOs# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API |
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h20 min (without bonus) · ~1h50 min (with bonus)
+
+---
+
+## How to Run Automated Tests
+
+Open `exercise1/Checker.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
+
+The working directory must be the **project root** (`paoj-2026/`):
+`Run → Edit Configurations → Working directory → $PROJECT_DIR$`
+
+* **exercise1** — tested in 2 parts (`partA`, `partB`); Checker calls `IOTest.runParts`.
+* **exercise2** — flat tests; Checker calls `IOTest.runFlat`.
+
+---
+
+## Files in this Laboratory
+
+| File | Role |
+| --- | --- |
+| `exercise1/Readme.md` | Requirements for Exercise 1 |
+| `exercise1/Main.java` | Implementation (complete the TODOs) |
+| `exercise1/Checker.java` | Runs automated tests for Exercise 1 |
+| `exercise2/Readme.md` | Requirements for Exercise 2 |
+| `exercise2/Main.java` | Implementation (complete the TODOs) |
+| `exercise2/Checker.java` | Runs automated tests for Exercise 2 |
+| `exercise3/Readme.md` | Requirements for the# Laboratory 10 — Java Collections Framework: LinkedList, Iterator, and Stream API |
+
+> **Package:** `com.pao.laboratory10` · **Course:** 10
+> **Deadline:** Wednesday, May 21, 2026, 11:59 PM
+
+---
+
+## Theoretical Concepts
+
+### LinkedList — Doubly Linked List
+
+`LinkedList<E>` implements both `List<E>` and `Deque<E>`. Unlike `ArrayList`, the `addFirst` / `removeFirst` operations are **$O(1)$**, but index-based access `get(i)` is **$O(n)$**. Use `LinkedList` when you need frequent insertions/deletions at the ends (FIFO queue or LIFO stack). Key methods: `addFirst`, `addLast`, `removeFirst`, `removeLast`, `peekFirst`, `peekLast`.
+
+### Explicit Iterator and ConcurrentModificationException
+
+The `enhanced-for` loop does not allow modifying a collection during iteration—any `add()` or `remove()` will throw a `ConcurrentModificationException`. The solution: `Iterator<E> itr = col.iterator(); while(itr.hasNext()) { if(...) itr.remove(); }` — `itr.remove()` is the only safe way to delete while iterating. `ConcurrentModificationException` occurs even in **single-threaded** environments, not just multi-threaded ones.
+
+### The `Collections` Class — Utility Methods
+
+* `Collections.sort(list, comparator)` — sorting (reuse `Comparator` from previous labs).
+* `Collections.reverse(list)` — in-place reversal.
+* `Collections.min(col) / max(col)` — extremes (requires `Comparable` or `Comparator`).
+* `Collections.frequency(col, elem)` — number of occurrences.
+
+### LinkedHashSet — Set with Guaranteed Order
+
+`LinkedHashSet<E>` combines the speed of `HashSet` ($O(1)$ add/contains) with the preservation of **insertion order**. This is useful when deduplicating a collection while maintaining the order of each element's first appearance.
+
+---
+
+1. **LinkedList** — deque operations, structural contrast with `ArrayList`.
+2. **Explicit Iterator + `itr.remove()**` — the only safe deletion during iteration.
+3. **`ConcurrentModificationException`** — cause (fail-fast) and resolution.
+4. **`LinkedHashSet`** — deduplication with guaranteed insertion order.
+5. **`Collections` utility** — `sort`, `reverse`, `min`, `max`.
+6. **Stream API** *(bonus)* — `filter`, `map`, `Collectors.groupingBy`, monthly statements.
+
+---
+
+## Exercises
+
+| # | Package | Main Concept | Estimated Time | Automated Tests |
+| --- | --- | --- | --- | --- |
+| 1 | [`exercise1/`](https://www.google.com/search?q=exercise1/Readme.md) | `LinkedList` (deque operations + `Iterator.remove()`), contrast with `ArrayList` | ~40 min | ✓ (2 parts) |
+| 2 | [`exercise2/`]() | `LinkedHashSet`, `ConcurrentModificationException`, `Collections.sort/reverse/min/max` | ~40 min | ✓ (flat) |
+| 3 *(bonus)* | [`exercise3/`]() | Stream API — `filter`, `groupingBy`, `summingDouble`, monthly account statements | ~30 min | manual |
+
+> **Total estimated:** ~1h20 min (without bonus) · ~1h50 min (with bonus)
+
+---
+
+## How to Run Automated Tests
+
+Open `exercise1/Checker.java` or `exercise2/Checker.java` in IntelliJ and press **Run**.
+
+The working directory must be the **project root** (`paoj-2026/`):
+`Run → Edit Configurations → Working directory → $PROJECT_DIR$`
+
+* **exercise1** — tested in 2 parts (`partA`, `partB`); Checker calls `IOTest.runParts`.
+* **exercise2** — flat tests; Checker calls `IOTest.runFlat`.
+
+---
+
+## Files in this Laboratory
+
+| File | Role |
+| --- | --- |
+| `exercise1/Readme.md` | Requirements for Exercise 1 |
+| `exercise1/Main.java` | Implementation (complete the TODOs) |
+| `exercise1/Checker.java` | Runs automated tests for Exercise 1 |
+| `exercise2/Readme.md` | Requirements for Exercise 2 |
+| `exercise2/Main.java` | Implementation (complete the TODOs) |
+| `exercise2/Checker.java` | Runs automated tests for Exercise 2 |
+| `exercise3/Readme.md` | Requirements for the Bonus Exercise |
+| `exercise3/Main.java` | Demonstration (complete according to the Readme) |

@@ -1,58 +1,60 @@
-# Exercițiul 2 — Deduplicare și rapoarte lunare
+# Exercise 2 — Deduplication and Monthly Reports
 
-> **Pachet:** `com.pao.laboratory10.exercise2`
-> **Timp estimat:** ~40 min · **Teste automate:** da (`Checker.java`, flat)
-
----
-
-## Scop
-
-Un extras de cont primit de la bancă poate conține tranzacții duplicate (același `id` apare de două ori în export). Sistemul trebuie să identifice ID-urile unice (în ordinea primei apariții), să genereze rapoarte lunare și să sorteze / analizeze tranzacțiile. De asemenea, vei demonstra `ConcurrentModificationException` printr-un test deliberat.
+> **Package:** `com.pao.laboratory10.exercise2`
+> **Estimated Time:** ~40 min · **Automated Tests:** Yes (`Checker.java`, flat)
 
 ---
 
-## Import din exercițiul 1
+## Purpose
+
+An account statement received from the bank may contain duplicate transactions (the same `id` appears twice in the export). The system must identify unique IDs (in the order of their first appearance), generate monthly reports, and sort or analyze transactions. Additionally, you will demonstrate a `ConcurrentModificationException` through a deliberate test.
+
+---
+
+## Import from Exercise 1
 
 ```java
-import com.pao.laboratory10.exercise1.Tranzactie;
-import com.pao.laboratory10.exercise1.TipTranzactie;
+import com.pao.laboratory10.exercise1.Transaction;
+import com.pao.laboratory10.exercise1.TransactionType;
+
 ```
 
 ---
 
-## Format input
+## Input Format
 
 ```
 N
-id suma data(yyyy-MM-dd) tip(CREDIT|DEBIT)
-... (N linii, pot exista duplicate de id)
-comandă*
+id amount date(yyyy-MM-dd) type(CREDIT|DEBIT)
+... (N lines, id duplicates may exist)
+command*
+
 ```
 
-Comenzile se citesc până la EOF. Lista internă păstrează **toate** cele N tranzacții (inclusiv duplicate).
+Commands are read until EOF. The internal list keeps **all** N transactions (including duplicates).
 
-## Format output
+## Output Format
 
-**Format linie tranzacție:** `[id] data tip: suma RON`
+**Transaction line format:** `[id] date type: amount RON`
 
-**Comenzi disponibile:**
+**Available Commands:**
 
-| Comandă | Noțiune | Output |
-|---------|---------|--------|
-| `UNIQUE_IDS` | `LinkedHashSet<Integer>` | `IDs unice (N): [1, 2, 3, ...]` — id-uri în ordinea primei apariții, fără duplicate |
-| `MONTHLY_REPORT` | `TreeMap<String, ...>` | Per lună sortată: `yyyy-MM: CREDIT X.XX RON, DEBIT Y.YY RON` |
-| `TOP n` | `Collections.sort` + `subList` | `Top n:` urmat de n linii (suma descrescătoare, nu modifică lista internă) |
-| `SORT_ASC` | `Collections.sort(Comparator)` | Lista sortată suma crescătoare; modifică lista internă |
-| `SORT_DESC` | `Collections.sort(reversed)` | Lista sortată suma descrescătoare; modifică lista internă |
-| `REVERSE` | `Collections.reverse` | Lista inversată față de starea curentă; modifică lista internă |
-| `MIN_MAX` | `Collections.min/max` | `MIN: [id] data tip: suma RON` și `MAX: [id] data tip: suma RON` |
-| `CME_DEMO` | try-catch `CME` | `ConcurrentModificationException prins: modificare in iteratie detectata.` |
+| Command | Concept | Output |
+| --- | --- | --- |
+| `UNIQUE_IDS` | `LinkedHashSet<Integer>` | `Unique IDs (N): [1, 2, 3, ...]` — IDs in order of first appearance, no duplicates |
+| `MONTHLY_REPORT` | `TreeMap<String, ...>` | Per sorted month: `yyyy-MM: CREDIT X.XX RON, DEBIT Y.YY RON` |
+| `TOP n` | `Collections.sort` + `subList` | `Top n:` followed by n lines (descending amount, does not modify internal list) |
+| `SORT_ASC` | `Collections.sort(Comparator)` | List sorted by ascending amount; modifies internal list |
+| `SORT_DESC` | `Collections.sort(reversed)` | List sorted by descending amount; modifies internal list |
+| `REVERSE` | `Collections.reverse` | List reversed relative to current state; modifies internal list |
+| `MIN_MAX` | `Collections.min/max` | `MIN: [id] data tip: suma RON` and `MAX: [id] data tip: suma RON` |
+| `CME_DEMO` | try-catch `CME` | `ConcurrentModificationException caught: modification during iteration detected.` |
 
-> **MONTHLY_REPORT** afișează întotdeauna ambele tipuri per lună (`CREDIT 0.00 RON` dacă nu există tranzacții CREDIT în luna respectivă).
+> **MONTHLY_REPORT** always displays both types per month (`CREDIT 0.00 RON` if there are no CREDIT transactions in that specific month).
 
 ---
 
-## Exemplu complet
+## Complete Example
 
 ```
 Input:
@@ -68,14 +70,15 @@ Output:
 [2] 2024-01-22 DEBIT: 750.50 RON
 [4] 2024-02-18 DEBIT: 1200.00 RON
 [1] 2024-01-15 CREDIT: 1500.00 RON
+
 ```
 
 ---
 
-## Hint-uri
+## Hints
 
-- `LinkedHashSet<Integer>` — iterarea produce id-urile în ordinea primei inserări
-- `TreeMap<String, double[]>` (sau `Map<String, double[]>`) — cheia = `data.substring(0, 7)`; valoarea = `[sumaCREDIT, sumaDEBIT]`; `TreeMap` sortează cheile lexicografic (yyyy-MM sortează cronologic)
-- `Collections.sort(list, Comparator.comparingDouble(Tranzactie::getSuma))` — refolosești ideea de `Comparator` din Lab02/05/06
-- **`CME_DEMO`:** `try { for (Tranzactie t : lista) lista.remove(t); } catch (ConcurrentModificationException e) { System.out.println("..."); }` — eroarea apare la prima iterație
-- `TOP n` — creează o copie a listei, sortează copia descrescător, ia `subList(0, n)` — lista internă nu se modifică
+* **`LinkedHashSet<Integer>`** — Iteration yields IDs in the order of their first insertion.
+* **`TreeMap<String, double[]>`** (or `Map<String, double[]>`) — Key = `date.substring(0, 7)`; Value = `[sumCREDIT, sumDEBIT]`; `TreeMap` sorts keys lexicographically (yyyy-MM sorts chronologically).
+* **`Collections.sort(list, Comparator.comparingDouble(Transaction::getAmount))`** — Reuse the `Comparator` logic from Lab02/05/06.
+* **`CME_DEMO`:** `try { for (Transaction t : list) list.remove(t); } catch (ConcurrentModificationException e) { System.out.println("..."); }` — The error occurs during the first iteration.
+* **`TOP n`** — Create a copy of the list, sort the copy in descending order, then use `subList(0, n)` — the internal list remains unchanged.</String,></String,></String,>

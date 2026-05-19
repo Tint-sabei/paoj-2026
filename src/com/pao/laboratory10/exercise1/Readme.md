@@ -1,104 +1,119 @@
-# Exercițiul 1 — Coadă de tranzacții cu LinkedList și Iterator
+# Exercise 1 — Transaction Queue with LinkedList and Iterator
 
-> **Pachet:** `com.pao.laboratory10.exercise1`
-> **Timp estimat:** ~40 min · **Teste automate:** da (`Checker.java`, 2 părți)
-
----
-
-## Scop
-
-Sistemul bancar menține o coadă de tranzacții în așteptare. Operatorii pot adăuga tranzacții ca într-o coadă FIFO (cu `ENQUEUE` / `DEQUEUE`) sau ca într-o stivă LIFO (cu `PUSH` / `POP`), pot vizualiza coada și pot elimina în bloc tranzacțiile de un anumit tip sau sub un prag. Eliminările **trebuie** să folosească `Iterator.remove()` — singura metodă sigură în iterație.
+> **Package:** `com.pao.laboratory10.exercise1`
+> **Estimated Time:** ~40 min · **Automated Tests:** Yes (`Checker.java`, 2 parts)
 
 ---
 
-## Cerință generală
+## Purpose
 
-Creează în pachetul `com.pao.laboratory10.exercise1`:
-
-- `enum TipTranzactie { CREDIT, DEBIT }`
-- `class Tranzactie` cu câmpurile: `int id`, `double suma`, `String data` (yyyy-MM-dd), `TipTranzactie tip`
-  - constructori, getteri, `toString()` → `[id] data tip: suma RON` (ex: `[1] 2024-01-10 CREDIT: 500.00 RON`)
-- `Main.java` cu protocol de comenzi descris mai jos, folosind `LinkedList<Tranzactie>` intern
+The banking system maintains a queue of pending transactions. Operators can add transactions as in a FIFO queue (using `ENQUEUE` / `DEQUEUE`) or as in a LIFO stack (using `PUSH` / `POP`), view the queue, and bulk-remove transactions of a specific type or below a certain threshold. Removals **must** use `Iterator.remove()` — the only safe method during iteration.
 
 ---
 
-## Format input
+## General Requirements
 
-Comenzile se citesc din stdin până la EOF, câte una pe linie.
+Create the following in the package `com.pao.laboratory10.exercise1`:
 
-## Format output
+* `enum TransactionType { CREDIT, DEBIT }`
+* `class Transaction` with the fields: `int id`, `double amount`, `String date` (yyyy-MM-dd), `TransactionType type`
+* constructors, getters, `toString()` → `[id] date type: amount RON` (e.g.: `[1] 2024-01-10 CREDIT: 500.00 RON`)
 
-**Format linie tranzacție:**
+
+* `Main.java` with the command protocol described below, using a `LinkedList<Transaction>` internally.
+
+---
+
+## Input Format
+
+Commands are read from stdin until EOF, one per line.
+
+## Output Format
+
+**Transaction line format:**
+
 ```
-[id] data tip: suma RON
+[id] date type: amount RON
+
 ```
 
-**Comenzi disponibile:**
+**Available Commands:**
 
-| Comandă | Operație LinkedList | Output |
-|---------|---------------------|--------|
-| `ENQUEUE id suma data tip` | `addLast` | *(niciun output)* |
-| `DEQUEUE` | `removeFirst` | `Procesat: [id] data tip: suma RON` sau `Coada goala.` |
-| `PUSH id suma data tip` | `addFirst` | *(niciun output)* |
-| `POP` | `removeFirst` | `Extras: [id] data tip: suma RON` sau `Coada goala.` |
-| `REMOVE_DEBIT` | `Iterator.remove()` pe DEBIT | `Eliminat N tranzactii DEBIT.` |
-| `REMOVE_BELOW threshold` | `Iterator.remove()` pe suma < threshold | `Eliminat N tranzactii sub threshold RON.` |
-| `PRINT` | iterare | Toate tranzacțiile, câte una pe linie |
-| `SIZE` | `size()` | `Dimensiune coada: N` |
+| Command | LinkedList Operation | Output |
+| --- | --- | --- |
+| `ENQUEUE id amount date type` | `addLast` | *(no output)* |
+| `DEQUEUE` | `removeFirst` | `Processed: [id] date type: amount RON` or `Empty queue.` |
+| `PUSH id amount date type` | `addFirst` | *(no output)* |
+| `POP` | `removeFirst` | `Extracted: [id] date type: amount RON` or `Empty queue.` |
+| `REMOVE_DEBIT` | `Iterator.remove()` on DEBIT | `Removed N DEBIT transactions.` |
+| `REMOVE_BELOW threshold` | `Iterator.remove()` on amount < threshold | `Removed N transactions below threshold RON.` |
+| `PRINT` | iteration | All transactions, one per line |
+| `SIZE` | `size()` | `Queue size: N` |
 
 ---
 
-## Partea A — Operații de bază (ENQUEUE, DEQUEUE, PUSH, POP, PRINT, SIZE)
+## Part A — Basic Operations (ENQUEUE, DEQUEUE, PUSH, POP, PRINT, SIZE)
 
-Implementează operațiile de bază ale cozii. `DEQUEUE` și `POP` ambele fac `removeFirst()`, dar cu mesaj diferit. La coadă goală afișează `Coada goala.`.
+Implement the basic operations of the queue. `DEQUEUE` and `POP` both perform `removeFirst()`, but with different messages. If the queue is empty, display `Empty queue.`.
 
-**Exemplu:**
+**Example:**
+
 ```
 Input:                          Output:
 ENQUEUE 1 500.00 2024-01-10 CREDIT
 ENQUEUE 2 300.00 2024-01-15 DEBIT
-SIZE                            Dimensiune coada: 2
+SIZE                            Queue size: 2
 PRINT                           [1] 2024-01-10 CREDIT: 500.00 RON
                                 [2] 2024-01-15 DEBIT: 300.00 RON
-DEQUEUE                         Procesat: [1] 2024-01-10 CREDIT: 500.00 RON
-DEQUEUE                         Procesat: [2] 2024-01-15 DEBIT: 300.00 RON
-DEQUEUE                         Coada goala.
+DEQUEUE                         Processed: [1] 2024-01-10 CREDIT: 500.00 RON
+DEQUEUE                         Processed: [2] 2024-01-15 DEBIT: 300.00 RON
+DEQUEUE                         Empty queue.
+
 ```
 
 ---
 
-## Partea B — Eliminare cu Iterator (REMOVE_DEBIT, REMOVE_BELOW)
+## Part B — Removal with Iterator (REMOVE_DEBIT, REMOVE_BELOW)
 
-Implementează eliminările în bloc. Folosește `Iterator<Tranzactie>` explicit — **nu** `enhanced-for` (ar arunca `ConcurrentModificationException`).
+Implement bulk removals. Use an explicit `Iterator<Transaction>` — **do not** use an `enhanced-for` loop (it would throw a `ConcurrentModificationException`).
 
-`REMOVE_DEBIT` elimină toate tranzacțiile de tip DEBIT.
-`REMOVE_BELOW threshold` elimină toate tranzacțiile cu `suma < threshold`.
+`REMOVE_DEBIT` removes all transactions of type DEBIT.
+`REMOVE_BELOW threshold` removes all transactions where `amount < threshold`.
 
-Afișează numărul de tranzacții eliminate, chiar dacă este 0.
+Display the number of removed transactions, even if it is 0.
 
-**Exemplu:**
+**Example:**
+
 ```
 Input:                             Output:
 ENQUEUE 1 500.00 2024-01-10 CREDIT
 ENQUEUE 2 50.00 2024-01-15 DEBIT
 ENQUEUE 3 150.00 2024-02-01 CREDIT
-REMOVE_BELOW 100.00                Eliminat 1 tranzactii sub 100.00 RON.
+REMOVE_BELOW 100.00                Removed 1 transactions below 100.00 RON.
 PRINT                              [1] 2024-01-10 CREDIT: 500.00 RON
                                    [3] 2024-02-01 CREDIT: 150.00 RON
+
 ```
 
 ---
 
-## Hint-uri
+## Hints
 
-- `LinkedList<E>` implementează `Deque<E>` — `addFirst` / `addLast` / `removeFirst` sunt **O(1)**; `ArrayList.addFirst` ar fi **O(n)**
-- `enhanced-for` pe o `LinkedList` la care adaugi / elimini → `ConcurrentModificationException`
-- Șablon `Iterator.remove()`:
-  ```java
-  Iterator<Tranzactie> itr = coada.iterator();
-  while (itr.hasNext()) {
-      Tranzactie t = itr.next();
-      if (condiție) itr.remove();
-  }
-  ```
-- `Double.parseDouble(scanner.next())` pentru suma; `TipTranzactie.valueOf(scanner.next())` pentru tip
+* `LinkedList<E>` implements `Deque<E>` — `addFirst` / `addLast` / `removeFirst` are **O(1)**; `ArrayList.addFirst` would be **O(n)**.
+* Using an `enhanced-for` loop on a `LinkedList` while adding/removing elements → `ConcurrentModificationException`.
+* `Iterator.remove()` pattern:
+```java
+Iterator<Transaction> itr = queue.iterator();
+while (itr.hasNext()) {
+    Transaction t = itr.next();
+    if (condition) itr.remove();
+}
+
+```
+
+
+* Use `Double.parseDouble(scanner.next())` for the amount and `TransactionType.valueOf(scanner.next())` for the type.
+
+```</E></E></Transaction></Transaction>
+
+```
