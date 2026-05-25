@@ -1,98 +1,107 @@
-# Exercise 3 (Bonus) - Colector custom si snapshot imutabil
+Here is the English translation of your assignment text:
 
-## Scenariu
+---
 
-Extinde modulul de raportare cu un colector custom care produce un snapshot analitic read-only.
+# Exercise 3 (Bonus) - Custom Collector and Immutable Snapshot
 
-## Notiuni demonstrate
+## Scenario
 
-- `Collector.of(...)`
-- modele imutabile pentru rezultate
-- separare intre colectare si prezentare
+Extend the reporting module with a custom collector that produces a read-only analytical snapshot.
 
-## Cerinte minime
+## Concepts Demonstrated
 
-1. Defineste un colector custom pentru agregare pe mai multe dimensiuni.
-2. Returneaza un rezultat imutabil (fara mutatii dupa construire).
-3. Demonstreaza in `Main.java` cel putin 3 interogari pe snapshot.
+* `Collector.of(...)`
+* Immutable models for results
+* Separation between collection and presentation
 
-## Libertate de implementare
+## Minimum Requirements
 
-- Nu exista format I/O fix.
-- Datele pot fi hardcodate sau generate intern.
-- Evaluarea este manuala pe baza claritatii demo-ului si corectitudinii rezultatului.
+1. Define a custom collector for multi-dimensional aggregation.
+2. Return an immutable result (no mutations allowed after construction).
+3. Demonstrate at least 3 queries on the snapshot in `Main.java`.
 
-## Exemplu de implementare (sugestie)
+## Freedom of Implementation
 
-Mai jos este un exemplu minimal, complet funcțional, care ilustrează un `Collector` custom, un container mutabil folosit în colectare și un `Snapshot` imutabil returnat de finisher. Codul e orientativ — poți folosi aceleași idei în implementarea ta.
+* There is no fixed I/O format.
+* Data can be hardcoded or generated internally.
+* Evaluation is manual, based on the clarity of the demo and the correctness of the result.
 
-1) Model simplu `Transaction` (immutabil):
+## Implementation Example (Suggestion)
+
+Below is a minimal, fully functional example illustrating a custom `Collector`, a mutable container used during collection, and an immutable `Snapshot` returned by the finisher. This code serves as a guideline — you may use the same ideas in your own implementation.
+
+1. Simple `Transaction` model (immutable):
 
 ```java
 public final class Transaction {
-	private final int id;
-	private final BigDecimal amount;
-	private final LocalDate date;
-	private final String country;
-	private final String channel;
+    private final int id;
+    private final BigDecimal amount;
+    private final LocalDate date;
+    private final String country;
+    private final String channel;
 
-	public Transaction(int id, BigDecimal amount, LocalDate date, String country, String channel) {
-		this.id = id; this.amount = amount; this.date = date; this.country = country; this.channel = channel;
-	}
-	// getters...
+    public Transaction(int id, BigDecimal amount, LocalDate date, String country, String channel) {
+       this.id = id; this.amount = amount; this.date = date; this.country = country; this.channel = channel;
+    }
+    // getters...
 }
+
 ```
 
-2) `Snapshot` imutabil pentru rezultate agregate:
+2. Immutable `Snapshot` for aggregated results:
 
 ```java
 public final class Snapshot {
-	private final Map<String, Long> countByCountry;
-	private final Map<String, Long> countByChannel;
-	private final BigDecimal totalAmount;
-	private final List<Transaction> topTransactions;
+    private final Map<String, Long> countByCountry;
+    private final Map<String, Long> countByChannel;
+    private final BigDecimal totalAmount;
+    private final List<Transaction> topTransactions;
 
-	public Snapshot(Map<String, Long> byCountry, Map<String, Long> byChannel, BigDecimal total, List<Transaction> top) {
-		this.countByCountry = Collections.unmodifiableMap(new HashMap<>(byCountry));
-		this.countByChannel = Collections.unmodifiableMap(new HashMap<>(byChannel));
-		this.totalAmount = total;
-		this.topTransactions = List.copyOf(top);
-	}
-	// getters...
+    public Snapshot(Map<String, Long> byCountry, Map<String, Long> byChannel, BigDecimal total, List<Transaction> top) {
+       this.countByCountry = Collections.unmodifiableMap(new HashMap<>(byCountry));
+       this.countByChannel = Collections.unmodifiableMap(new HashMap<>(byChannel));
+       this.totalAmount = total;
+       this.topTransactions = List.copyOf(top);
+    }
+    // getters...
 }
+
 ```
 
-3) `CustomCollectors.toSnapshot(int topN)` — collector custom:
+3. `CustomCollectors.toSnapshot(int topN)` — custom collector:
 
 ```java
 public static Collector<Transaction, ?, Snapshot> toSnapshot(int topN) {
-	class Agg { /* mutable maps, total, list */ }
-	return Collector.of(
-		Agg::new,
-		(agg, tx) -> { /* accumulate */ },
-		(a,b) -> { /* combine for parallel */ return a; },
-		agg -> { /* finisher -> build Snapshot, compute topN */ }
-	);
+    class Agg { /* mutable maps, total, list */ }
+    return Collector.of(
+       Agg::new,
+       (agg, tx) -> { /* accumulate */ },
+       (a,b) -> { /* combine for parallel */ return a; },
+       agg -> { /* finisher -> build Snapshot, compute topN */ }
+    );
 }
+
 ```
 
-4) `Main` demo — cel puțin 3 interogări pe `Snapshot`:
+4. `Main` demo — at least 3 queries on the `Snapshot`:
 
 ```java
-List<Transaction> data = List.of(/* câteva tranzacții hardcodate */);
+List<Transaction> data = List.of(/* a few hardcoded transactions */);
 Snapshot snap = data.stream().collect(CustomCollectors.toSnapshot(5));
 
-// Interogare 1: top tranzacții (din snapshot)
+// Query 1: top transactions (from the snapshot)
 snap.getTopTransactions().forEach(System.out::println);
 
-// Interogare 2: total pe țări (desc)
+// Query 2: total by country (descending)
 snap.getCountByCountry().entrySet().stream() /* sort & print */;
 
-// Interogare 3: canale ordonate după număr
+// Query 3: channels sorted by count
 snap.getCountByChannel().entrySet().stream() /* sort & print */;
+
 ```
 
-Comentarii:
-- Finisher-ul `agg -> Snapshot` trebuie să transforme structurile mutabile din `Agg` în colecții imutabile și să calculeze view-urile (ex: topN).
-- `Collector.Characteristics.UNORDERED` este acceptabil dacă nu depinzi de ordinea stream-ului; asigură-te că `combine` e corect implementat pentru execuții paralele.
-- Testează cu date care produc tie-breakers (ex: două tranzacții cu aceeași sumă) pentru a demonstra stabilitatea ordonării din snapshot.
+Comments:
+
+* The finisher `agg -> Snapshot` must transform the mutable structures from `Agg` into immutable collections and compute the views (e.g., topN).
+* `Collector.Characteristics.UNORDERED` is acceptable if you do not depend on the stream order; ensure that `combine` is correctly implemented for parallel executions.
+* Test with data that produces tie-breakers (e.g., two transactions with the same amount) to demonstrate the ordering stability within the snapshot.
