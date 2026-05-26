@@ -4,18 +4,17 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collector;
 
-public final class CustomCollectors {
+public class CustomCollectors {
     public static Collector<Transaction, ?, Snapshot> toSnapshot(int topN) {
         class Agg {
-            final Map<String, Long> countryCounts = new HashMap<>();
-            final Map<String, Long> channelCounts = new HashMap<>();
+            Map<String, Long> countryCounts = new HashMap<>();
+            Map<String, Long> channelCounts = new HashMap<>();
             BigDecimal totalAmount = BigDecimal.ZERO;
-            final List<Transaction> allTransactions = new ArrayList<>();
+            List<Transaction> allTransactions = new ArrayList<>();
         }
 
         return Collector.of(
                 Agg::new,
-                // Accumulator
                 (agg, tx) -> {
                     agg.countryCounts.merge(tx.getCountry(), 1L, Long::sum);
                     agg.channelCounts.merge(tx.getChannel(), 1L, Long::sum);
@@ -30,9 +29,7 @@ public final class CustomCollectors {
                     return a;
                 },
                 agg -> {
-                    agg.allTransactions.sort(Comparator.comparing(Transaction::getAmount).reversed());
 
-                    int limit = Math.min(topN, agg.allTransactions.size());
                     List<Transaction> topList = agg.allTransactions.stream().sorted(Comparator.comparing(Transaction::getAmount).reversed()).limit(topN).toList();
 
                     return new Snapshot(agg.countryCounts, agg.channelCounts, agg.totalAmount, topList);

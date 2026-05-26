@@ -29,5 +29,9 @@ public class Main {
         snap.getCountByChannel().entrySet().stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .forEach(System.out::println);
+
+        System.out.println("\nTotal amount");
+        System.out.println(snap.getTotalAmount());
+
     }
 }
