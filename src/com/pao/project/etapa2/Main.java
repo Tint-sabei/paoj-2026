@@ -99,8 +99,8 @@ public class Main {
         List<String> stats = clinicService.getServiceStatistics();
         stats.forEach(s -> System.out.println("[JOIN #2] " + s));
 
-        List<String> ledger = clinicService.getPetInvoicingLedger();
-        ledger.forEach(l -> System.out.println("[JOIN #3] " + l));
+        List<String> invoice = clinicService.getPetInvoice();
+        invoice.forEach(l -> System.out.println("[JOIN #3] " + l));
         audit.log("execute_relational_join_reports");
 
         // ---- Action 10: Remove Pet ----

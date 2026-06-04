@@ -178,7 +178,7 @@ public class ClinicService {
     /**
      * JOIN #3: Get complete invoicing balance per pet
      */
-    public List<String> getPetInvoicingLedger() throws SQLException, IOException {
+    public List<String> getPetInvoice() throws SQLException, IOException {
         String sql = """
                 SELECT p.name          AS pet_name,
                        p.specie        AS pet_specie,
